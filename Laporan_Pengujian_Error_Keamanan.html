@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Pengujian Error & Keamanan — Bus Kampus Non-Merdeka</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  @page { size: A4; margin: 20mm 18mm 22mm 18mm; }
+  @media print {
+    .no-print { display: none !important; }
+    body { font-size: 10pt; }
+    .page-break { page-break-before: always; }
+    section { page-break-inside: avoid; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; color: #1e293b; background: #fff; line-height: 1.6; }
+
+  /* COVER */
+  .cover { background: linear-gradient(135deg, #1e3a5f 0%, #c41e3a 100%); color: white; padding: 60px 50px; min-height: 200px; position: relative; overflow: hidden; }
+  .cover::after { content: ''; position: absolute; bottom: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,215,0,0.1); }
+  .cover-badge { display: inline-block; background: rgba(255,215,0,0.2); border: 1px solid rgba(255,215,0,0.4); color: #ffd700; font-size: 9px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; }
+  .cover h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; }
+  .cover h1 span { color: #ffd700; }
+  .cover p { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+  .cover-meta { margin-top: 24px; display: flex; gap: 30px; flex-wrap: wrap; }
+  .cover-meta div { font-size: 9px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.15em; }
+  .cover-meta strong { display: block; font-size: 12px; color: white; font-weight: 700; margin-top: 2px; letter-spacing: 0; text-transform: none; }
+
+  /* LAYOUT */
+  .content { padding: 32px 40px; }
+  h2.section-title { font-size: 14px; font-weight: 900; color: #1e3a5f; text-transform: uppercase; letter-spacing: 0.1em; padding-bottom: 8px; border-bottom: 2px solid #c41e3a; margin-bottom: 18px; margin-top: 30px; display: flex; align-items: center; gap: 8px; }
+  h2.section-title span.num { background: #c41e3a; color: white; font-size: 9px; font-weight: 900; padding: 2px 7px; border-radius: 10px; }
+  h3.sub { font-size: 11px; font-weight: 800; color: #1e3a5f; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 9.5px; margin: 10px 0 18px; }
+  th { background: #1e3a5f; color: white; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; font-size: 8px; padding: 7px 10px; text-align: left; }
+  td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eff6ff; }
+
+  /* BADGES */
+  .badge { display: inline-block; font-size: 7.5px; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
+  .badge-orange { background: #ffedd5; color: #9a3412; }
+  .badge-yellow { background: #fef9c3; color: #854d0e; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-navy   { background: #1e3a5f; color: white; }
+  .badge-purple { background: #ede9fe; color: #6d28d9; }
+
+  /* INFO BOXES */
+  .info-box { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 9.5px; }
+  .info-box.warning { background: #fffbeb; border-left: 3px solid #f59e0b; color: #78350f; }
+  .info-box.danger  { background: #fef2f2; border-left: 3px solid #ef4444; color: #7f1d1d; }
+  .info-box.success { background: #f0fdf4; border-left: 3px solid #22c55e; color: #14532d; }
+  .info-box.info    { background: #eff6ff; border-left: 3px solid #3b82f6; color: #1e3a8a; }
+  .info-box strong  { font-weight: 800; }
+
+  /* CODE */
+  code { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1px 5px; font-family: 'Courier New', monospace; font-size: 8.5px; color: #c41e3a; }
+  pre  { background: #0f172a; color: #e2e8f0; border-radius: 8px; padding: 12px 14px; font-family: 'Courier New', monospace; font-size: 8px; overflow-x: auto; margin: 8px 0; line-height: 1.7; }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; margin: 8px 0; padding: 0; }
+  .checklist li { display: flex; align-items: flex-start; gap: 8px; font-size: 9.5px; padding: 4px 0; border-bottom: 1px solid #f8fafc; }
+  .checklist li::before { content: '☐'; font-size: 13px; color: #94a3b8; flex-shrink: 0; line-height: 1.2; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+  .card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; }
+  .card h4 { font-size: 10px; font-weight: 800; color: #1e3a5f; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* PRINT BUTTON */
+  .print-btn { position: fixed; bottom: 24px; right: 24px; background: #c41e3a; color: white; border: none; border-radius: 50px; padding: 12px 24px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 24px rgba(196,30,58,0.4); z-index: 999; }
+  .print-btn:hover { background: #821326; }
+
+  /* FOOTER */
+  .doc-footer { background: #0f172a; color: rgba(255,255,255,0.5); padding: 16px 40px; font-size: 8px; text-transform: uppercase; letter-spacing: 0.15em; display: flex; justify-content: space-between; margin-top: 30px; }
+
+  p { font-size: 9.5px; line-height: 1.65; color: #334155; margin-bottom: 6px; }
+  ul, ol { font-size: 9.5px; padding-left: 18px; margin: 6px 0; }
+  li { margin-bottom: 3px; line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<!-- PRINT BUTTON -->
+<button class="print-btn no-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+
+<!-- ==================== COVER ==================== -->
+<div class="cover">
+  <div class="cover-badge">Dokumen Teknis — Pengujian Sistem</div>
+  <h1>Laporan Pengujian<br><span>Error Pages & Keamanan</span></h1>
+  <p>Bus Kampus Kampus Non-Merdeka — Sistem Tiket Terintegrasi</p>
+  <div class="cover-meta">
+    <div>Tanggal<strong>April 2026</strong></div>
+    <div>Versi<strong>v3.2 — Keamanan Multi-Peran</strong></div>
+    <div>Lingkungan<strong>Laravel 10 + MySQL</strong></div>
+    <div>Status<strong>Local Development</strong></div>
+  </div>
+</div>
+
+<!-- ==================== CONTENT ==================== -->
+<div class="content">
+
+<!-- DAFTAR ISI -->
+<h2 class="section-title"><span class="num">0</span> Daftar Isi</h2>
+<table>
+  <tr><td style="width:40px; font-weight:800; color:#c41e3a;">1</td><td>Pendahuluan & Lingkup Pengujian</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">2</td><td>Pengujian Halaman Error (401, 403, 404, 419, 500, 503)</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">3</td><td>Pengujian Keamanan — Autentikasi & Otorisasi</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">4</td><td>Pengujian Keamanan — CSRF Protection</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">5</td><td>Pengujian Keamanan — SQL Injection</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">6</td><td>Pengujian Keamanan — XSS (Cross-Site Scripting)</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">7</td><td>Pengujian Keamanan — Rate Limiting & Brute Force</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">8</td><td>Checklist Aksesibilitas WCAG 2.1</td></tr>
+  <tr><td style="font-weight:800; color:#c41e3a;">9</td><td>Ringkasan & Rekomendasi</td></tr>
+</table>
+
+<!-- ==================== BAB 1 ==================== -->
+<h2 class="section-title"><span class="num">1</span> Pendahuluan & Lingkup Pengujian</h2>
+<p>Dokumen ini merupakan panduan teknis pengujian sistem <strong>Bus Kampus Non-Merdeka</strong> yang mencakup dua area utama: <strong>(1) Pengujian tampilan halaman error HTTP</strong> dan <strong>(2) Pengujian keamanan aplikasi web</strong>. Pengujian dilakukan pada lingkungan development lokal sebelum deployment ke production.</p>
+
+<div class="grid-2" style="margin-top:14px;">
+  <div class="card">
+    <h4>🌐 Informasi Sistem</h4>
+    <table>
+      <tr><td style="font-weight:700;width:90px;">Framework</td><td>Laravel 10.x</td></tr>
+      <tr><td style="font-weight:700;">Database</td><td>MySQL 8.0</td></tr>
+      <tr><td style="font-weight:700;">Auth</td><td>Session-based + CSRF</td></tr>
+      <tr><td style="font-weight:700;">Base URL</td><td><code>http://localhost:8181</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>👥 Role Pengguna</h4>
+    <table>
+      <tr><td><span class="badge badge-red">Admin</span></td><td>Akses penuh sistem</td></tr>
+      <tr><td><span class="badge badge-blue">User</span></td><td>Pemesanan tiket</td></tr>
+      <tr><td><span class="badge badge-navy">Sopir</span></td><td>Dashboard perjalanan</td></tr>
+      <tr><td><span class="badge badge-green">Guest</span></td><td>Lihat bus (tanpa login)</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="info-box warning">
+  <strong>⚠️ Perhatian:</strong> Route pengujian error (<code>/test-error/*</code>) hanya tersedia saat <code>APP_ENV=local</code>. Route ini <strong>tidak akan muncul</strong> di environment production/staging secara otomatis.
+</div>
+
+<!-- ==================== BAB 2 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">2</span> Pengujian Halaman Error HTTP</h2>
+<p>Semua halaman error menggunakan template <code>resources/views/errors/minimal.blade.php</code> dengan desain konsisten berlogo Kampus Non-Merdeka. Gunakan route debug berikut atau cara natural untuk memicu setiap kode error.</p>
+
+<h3 class="sub">2.1 URL Pengujian Cepat (Development)</h3>
+<table>
+  <thead><tr><th>Kode</th><th>Nama Error</th><th>URL Test</th><th>Cara Alami</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="badge badge-navy">401</span></td>
+      <td>Unauthorized</td>
+      <td><code>/test-error/401</code></td>
+      <td>Akses API tanpa header Authorization</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-orange">403</span></td>
+      <td>Forbidden</td>
+      <td><code>/test-error/403</code></td>
+      <td>Login sbg user → akses <code>/admin/dashboard</code></td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-blue">404</span></td>
+      <td>Not Found</td>
+      <td><code>/test-error/404</code></td>
+      <td>Akses URL yang tidak terdaftar di routes</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-yellow">419</span></td>
+      <td>Page Expired</td>
+      <td><code>/test-error/419</code></td>
+      <td>Submit form setelah hapus cookies / incognito</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-red">500</span></td>
+      <td>Server Error</td>
+      <td><code>/test-error/500</code></td>
+      <td>Perlu <code>APP_DEBUG=false</code> di .env</td>
+    </tr>
+    <tr>
+      <td><span class="badge badge-purple">503</span></td>
+      <td>Maintenance</td>
+      <td><code>/test-error/503</code></td>
+      <td>Jalankan: <code>php artisan down</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">2.2 Langkah Pengujian Halaman Error</h3>
+<table>
+  <thead><tr><th>Langkah</th><th>Aksi</th><th>Hasil yang Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Buka <code>/test-error/</code></td><td>Dashboard 6 kartu error muncul</td><td>☐</td></tr>
+    <tr><td>2</td><td>Klik kartu 404</td><td>Halaman 404 muncul dengan logo Kampus Non-Merdeka, tombol Beranda &amp; Kembali</td><td>☐</td></tr>
+    <tr><td>3</td><td>Klik kartu 403</td><td>Pesan "Forbidden" dengan desain Kampus Non-Merdeka</td><td>☐</td></tr>
+    <tr><td>4</td><td>Klik kartu 401</td><td>Pesan "Unauthorized"</td><td>☐</td></tr>
+    <tr><td>5</td><td>Klik kartu 419</td><td>Pesan "Page Expired"</td><td>☐</td></tr>
+    <tr><td>6</td><td>Set APP_DEBUG=false → klik kartu 500</td><td>Halaman 500 custom (bukan stack trace)</td><td>☐</td></tr>
+    <tr><td>7</td><td>Jalankan <code>php artisan down</code> → buka situs</td><td>Halaman 503 Maintenance</td><td>☐</td></tr>
+    <tr><td>8</td><td>Klik tombol "Beranda Utama" di setiap error</td><td>Kembali ke halaman utama (/)</td><td>☐</td></tr>
+    <tr><td>9</td><td>Klik tombol "Kembali Coba"</td><td>Navigasi ke halaman sebelumnya</td><td>☐</td></tr>
+    <tr><td>10</td><td>Uji di ukuran layar mobile (320px)</td><td>Tampilan responsif, teks tidak terpotong</td><td>☐</td></tr>
+  </tbody>
+</table>
+
+<div class="info-box info">
+  <strong>💡 Tips Error 500:</strong> Untuk melihat halaman 500 kustom (bukan Laravel debug page), edit file <code>.env</code>: ubah <code>APP_DEBUG=false</code>, simpan, lalu jalankan <code>php artisan config:clear</code> agar perubahan berlaku.
+</div>
+
+<h3 class="sub">2.3 Pengujian via Dashboard</h3>
+<p>Buka URL <code>http://localhost:8181/test-error/</code> di browser. Halaman dashboard akan menampilkan 6 kartu error. Klik setiap kartu untuk melihat tampilan masing-masing halaman error kustom Bus Kampus Non-Merdeka.</p>
+
+<!-- ==================== BAB 3 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">3</span> Pengujian Keamanan — Autentikasi & Otorisasi</h2>
+
+<h3 class="sub">3.1 Pengujian Login & Session</h3>
+<table>
+  <thead><tr><th>ID</th><th>Skenario</th><th>Langkah</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>AUTH-01</td>
+      <td>Login Valid Admin</td>
+      <td>POST <code>/login</code> dengan kredensial admin benar</td>
+      <td>Redirect ke <code>/admin/dashboard</code>, sesi aktif</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTH-02</td>
+      <td>Login Valid User</td>
+      <td>POST <code>/login</code> dengan kredensial user biasa</td>
+      <td>Redirect ke <code>/user/dashboard</code></td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTH-03</td>
+      <td>Login Gagal — Password Salah</td>
+      <td>POST <code>/login</code> dengan password salah</td>
+      <td>Pesan error "credential tidak cocok", <strong>tidak</strong> masuk</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTH-04</td>
+      <td>Login Gagal — Email Tidak Ada</td>
+      <td>POST <code>/login</code> email tidak terdaftar</td>
+      <td>Pesan error, tidak ada info apakah email terdaftar atau tidak</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTH-05</td>
+      <td>Akses Setelah Logout</td>
+      <td>Logout → tekan tombol Back browser → akses <code>/user/dashboard</code></td>
+      <td>Redirect ke halaman login (sesi tidak valid)</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTH-06</td>
+      <td>Session Fixation — Regenerate</td>
+      <td>Catat session ID sebelum login, bandingkan setelah login</td>
+      <td>Session ID <strong>berubah</strong> setelah berhasil login</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">3.2 Pengujian Otorisasi — Akses Route Terproteksi</h3>
+<table>
+  <thead><tr><th>ID</th><th>Skenario</th><th>Langkah</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>AUTHZ-01</td>
+      <td>User Akses Admin</td>
+      <td>Login sebagai user → buka <code>/admin/dashboard</code></td>
+      <td>Redirect atau Error 403 Forbidden</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTHZ-02</td>
+      <td>Guest Akses User Area</td>
+      <td>Tanpa login → buka <code>/user/dashboard</code></td>
+      <td>Redirect ke halaman <code>/login</code></td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTHZ-03</td>
+      <td>User Akses Data User Lain</td>
+      <td>Login sbg user A → buka <code>/user/bookings/{id_user_B}</code></td>
+      <td>Error 403 atau 404, data user lain tidak terekspos</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTHZ-04</td>
+      <td>Sopir Akses Admin</td>
+      <td>Login sebagai sopir → buka <code>/admin/buses</code></td>
+      <td>Error 403 Forbidden</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTHZ-05</td>
+      <td>Direct Access Protected API</td>
+      <td>Tanpa login → GET <code>/notifications</code></td>
+      <td>Redirect ke login</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>AUTHZ-06</td>
+      <td>Admin/Sopir Akses Rute User</td>
+      <td>Admin/Sopir login → buka <code>/user/dashboard</code> secara paksa</td>
+      <td>Diarahkan mundur ke Dashboard asal Admin/Sopir tanpa eror rusak</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="info-box success">
+  <strong>✅ Perlindungan yang Sudah Ada:</strong> Laravel menggunakan middleware <code>auth</code>, <code>admin</code>, dan <code>sopir</code> di routes untuk memblokir akses tidak sah secara otomatis.
+</div>
+
+<!-- ==================== BAB 4 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">4</span> Pengujian Keamanan — CSRF Protection</h2>
+<p>Laravel melindungi semua form POST/PATCH/DELETE dengan CSRF token. Berikut cara mengujinya:</p>
+
+<h3 class="sub">4.1 Skenario Pengujian CSRF</h3>
+<table>
+  <thead><tr><th>ID</th><th>Skenario</th><th>Langkah</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>CSRF-01</td>
+      <td>Form Tanpa Token</td>
+      <td>Submit form login via <code>curl</code> tanpa menyertakan <code>_token</code></td>
+      <td>HTTP 419 Page Expired</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>CSRF-02</td>
+      <td>Token Kadaluarsa</td>
+      <td>Buka form, tunggu &gt;120 menit, submit</td>
+      <td>HTTP 419 Page Expired</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>CSRF-03</td>
+      <td>Token Salah</td>
+      <td>Submit form dengan nilai <code>_token</code> dipalsukan</td>
+      <td>HTTP 419 Page Expired</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>CSRF-04</td>
+      <td>Cross-Origin Request</td>
+      <td>Buat HTML form di domain lain mengarah ke <code>/login</code></td>
+      <td>HTTP 419, request ditolak</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>CSRF-05</td>
+      <td>Token Valid — Form Normal</td>
+      <td>Submit form login normal via browser</td>
+      <td>Berhasil login (token diverifikasi Laravel)</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">4.2 Cara Menguji CSRF dengan cURL</h3>
+<pre># Uji POST tanpa CSRF token — harus ditolak dengan 419
+curl -X POST http://localhost:8181/login \
+  -d "email=admin@kampus-non-merdeka.ac.id&password=password" \
+  -c /tmp/cookies.txt -b /tmp/cookies.txt \
+  -v 2>&1 | grep "HTTP/"
+
+# Hasil yang diharapkan: HTTP/1.1 419</pre>
+
+<!-- ==================== BAB 5 ==================== -->
+<h2 class="section-title"><span class="num">5</span> Pengujian Keamanan — SQL Injection</h2>
+<p>Laravel menggunakan <strong>Eloquent ORM dengan prepared statements</strong> yang mencegah SQL Injection secara default. Pengujian ini memverifikasi bahwa tidak ada query mentah yang rentan.</p>
+
+<h3 class="sub">5.1 Skenario SQL Injection</h3>
+<table>
+  <thead><tr><th>ID</th><th>Input Uji</th><th>Field Target</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>SQLi-01</td>
+      <td><code>' OR '1'='1</code></td>
+      <td>Email pada form login</td>
+      <td>Login gagal, tidak bypass autentikasi</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>SQLi-02</td>
+      <td><code>admin'--</code></td>
+      <td>Email pada form login</td>
+      <td>Login gagal, error validasi</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>SQLi-03</td>
+      <td><code>'; DROP TABLE users;--</code></td>
+      <td>Field pencarian / input teks</td>
+      <td>Input diperlakukan sbg string biasa, tabel tidak terhapus</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>SQLi-04</td>
+      <td><code>1 UNION SELECT username,password FROM users</code></td>
+      <td>URL parameter ID booking</td>
+      <td>Error 404 atau data tidak bocor</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>SEC-05</td>
+      <td><code>update(['is_boarded'=&gt;true])</code></td>
+      <td>Mass Assignment Exploit ($fillable)</td>
+      <td>Sistem simulasi ORM menolak mass-assignment gelap (*Ghost-drop* dihiraukan jika tidak di-whitelist)</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="info-box success">
+  <strong>✅ Proteksi Aktif:</strong> Semua query menggunakan Eloquent ORM (<code>User::where('email', $email)</code>) yang secara otomatis menggunakan <em>parameterized queries / prepared statements</em> — immune terhadap SQL Injection standar. Penutupan Celah <strong>Mass-Assignment Vulnerability</strong> di Model Booking (variabel <code>is_boarded</code>, <code>priority_need</code>) telah rampung sehingga eksploitasi oleh bot <em>Auto-Cancel</em> 15 Detik sudah dinetralisir selamanya.
+</div>
+
+<!-- ==================== BAB 6 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">6</span> Pengujian Keamanan — XSS (Cross-Site Scripting)</h2>
+<p>Laravel Blade menggunakan <code>{{ }}</code> (double curly) yang secara otomatis meng-escape HTML output. Pengujian ini memverifikasi tidak ada celah XSS reflected maupun stored.</p>
+
+<h3 class="sub">6.1 Skenario XSS</h3>
+<table>
+  <thead><tr><th>ID</th><th>Payload</th><th>Target Input</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>XSS-01</td>
+      <td><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></td>
+      <td>Field nama saat registrasi</td>
+      <td>Tag ditampilkan sebagai teks biasa, alert TIDAK muncul</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>XSS-02</td>
+      <td><code>&lt;img src=x onerror=alert(1)&gt;</code></td>
+      <td>Field komentar / catatan booking</td>
+      <td>Tag di-escape, tidak ada eksekusi JS</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>XSS-03</td>
+      <td><code>"&gt;&lt;svg onload=alert(1)&gt;</code></td>
+      <td>Parameter URL (reflected)</td>
+      <td>Input di-encode, tidak ada eksekusi</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>XSS-04</td>
+      <td><code>javascript:alert(1)</code></td>
+      <td>Field URL / redirect</td>
+      <td>Input ditolak atau ditampilkan sbg teks</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">6.2 Verifikasi Otomatis Blade Escaping</h3>
+<p>Periksa source HTML halaman profil setelah menyimpan nama dengan karakter spesial:</p>
+<pre># Input: nama = &lt;script&gt;alert('xss')&lt;/script&gt;
+# Output di HTML yang diharapkan:
+&lt;p&gt;&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;&lt;/p&gt;
+# — Karakter < > dikonversi ke &amp;lt; &amp;gt; — AMAN ✅</pre>
+
+<div class="info-box warning">
+  <strong>⚠️ Perhatikan:</strong> Jika ada penggunaan <code>{!! !!}</code> (unescaped output) di Blade views, pastikan input yang ditampilkan sudah dibersihkan dengan <code>strip_tags()</code> atau <code>htmlspecialchars()</code>.
+</div>
+
+<!-- ==================== BAB 7 ==================== -->
+<h2 class="section-title"><span class="num">7</span> Pengujian Keamanan — Rate Limiting & Brute Force</h2>
+
+<h3 class="sub">7.1 Uji Rate Limiting Form Login</h3>
+<table>
+  <thead><tr><th>ID</th><th>Skenario</th><th>Langkah</th><th>Hasil Diharapkan</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>RATE-01</td>
+      <td>Login Gagal Berulang</td>
+      <td>Submit login salah 5x berturut-turut</td>
+      <td>Akun dikunci sementara / throttle aktif (429 Too Many Requests)</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>RATE-02</td>
+      <td>API Endpoint Flooding</td>
+      <td>Kirim 100+ request ke <code>/api/simulation/buses</code> dalam 1 menit</td>
+      <td>Rate limiter memblokir setelah batas terlampaui</td>
+      <td>☐</td>
+    </tr>
+    <tr>
+      <td>RATE-03</td>
+      <td>Password Enumeration</td>
+      <td>Coba 50+ password berbeda untuk 1 email</td>
+      <td>Respon terlambat / diblokir setelah percobaan tertentu</td>
+      <td>☐</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">7.2 Uji Paksa dengan cURL (Simulasi Brute Force)</h3>
+<pre># Simulasi login gagal berulang — pantau apakah 429 muncul setelah percobaan ke-5
+for i in {1..6}; do
+  curl -s -o /dev/null -w "Request $i: HTTP %{http_code}\n" \
+    -X POST http://localhost:8181/login \
+    -H "Content-Type: application/x-www-form-urlencoded" \
+    -d "_token=INVALID&email=test@test.com&password=wrongpass"
+done
+
+# Hasil diharapkan: Request 1-5 = 422, Request 6 = 429 Too Many Requests</pre>
+
+<!-- ==================== BAB 8 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">8</span> Checklist Aksesibilitas WCAG 2.1</h2>
+<p>Bus Kampus Non-Merdeka telah mengimplementasikan standar <strong>WCAG 2.1 Level AA</strong>. Gunakan checklist ini untuk memverifikasi:</p>
+
+<div class="grid-2">
+  <div class="card">
+    <h4>🔑 Keyboard & Navigasi</h4>
+    <ul class="checklist">
+      <li>Skip link "Lewati ke konten utama" muncul saat Tab pertama ditekan</li>
+      <li>Semua tombol dan link dapat dijangkau via Tab</li>
+      <li>Focus indicator (ring merah 3px) terlihat jelas</li>
+      <li>Modal panel aksesibilitas ditutup dengan tombol Escape</li>
+      <li>Sidebar navigation bisa diakses penuh via keyboard</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>🎨 Kontras & Visual</h4>
+    <ul class="checklist">
+      <li>Teks sidebar: rasio kontras ≥ 4.5:1 (rgba white/0.85)</li>
+      <li>Badge status: warna teks memenuhi WCAG AA</li>
+      <li>Tombol logout memiliki label teks, bukan hanya ikon</li>
+      <li>Ikon FontAwesome dekoratif: aria-hidden="true"</li>
+      <li>High contrast mode berfungsi via toolbar aksesibilitas</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>📢 Screen Reader</h4>
+    <ul class="checklist">
+      <li>Semua gambar punya alt text deskriptif</li>
+      <li>Flash message: role="alert" aria-live="polite"</li>
+      <li>Link aktif sidebar: aria-current="page"</li>
+      <li>Mobile menu button: aria-expanded + aria-controls</li>
+      <li>Rating bintang: aria-label="Rating 5 bintang"</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>⚙️ Aksesibilitas Toolbar</h4>
+    <ul class="checklist">
+      <li>Tombol ♿ terfokus saat Tab ke wilayahnya</li>
+      <li>Toggle font A/A+/A++ mengubah ukuran teks situs</li>
+      <li>Toggle kontras tinggi aktif dan persisten</li>
+      <li>Toggle kurangi gerak menonaktifkan animasi</li>
+      <li>Reset mengembalikan semua ke default</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="sub" style="margin-top:16px;">8.1 Cara Menguji Aksesibilitas</h3>
+<table>
+  <thead><tr><th>Metode</th><th>Tool</th><th>Langkah</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>Keyboard-only</td>
+      <td>Browser saja</td>
+      <td>Tekan Tab berulang kali, navigasi tanpa mouse. Pastikan semua elemen tercapai</td>
+    </tr>
+    <tr>
+      <td>Color Contrast</td>
+      <td>Chrome DevTools</td>
+      <td>Inspect element → klik kotak warna → lihat rasio kontras otomatis</td>
+    </tr>
+    <tr>
+      <td>Screen Reader</td>
+      <td>NVDA (Windows) / VoiceOver (Mac)</td>
+      <td>Aktifkan, navigasi halaman, pastikan semua konten diumumkan</td>
+    </tr>
+    <tr>
+      <td>Automated Scan</td>
+      <td>axe DevTools (Chrome Extension)</td>
+      <td>Install extension → buka halaman → Run Analysis → periksa violations</td>
+    </tr>
+    <tr>
+      <td>Reduced Motion</td>
+      <td>OS Settings / Toolbar</td>
+      <td>Aktifkan "Reduce Motion" di OS atau via toolbar ♿ → verifikasi animasi berhenti</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ==================== BAB 9 ==================== -->
+<div class="page-break"></div>
+<h2 class="section-title"><span class="num">9</span> Ringkasan & Rekomendasi</h2>
+
+<h3 class="sub">9.1 Status Proteksi Keamanan</h3>
+<table>
+  <thead><tr><th>Area</th><th>Status</th><th>Mekanisme</th><th>Rekomendasi</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>CSRF</td>
+      <td><span class="badge badge-green">✅ Aktif</span></td>
+      <td>Laravel VerifyCsrfToken middleware</td>
+      <td>Sudah aman — tidak perlu aksi</td>
+    </tr>
+    <tr>
+      <td>SQL Injection</td>
+      <td><span class="badge badge-green">✅ Aktif</span></td>
+      <td>Eloquent ORM + prepared statements</td>
+      <td>Hindari query <code>DB::select()</code> dengan input mentah</td>
+    </tr>
+    <tr>
+      <td>XSS</td>
+      <td><span class="badge badge-green">✅ Aktif</span></td>
+      <td>Blade <code>{{ }}</code> auto-escape HTML</td>
+      <td>Hindari <code>{!! !!}</code> tanpa sanitasi</td>
+    </tr>
+    <tr>
+      <td>Autentikasi</td>
+      <td><span class="badge badge-green">✅ Aktif</span></td>
+      <td>Session-based auth + middleware auth</td>
+      <td>Pertimbangkan 2FA untuk akun admin</td>
+    </tr>
+    <tr>
+      <td>Otorisasi</td>
+      <td><span class="badge badge-green">✅ Aktif</span></td>
+      <td>Custom middleware: admin, sopir</td>
+      <td>Tambahkan Laravel Gates/Policies untuk granularitas</td>
+    </tr>
+    <tr>
+      <td>Rate Limiting</td>
+      <td><span class="badge badge-yellow">⚠️ Parsial</span></td>
+      <td>Laravel default throttle</td>
+      <td>Konfigurasi eksplisit di <code>RouteServiceProvider</code></td>
+    </tr>
+    <tr>
+      <td>HTTPS</td>
+      <td><span class="badge badge-orange">⚠️ Lokal</span></td>
+      <td>HTTP di development</td>
+      <td>Wajib SSL/TLS di production (Let's Encrypt)</td>
+    </tr>
+    <tr>
+      <td>Headers Keamanan</td>
+      <td><span class="badge badge-yellow">⚠️ Belum</span></td>
+      <td>—</td>
+      <td>Tambahkan CSP, X-Frame-Options, HSTS via middleware</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 class="sub">9.2 Rekomendasi Prioritas Tinggi</h3>
+<div class="info-box danger">
+  <strong>🔴 PRODUCTION — Wajib Sebelum Go-Live:</strong>
+  <ol style="margin-top:6px; padding-left:18px;">
+    <li>Aktifkan HTTPS / SSL certificate (Let's Encrypt)</li>
+    <li>Set <code>APP_DEBUG=false</code> dan <code>APP_ENV=production</code></li>
+    <li>Tambahkan header keamanan: <code>X-Frame-Options: DENY</code>, <code>Content-Security-Policy</code></li>
+    <li>Hapus atau batasi akses route <code>/test-error/*</code> (sudah terlindungi via <code>app()->environment('local')</code>)</li>
+    <li>Konfigurasikan <code>SESSION_SECURE_COOKIE=true</code> dan <code>SESSION_HTTP_ONLY=true</code></li>
+  </ol>
+</div>
+
+<div class="info-box warning">
+  <strong>🟡 JANGKA MENENGAH — Peningkatan Keamanan:</strong>
+  <ol style="margin-top:6px; padding-left:18px;">
+    <li>Implementasi Two-Factor Authentication (2FA) untuk admin</li>
+    <li>Audit log untuk aksi sensitif (login, perubahan data, hapus record)</li>
+    <li>Konfigurasi rate limiting eksplisit di <code>RouteServiceProvider.php</code></li>
+    <li>Tambahkan validasi server-side yang lebih ketat di semua FormRequest</li>
+  </ol>
+</div>
+
+<div class="info-box success">
+  <strong>🟢 AKSESIBILITAS — Sudah Diimplementasikan:</strong>
+  <ul style="margin-top:6px; padding-left:18px;">
+    <li>Skip navigation link (WCAG 2.4.1)</li>
+    <li>ARIA landmark roles di semua layout (WCAG 1.3.1)</li>
+    <li>Focus indicator yang jelas (WCAG 2.4.7)</li>
+    <li>Accessibility Toolbar: ukuran teks, kontras, reduced motion</li>
+    <li>Mendukung <code>prefers-reduced-motion</code> dan Windows High Contrast Mode</li>
+  </ul>
+</div>
+
+</div><!-- end .content -->
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <span>Bus Kampus Non-Merdeka — Laporan Pengujian Error & Keamanan</span>
+  <span>© 2026 Kampus Non-Merdeka Transport System</span>
+  <span>Versi 3.2 — April 2026</span>
+</div>
+
+</body>
+</html>

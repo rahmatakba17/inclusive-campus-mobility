@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Panduan Pemula: Deployment Laravel (Bus Kampus) ke Hostinger via SSH & Git</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; color: #333; }
+        h1 { color: #2c3e50; text-align: center; }
+        h2 { color: #2980b9; border-bottom: 2px solid #2980b9; padding-bottom: 5px; }
+        h3 { color: #16a085; }
+        p, li { font-size: 14px; }
+        .step { background: #f9f9f9; padding: 15px; margin-bottom: 20px; border-left: 4px solid #3498db; }
+        code { background: #eee; padding: 3px 6px; border-radius: 4px; font-family: monospace; color: #d63031; }
+        pre code { background: none; color: inherit; display: block; overflow-x: auto; }
+        pre { background: #2d3436; color: #f1f2f6; padding: 15px; border-radius: 5px; }
+        .warning { background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Panduan Lengkap: Deployment Bus Kampus di Hostinger (Metode SSH &amp; Git)</h1>
+    <p>Panduan ini menggunakan metode Terminal (SSH) dan Git untuk mempermudah proses pembaruan (update) di masa depan tanpa perlu upload manual berkali-kali.</p>
+
+    <div class="warning">
+        <strong>Penting:</strong> Pastikan Anda telah melakukan <code>git commit</code> dan <code>git push</code> seluruh kode proyek Bus Kampus lokal Anda (termasuk folder file tersembunyi) ke repositori GitHub atau GitLab Anda secara online.
+    </div>
+
+    <h2>Tahap 1: Persiapan Database di Hostinger</h2>
+    <div class="step">
+        <ol>
+            <li>Login ke <strong>hPanel Hostinger</strong>.</li>
+            <li>Buka menu <strong>Database</strong> -> <strong>Manajemen Database</strong> (MySQL Databases).</li>
+            <li>Buat database baru. Isi <strong>Nama Database</strong>, <strong>Username MySQL</strong>, dan <strong>Password</strong>.</li>
+            <li>Klik tombol <strong>Buat</strong> (Create), dan catat informasi kredensial yang baru saja Anda buat.</li>
+        </ol>
+    </div>
+
+    <h2>Tahap 2: Menghubungkan Terminal via SSH</h2>
+    <div class="step">
+        <ol>
+            <li>Di hPanel Hostinger, cari menu <strong>Tingkat Lanjut (Advanced)</strong> -> <strong>Akses SSH</strong>.</li>
+            <li>Aktifkan akses SSH jika belum aktif.</li>
+            <li>Salin perintah koneksi SSH yang diberikan (misal: <code>ssh u1234567@185.xxx.xxx.xxx -p 65002</code>).</li>
+            <li>Buka program <strong>Terminal</strong> (di Mac/Linux) atau <strong>Command Prompt/PowerShell</strong> (di Windows), lalu *paste* dan jalankan perintah tersebut.</li>
+            <li>Masukkan password FTP/SSH Anda (biasanya sama dengan password utama Cpanel/hPanel Anda). Ketika mengetik, karakter password tidak akan terlihat; tekan Enter jika sudah.</li>
+        </ol>
+    </div>
+
+    <h2>Tahap 3: Kloning Repositori Git di Server</h2>
+    <div class="step">
+        <p>Setelah berhasil login di Terminal Hostinger:</p>
+        <ol>
+            <li>Masuk ke direktori website Anda (biasanya `public_html`):
+<pre><code>cd domains/namadomainanda.com/public_html</code></pre>
+            </li>
+            <li>Hapus file bawaan jika ada (memastikan folder kosong sempurna):
+<pre><code>rm -rf * && rm -rf .*</code></pre>
+            </li>
+            <li>Lakukan *Clone* (Salin kode) dari repositori GitHub Anda ke dalam direktori ini (jangan lupa tanda titik di akhir agar terekstrak langsung, bukan di dalam sub-folder):
+<pre><code>git clone https://github.com/username/repo-bus-kampus.git .</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <h2>Tahap 4: Instalasi Dependensi dan Build</h2>
+    <div class="step">
+        <p>Jalankan perintah ini satu-per-satu di terminal VPS/Shared Hosting Anda:</p>
+        <ol>
+            <li>Install berbagai library (vendor) PHP:
+<pre><code>composer install --no-dev --optimize-autoloader</code></pre>
+            </li>
+            <li>Install Node.js packages untuk bagian Frontend (Asset):
+<pre><code>npm install
+npm run build</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <h2>Tahap 5: Konfigurasi File .env dan Migrate</h2>
+    <div class="step">
+        <ol>
+            <li>Buat file <code>.env</code> dengan mengkopi file example:
+<pre><code>cp .env.example .env</code></pre>
+            </li>
+            <li>Edit file <code>.env</code> menggunakan editor Nano:
+<pre><code>nano .env</code></pre>
+                <p>Ubah pengaturan krusial menjadi seperti ini (Gunakan tombol panah di keyboard untuk navigasi arah):</p>
+<pre><code>APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://namadomainanda.com
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database_anda_dari_tahap_1
+DB_USERNAME=user_database_anda_dari_tahap_1
+DB_PASSWORD=PasswordDatabaseAnda!</code></pre>
+                <p>Simpan konfigurasi dengan menekan <strong>Ctrl + X</strong>, lalu ketik huruf <strong>Y</strong>, kemudian tekan <strong>Enter</strong>.</p>
+            </li>
+            <li>Generate Key enkripsi lokal:
+<pre><code>php artisan key:generate</code></pre>
+            </li>
+            <li>Jalankan pembuatan tabel database (Migrasi) beserta isinya:
+<pre><code>php artisan migrate --seed</code></pre>
+            </li>
+        </ol>
+    </div>
+
+    <h2>Tahap 6: Optimasi & Mengamankan Folder Utama</h2>
+    <div class="step">
+        <ol>
+            <li>Tautkan folder penyimpanan publik gambar/assets Laravel (Symlink storage):
+<pre><code>php artisan storage:link</code></pre>
+            </li>
+            <li>Optimasi agar Laravel memuat kerangka aplikasi lebih cepat di Production:
+<pre><code>php artisan optimize</code></pre>
+            </li>
+            <li><strong>Tahap Akhir (Sangat Penting untuk Shared Hosting!):</strong> Secara default aplikasi hanya mengekspos public folder. Buat sebuah file konfigurasi server htaccess:
+<pre><code>nano .htaccess</code></pre>
+                Tambahkan kode teks berikut ini:
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+&lt;/IfModule&gt;</code></pre>
+            (Simpan: Ctrl+X, Y, lalu Enter.)
+            </li>
+        </ol>
+        <p>Buka website dari browser (contoh: <em>https://namadomainanda.com</em>) untuk memastikan aplikasi telah mengudara!</p>
+    </div>
+
+    <h2>Tahap Pembaruan (Jika Ada Perbaikan Bug / Penambahan Fitur Lokal)</h2>
+    <div class="step">
+        <p>Sewaktu-waktu di masa mendatang Anda merubah kode di komputer pribadi Anda, dorong (Push) perubahan tersebut ke Github. Lalu Login SSH dan jalankan rutinitas sederhana (Pulling):</p>
+<pre><code>cd domains/namadomainanda.com/public_html
+git pull origin main
+composer install --no-dev
+npm run build
+php artisan migrate
+php artisan optimize</code></pre>
+        <p>Sistem akan langsung terbarui secara cerdas tanpa harus upload manual (ZIP) file yang berat.</p>
+    </div>
+
+</body>
+</html>

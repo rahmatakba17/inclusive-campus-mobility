@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Modul Skenario Simulasi - Bus Kampus Non-Merdeka</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --primary: #1e3a5f;
+      --accent: #c41e3a;
+      --bg: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    @page { size: A4; margin: 20mm; }
+
+    @media print {
+      body { background: white; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      .container { box-shadow: none !important; margin: 0 !important; width: 100% !important; border-radius: 0 !important; }
+      .card { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }
+    }
+
+    .container {
+      max-width: 940px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--primary), #0f172a);
+      color: white;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 4px;
+      background: var(--accent);
+    }
+    .header-logo-wrap {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 68px; height: 68px;
+      background: white; border-radius: 50%;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      border: 3px solid rgba(255,255,255,0.2);
+      position: relative; z-index: 1;
+    }
+    .header-logo-wrap img { width: 48px; height: 48px; object-fit: contain; }
+    .header h1 { font-size: 30px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; position: relative; z-index: 1; }
+    .header p { font-size: 15px; color: #cbd5e1; max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+    .header .version { 
+      display: inline-block; margin-top: 16px; padding: 4px 14px; 
+      background: rgba(255,255,255,0.12); border-radius: 20px;
+      font-size: 12px; font-weight: 600; position: relative; z-index: 1;
+    }
+
+    /* Content Area */
+    .content { padding: 40px; }
+
+    /* Scenario Card */
+    .scenario { margin-bottom: 44px; }
+
+    .scenario-header {
+      display: flex; align-items: center;
+      gap: 15px; margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .scenario-icon {
+      width: 50px; height: 50px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .scenario-title { flex: 1; }
+    .scenario-title h2 { font-size: 20px; font-weight: 700; color: var(--primary); }
+    .scenario-title p { font-size: 13px; color: var(--text-light); }
+
+    /* Steps */
+    .step-list { list-style: none; counter-reset: step-counter; }
+
+    .step-item {
+      position: relative;
+      padding-left: 36px;
+      margin-bottom: 16px;
+    }
+
+    .step-item::before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      position: absolute;
+      left: 0; top: 12px;
+      width: 24px; height: 24px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+
+    .step-content {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    .step-content:hover { border-color: #cbd5e1; }
+    .step-content strong { color: var(--primary); }
+
+    /* Code */
+    code {
+      background: #e2e8f0; padding: 2px 6px;
+      border-radius: 4px; font-family: monospace;
+      font-size: 12px; color: #334155;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block; padding: 2px 8px;
+      border-radius: 4px; font-size: 11px; font-weight: 700;
+    }
+    .badge-civitas { background: #dcfce7; color: #166534; }
+    .badge-umum { background: #f3e8ff; color: #6b21a8; }
+    .badge-tamu { background: #ffedd5; color: #c2410c; }
+    .badge-sopir { background: #dbeafe; color: #1e40af; }
+    .badge-admin { background: #fce7f3; color: #9d174d; }
+    .badge-new { background: #fef9c3; color: #854d0e; }
+    .badge-wcag { background: #d1fae5; color: #065f46; }
+    .badge-error { background: #fee2e2; color: #991b1b; }
+
+    /* Rules Box */
+    .rules-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 36px;
+    }
+    .rules-box h3 { font-size: 15px; color: #1e3a5f; margin-bottom: 10px; font-weight: 700; }
+    .rules-box ul { padding-left: 20px; font-size: 13px; color: #475569; }
+    .rules-box li { margin-bottom: 8px; }
+
+    /* New feature callout */
+    .new-callout {
+      background: linear-gradient(135deg, #fefce8, #fef9c3);
+      border-left: 4px solid #f59e0b;
+      padding: 16px 20px;
+      border-radius: 0 10px 10px 0;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #78350f;
+    }
+    .new-callout strong { color: #92400e; }
+
+    /* Print Button */
+    .print-btn-wrapper { text-align: center; margin: 20px 0 40px; }
+    .print-btn {
+      background: var(--accent); color: white; border: none;
+      padding: 12px 28px; border-radius: 10px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(196, 30, 58, 0.3);
+      transition: all 0.2s;
+    }
+    .print-btn:hover { background: #a01830; transform: translateY(-2px); }
+
+    /* Divider */
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  </style>
+</head>
+<body>
+
+  <div class="print-btn-wrapper no-print">
+    <button class="print-btn" onclick="window.print()">🖨️ Cetak / Simpan sebagai PDF</button>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="header-logo-wrap">
+        <img src="http://localhost:8181/images/logo_kampus_non_merdeka.png" alt="Logo Kampus Non-Merdeka"
+             onerror="this.style.display='none'; this.parentElement.innerHTML='🏛️'">
+      </div>
+      <h1>Modul Skenario Simulasi</h1>
+      <p>Dokumentasi Lengkap Alur Sistem Tiket &amp; Pelacakan Real-Time Bus Kampus Non-Merdeka</p>
+      <div class="version">Versi 3.2 — April 2026 &nbsp;|&nbsp; 11 Skenario Lengkap</div>
+    </div>
+
+    <div class="content">
+
+      <div class="rules-box">
+        <h3>ℹ️ Aturan Sistem yang Berlaku (v3.2)</h3>
+        <ul>
+          <li><strong>Jam Operasional:</strong> Pemesanan hanya bisa dilakukan antara jam <strong>05:00 - 21:00 WITA</strong>.</li>
+          <li><strong>Status Bus:</strong> Tiket HANYA bisa dipesan ketika bus berstatus <strong>Standby</strong>. Jika bus sedang jalan/istirahat, sistem menolak pemesanan.</li>
+          <li><strong>Proteksi Double-Booking:</strong> Satu pengguna tidak dapat memiliki 2 tiket aktif secara bersamaan pada bus manapun.</li>
+          <li><strong>Limitasi Kursi:</strong> Civitas maks <strong>4 kursi</strong>/transaksi, Umum maks <strong>1 kursi</strong>/transaksi, Tamu maks <strong>1 kursi</strong>.</li>
+          <li><strong>Limitasi Tip:</strong> Setiap pengguna hanya dapat memberikan tip <strong>1 kali per minggu</strong>, maksimal <strong>Rp 5.000</strong>.</li>
+          <li><strong>Auto-Finish:</strong> Sistem otomatis menyelesaikan semua tiket dan menghilangkan ikon penumpang saat bus tiba di terminal destinasi. Alert hanya muncul <strong>1 kali</strong>.</li>
+          <li><strong>Aksesibilitas WCAG 2.1:</strong> Toolbar ♿ tersedia di setiap halaman. Kontras minimum 4.5:1.</li>
+          <li><strong>Otorisasi Hapus (Baru):</strong> Bus tak bisa dihapus jikalau sedang berstatus "Aktif" & "Perawatan".</li>
+          <li><strong>Riwayat Fisik (Baru):</strong> Setiap merubah status menjadi "Perawatan" diwajibkan menulis Catatan Maintenance.</li>
+        </ul>
+      </div>
+
+      <!-- Skenario 1 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🎓</div>
+          <div class="scenario-title">
+            <h2>Skenario 1: Penumpang Civitas Akademika</h2>
+            <p>Pemesanan E-Tol, multi-kursi, dan Tip Apresiasi <span class="badge badge-civitas">CIVITAS</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Login Akun:</strong> Akses <code>/login</code> dan masuk menggunakan kredensial Civitas (contoh: <code>riska@kampus-non-merdeka.ac.id</code> / <code>password</code>). Sidebar menampilkan Logo Kampus Non-Merdeka dalam lingkaran putih.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Dashboard &amp; Peta Live:</strong> Buka <strong>Dashboard</strong>. Lihat peta live 13 armada dengan 2 rute terpisah (Tamalanrea ➔ Gowa dan Gowa ➔ Tamalanrea). Maks 2 bus per arah berjalan bersamaan.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Bus Standby:</strong> Buka <strong>Bus List</strong>, pilih bus dengan label <span style="background:#eef2ff;color:#4f46e5;border-radius:4px;padding:2px 6px;font-size:12px;font-weight:700;">STANDBY</span>. Klik tombol "Detail" atau "Pesan".
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Pembayaran E-Tol:</strong> Pilih metode <strong>Kartu E-Tol</strong> (tarif Rp 3.000/kursi). Klik "Tap / Scan Kartu E-Tol" — sistem simulasi menghasilkan 16 digit nomor seri e-tol.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Kursi (Maks 4):</strong> Pilih kursi pada denah interaktif. Civitas diizinkan memilih hingga <strong>4 kursi sekaligus</strong> dalam satu transaksi. Klik konfirmasi pembayaran.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Proteksi Double-Booking:</strong> Setelah berhasil memesan, coba klik bus lain → Sistem <strong>MENOLAK (Akses Ditolak)</strong> secara otomatis. Batalkan tiket pertama dulu jika ingin pindah bus.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>[PENTING - ATURAN SIMULASI 15 DETIK]:</strong> Begitu tiket diterbitkan, argo <em>grace period</em> 15 detik mulai berjalan. Mahasiswa/Tamu wajib memencet tombol "Validasi Check-in" di aplikasinya (Geofencing GPS) dalam batas waktu tersebut.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              Jika melebihi 15 detik dan belum check-in, peladen (server) mengeksekusi otomatis aturan <strong>Auto-Cancel</strong> dan menghanguskan tiket sehingga kursi langsung "hijau" kembali dan bisa direbut penumpang lain.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Penyelamatan Sopir (Driver Override):</strong> Jika penumpang tiba pada detik-detik akhir, Sopir cukup menekan tombol <strong>"Hadir"</strong> di Manifest untuk menyelamatkan tiket dari hangus otomatis!
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Notifikasi Bell:</strong> Klik ikon lonceng 🔔 di topbar kanan atas → dropdown muncul berisi status tiket Anda secara real-time. Badge merah menghitung item belum dibaca.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Kirim Tip Apresiasi:</strong> Buka detail tiket berstatus "Jalan" → scroll ke bawah → form Tip muncul. Kirim tip maks Rp 5.000. Form langsung terkunci dan menampilkan countdown "Tip berikutnya tersedia: X hari".
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 2 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">👤</div>
+          <div class="scenario-title">
+            <h2>Skenario 2: Penumpang Umum ter-Registrasi</h2>
+            <p>Pemesanan QRIS, limit 1 kursi <span class="badge badge-umum">UMUM</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Login Akun:</strong> Masuk sebagai <code>ani@gmail.com</code> / <code>password</code>.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Bus &amp; Pembayaran QRIS:</strong> Buka <strong>Bus List</strong> → pilih bus Standby → pilih metode <strong>QRIS</strong> (tarif Rp 6.000/kursi) → klik "Simulasi Scan QR" → tunggu countdown 3–5 detik.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Kursi (Maks 1):</strong> Berbeda dengan Civitas, pengguna umum <strong>hanya boleh 1 kursi</strong> per transaksi. Tombol penambahan kursi ke-2 akan dinonaktifkan.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Verifikasi Notifikasi:</strong> Klik 🔔 ikon notifikasi → tampil status tiket dengan badge warna (hijau=Confirmed, kuning=Pending, merah=Cancelled).
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="page-break"></div>
+
+      <!-- Skenario 3 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🚶</div>
+          <div class="scenario-title">
+            <h2>Skenario 3: Pemesanan Tamu (Guest)</h2>
+            <p>Pemesanan instan tanpa login <span class="badge badge-tamu">TAMU</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Tanpa Login:</strong> Dari halaman utama, klik menu <strong>Pesan sebagai Tamu</strong> (halaman <code>/guest/buses</code>).
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih Bus &amp; Isi Data:</strong> Pilih bus Standby → isi Form: Nama Tamu dan Nomor HP aktif.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Pilih 1 Kursi:</strong> Pilih satu kursi tersedia di denah interaktif.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Checkout Cepat:</strong> Konfirmasi → Tiket terbit dengan kode booking <code>BUS-XXXXXX</code>. Admin dapat melihat tiket ini berlabel "[TAMU]" di panel Bookings.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 4 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🚌</div>
+          <div class="scenario-title">
+            <h2>Skenario 4: Operasional Sopir</h2>
+            <p>Manajemen manifes, perjalanan, dan notifikasi tip <span class="badge badge-sopir">SOPIR</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Login Sopir:</strong> Masuk sebagai <code>sopir08@kampus-non-merdeka.ac.id</code> / <code>password</code>. Navbar menampilkan Logo Kampus Non-Merdeka. Panel menampilkan ID bus dan rute hari ini.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Lihat Manifes Penumpang:</strong> Daftar kursi terisi beserta nama dan kategori penumpang (Civitas/Umum/Tamu). Kursi kosong ditampilkan berbeda.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Mulai Perjalanan:</strong> Klik tombol <strong>"Mulai Perjalanan"</strong> → status bus berubah ke <strong>Jalan</strong> → pemesanan tiket baru diblokir otomatis.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Auto-Finish Trip (Sekali Saja):</strong> Buka peta <code>/map</code> di tab lain. Saat bus sampai di terminal tujuan, sistem memicu alert <strong>"Tiba di Tujuan"</strong> (hanya 1×, tidak berulang). Semua tiket penumpang berubah ke Completed secara otomatis.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Inspeksi Laporan Harian:</strong> Setelah shift selesai, pada layar Dashboard yang sama Sopir wajib mengisi Form <strong>Inspeksi Harian</strong> memaparkan kondisi kebugaran dan kelayakan mesin/kabin bus lalu menyimpannya ke sistem.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 5 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🗺️</div>
+          <div class="scenario-title">
+            <h2>Skenario 5: Pemantauan Peta Real-Time</h2>
+            <p>Tracking GIS 13 armada dual-route</p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Akses Peta Publik:</strong> Buka <code>http://localhost:8181/map</code> (tanpa login). Logo Kampus Non-Merdeka tampil di topbar kiri.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Simulasi Antrean Dual-Route:</strong> 13 armada bergerak di peta. Maksimal <strong>2 bus per arah</strong> berjalan bersamaan. Bus lain berstatus <span style="color:#d97706;font-weight:700;">Antri</span> di terminal Tamalanrea atau Gowa.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Tooltip Interaktif:</strong> Klik ikon bus di peta → Pop-up menampilkan nama bus, sopir, jumlah penumpang, arah rute, dan ETA.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Ikon ANDA (Penumpang):</strong> Jika sedang dalam perjalanan, ikon merah "ANDA" muncul di posisi bus. Ikon hilang otomatis saat bus tiba — tanpa reload halaman.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 6 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">📊</div>
+          <div class="scenario-title">
+            <h2>Skenario 6: Modul Pelaporan Admin</h2>
+            <p>Manajemen finansial dan visualisasi pendapatan <span class="badge badge-admin">ADMIN</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Akses Menu Pelaporan:</strong> Login sebagai <code>admin@kampus-non-merdeka.ac.id</code> → menu <strong>Laporan Pemasukan</strong> di sidebar kiri.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Analisis Pendapatan:</strong> Lihat ringkasan Total Harian, Bulanan, dan Tahunan. Pendapatan tiket dipisahkan dari tip/donasi sopir.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Grafik Tren:</strong> Visualisasi chart interaktif menampilkan tren pendapatan per periode.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Ekspor PDF:</strong> Klik tombol <strong>"Cetak PDF"</strong> → dokumen laporan resmi terbuka di tab baru siap untuk dicetak.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 7 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🔔</div>
+          <div class="scenario-title">
+            <h2>Skenario 7: Sistem Notifikasi Bell Real-Time <span class="badge badge-new">BARU</span></h2>
+            <p>Notifikasi berbeda per peran — Admin, User, Sopir</p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Klik Ikon Bell:</strong> Klik ikon lonceng 🔔 di pojok kanan atas (tersedia di semua panel). Dropdown langsung melakukan fetch data dari server.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Konten Sesuai Peran:</strong>
+              <ul style="padding-left:16px;margin-top:6px;font-size:13px;color:#475569;">
+                <li>👑 <strong>Admin:</strong> Booking pending (unread/merah) + booking terkonfirmasi terbaru.</li>
+                <li>🎓 <strong>User:</strong> Status tiket sendiri (pending kuning / confirmed hijau / cancelled merah).</li>
+                <li>🚌 <strong>Sopir:</strong> Tip masuk dari penumpang dalam 1 jam terakhir ditandai unread.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Baca Pintar (Smart Mark-as-read):</strong> Membuka <i>dropdown bell</i> akan menahan form selama 1 detik (jeda wajar baca) dan memicu sinkronisasi hybrid <i>LocalStorage-Database</i>. Hasilnya, <i>Badge Merah</i> menghilang otomatis seketika dan data persisten hilang sekalipun saat di-refresh.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Navigasi Langsung:</strong> Klik tiap item notifikasi → diarahkan ke halaman detail booking yang relevan. Klik "Lihat Semua" di footer dropdown → menuju halaman daftar booking lengkap.
+            </div>
+          </li>
+        </ol>
+        <div class="new-callout">
+          💡 <strong>Catatan Teknis:</strong> Notifikasi diambil melalui endpoint <code>GET /notifications</code> (auth required). Auto-refresh setiap 30 detik tanpa reload halaman. Dropdown memiliki z-index lebih tinggi dari konten halaman (z-50 pada header) sehingga selalu tampil di atas semua elemen.
+        </div>
+      </div>
+
+      <!-- Skenario 8 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">♿</div>
+          <div class="scenario-title">
+            <h2>Skenario 8: Aksesibilitas WCAG 2.1 <span class="badge badge-wcag">BARU v3.0</span></h2>
+            <p>Pengujian inklusivitas — keyboard, screen reader, toolbar aksesibilitas</p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Skip Navigation:</strong> Buka halaman <code>/</code> (landing page) → tekan <strong>Tab</strong> pertama kali. Link biru/merah "Lewati ke konten utama" harus muncul di atas navbar dengan outline kuning emas.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Keyboard-Only Navigation:</strong> Navigasi seluruh halaman menggunakan Tab / Shift+Tab / Enter saja (tanpa mouse). Semua tombol, link, dan form harus dapat dijangkau dan dioperasikan. Focus indicator (outline merah 3px) harus terlihat jelas di setiap elemen aktif.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Buka Toolbar Aksesibilitas:</strong> Klik tombol <strong>♿</strong> di pojok kanan bawah (tersedia di semua halaman — welcome, user, admin). Panel aksesibilitas terbuka dengan 3 opsi: Ukuran Teks, Kontras Tinggi, Kurangi Gerak.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Uji Ukuran Teks:</strong> Klik <strong>A+</strong> → teks seluruh halaman membesar ke 110%. Klik <strong>A++</strong> → 125%. Reload halaman → ukuran tetap sama (tersimpan di <code>localStorage</code>). Klik <strong>Reset</strong> → kembali normal.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Uji Kontras Tinggi:</strong> Aktifkan toggle <strong>Kontras Tinggi</strong> → halaman terlihat lebih gelap dan kontras. Berguna untuk pengguna low-vision. Status toggle tersimpan antar sesi.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Uji Kurangi Gerak:</strong> Aktifkan toggle <strong>Kurangi Gerak</strong> → semua animasi CSS (pulse, transition, transform) berhenti. Berguna bagi pengguna dengan kondisi vestibular. Juga aktif otomatis jika OS menggunakan <code>prefers-reduced-motion: reduce</code>.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Verifikasi Sidebar (Login Diperlukan):</strong> Login sebagai User → buka <strong>Beranda</strong>. Inspect elemen link sidebar aktif → pastikan atribut <code>aria-current="page"</code> ada. Ikon FontAwesome di sidebar harus memiliki <code>aria-hidden="true"</code>.
+            </div>
+          </li>
+        </ol>
+        <div class="new-callout">
+          ♿ <strong>File Implementasi:</strong> <code>resources/views/partials/accessibility-toolbar.blade.php</code> (toolbar), <code>layouts/app.blade.php</code> (skip nav + CSS global), <code>layouts/admin.blade.php</code>, <code>layouts/user.blade.php</code>, <code>welcome.blade.php</code>. Semua memenuhi WCAG 2.1 Level AA.
+        </div>
+      </div>
+
+      <!-- Skenario 9 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🚨</div>
+          <div class="scenario-title">
+            <h2>Skenario 9: Pengujian Halaman Error <span class="badge badge-error">BARU v3.0</span></h2>
+            <p>Verifikasi tampilan 6 kode error HTTP — 401, 403, 404, 419, 500, 503</p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Buka Dashboard Uji:</strong> Akses <code>http://localhost:8181/test-error/</code>. Dashboard menampilkan 6 kartu error berwarna berbeda (tersedia hanya di <code>APP_ENV=local</code>).
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Uji via Kartu / URL:</strong> Klik setiap kartu atau buka URL langsung:
+              <ul style="padding-left:16px;margin-top:6px;font-size:13px;color:#475569;">
+                <li><code>/test-error/401</code> → Unauthorized</li>
+                <li><code>/test-error/403</code> → Forbidden</li>
+                <li><code>/test-error/404</code> → Not Found</li>
+                <li><code>/test-error/419</code> → Page Expired (CSRF)</li>
+                <li><code>/test-error/500</code> → Server Error</li>
+                <li><code>/test-error/503</code> → Service Unavailable</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Verifikasi Tampilan:</strong> Setiap halaman error harus menampilkan: Logo Kampus Non-Merdeka melayang dengan animasi ping, kode error besar (H1), pesan deskriptif, tombol <strong>Kembali Coba</strong> dan <strong>Beranda Utama</strong>.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Cara Alami — Error 403:</strong> Login sebagai user biasa → akses <code>/admin/dashboard</code> → Error 403 muncul secara natural (middleware <code>admin</code> menolak akses).
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Cara Alami — Error 404:</strong> Akses URL tidak terdaftar, contoh: <code>/halaman-random-xyz</code> → Error 404 muncul.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Error 500 (Butuh APP_DEBUG=false):</strong> Edit <code>.env</code>: set <code>APP_DEBUG=false</code> → jalankan <code>php artisan config:clear</code> → buka <code>/test-error/500</code>. Halaman 500 kustom Kampus Non-Merdeka muncul (bukan stack trace Laravel).
+            </div>
+          </li>
+        </ol>
+        <div class="new-callout">
+          🔒 <strong>Keamanan Route:</strong> Route <code>/test-error/*</code> hanya aktif saat <code>APP_ENV=local</code>. Saat <code>APP_ENV=production</code>, route ini <strong>tidak tersedia sama sekali</strong> — aman untuk deployment.
+        </div>
+      </div>
+
+      <!-- Skenario 10 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">🛠️</div>
+          <div class="scenario-title">
+            <h2>Skenario 10: Siklus Maintenance Rekam Jejak Armada <span class="badge badge-admin">ADMIN</span></h2>
+            <p>Verifikasi Proteksi Laporan Maintenance & Sinkronisasi Real-Time Peta Tabel</p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Sinkronisasi Live Badge:</strong> Buka Fleet Data list <code>/admin/buses</code>, perhatikan indikator kolom Trip Status. Warnanya (jalan/standby/istirahat) menyala berkedip *Real-time sync* (interval 1.5 detik) seturut armada berlalu lalang di halaman utama tanpa me-refresh browser.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Proteksi Hapus Frontend & Backend:</strong> Tes Hapus salah satu bus yang belum "Tidak Aktif". SweetAlert pop-up Merah (Akses ditolak!) mencegah perusakan data terpusat Anda.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Log Laporan Perawatan:</strong> Edit armada tadi → Set status form menjadi **Perawatan**. Akan muncul _textarea_ popup form Alpine.js "Catatan Teknik" yang mewajibkan input diagnostik.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Riwayat History Lintas Aktor:</strong> Kembali ke halaman View Data (Detail Bus) armada yang di-edit. Pada sekmen terbawah ada modul **Riwayat Laporan Armada**. Di situlah tulisan dari "Laporan Harian (Sopir)" dan "Audit Maintenance (Admin)" tersusun bertumpuk kronologis secara berdikari.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Skenario 11 -->
+      <div class="scenario">
+        <div class="scenario-header">
+          <div class="scenario-icon">♿</div>
+          <div class="scenario-title">
+            <h2>Skenario 11: Purwarupa Pemesanan Inklusif (Demo)</h2>
+            <p>Fitur Pesan Kursi / Integrasi Penumpang Prioritas <span class="badge badge-wcag">AKUN INKLUSIF</span></p>
+          </div>
+        </div>
+        <ol class="step-list">
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Akses Halaman Uji:</strong> Jelajahi file <code>/inclusive-demo.html</code>. Muncul rancangan Booking Kursi Baru berlandaskan WCAG dan "Smart Blocking".
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Limitasi Interaksi Dinamis Berbasis Profil:</strong> Jika Pengguna menggunakan profil awam (tanpa kualifikasi disabilitas), Toggle disabilitas dimatikan untuk mengokohkan "4 Kursi Merah". Sebaliknya, saat toggle prioritas ditekan, UI bertransisi selama 10-15 detik mendemonstrasikan penguncian paksa kursi.
+            </div>
+          </li>
+          <li class="step-item">
+            <div class="step-content">
+              <strong>Skenario Kekebalan (Immunity Rule):</strong> Penumpang prioritas tingkat tinggi yang memakai Purwarupa Pemesanan ini tidak mempan terkena pembersihan <em>Auto-Cancel 15 Detik</em>. Tiket akan diamankan permanen walau lambat melakukan <em>Check-In</em>.
+            </div>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="print-btn-wrapper no-print">
+    <button class="print-btn" onclick="window.print()">🖨️ Cetak / Simpan sebagai PDF</button>
+  </div>
+
+</body>
+</html>

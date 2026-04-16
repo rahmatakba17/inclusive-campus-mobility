@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* ── Bus Map Marker Styles ────────────────────────────────────────── */
+/* Digunakan oleh bus-tracker.js — L.divIcon dengan class .bus-dot    */
+.bus-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    background-color: #3b82f6; /* default biru */
+    /* GPU-accelerated compositing — mencegah layout reflow saat animasi */
+    will-change: transform;
+    transition: background-color 0.4s ease;
+}
+
+.bus-dot[data-status="jalan"]     { background-color: #22c55e; } /* hijau */
+.bus-dot[data-status="standby"]   { background-color: #3b82f6; } /* biru */
+.bus-dot[data-status="istirahat"] { background-color: #f59e0b; } /* kuning */
+
+/* Pulse animation untuk bus yang sedang jalan */
+.bus-dot[data-status="jalan"]::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: -4px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(34, 197, 94, 0.3);
+    animation: bus-pulse 2s ease-out infinite;
+    pointer-events: none;
+}
+
+@keyframes bus-pulse {
+    0%   { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ── Performance: Prevent Layout Thrashing ──────────────────────────── */
+/* Elemen yang sering diupdate pollingg — gunakan contain agar browser  */
+/* tidak reflow seluruh halaman saat konten berubah.                    */
+[data-role="status-badge"],
+[data-role="seats-count"] {
+    contain: layout style;
+}
+
+#bus-map {
+    /* Isolasi rendering map dari komponen lain */
+    contain: layout;
+    isolation: isolate;
+}

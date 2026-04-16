@@ -1,0 +1,118 @@
+services:
+  # ===================================
+  # Laravel Application (PHP-FPM)
+  # ===================================
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP:-1000}'
+    image: bus_kampus-unhas
+    container_name: bus_kampus_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    volumes:
+      - .:/var/www/html
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - bus_kampus_network
+    depends_on:
+      - mysql
+      - redis
+
+  # ===================================
+  # Nginx Web Server
+  # ===================================
+  nginx:
+    image: nginx:stable-alpine
+    container_name: bus_kampus_nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-80}:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - bus_kampus_network
+    depends_on:
+      - app
+
+  # ===================================
+  # MySQL Database
+  # ===================================
+  mysql:
+    image: mysql:8.0
+    container_name: bus_kampus_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: '${DB_DATABASE:-bus_kampus}'
+      MYSQL_USER: '${DB_USERNAME:-bus_user}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-password}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD:-password}'
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - bus_kampus_mysql_data:/var/lib/mysql
+    networks:
+      - bus_kampus_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      retries: 3
+      timeout: 5s
+
+  # ===================================
+  # Redis Cache & Sessions
+  # ===================================
+  redis:
+    image: redis:7-alpine
+    container_name: bus_kampus_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - bus_kampus_redis_data:/data
+    networks:
+      - bus_kampus_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+
+  # ===================================
+  # phpMyAdmin (Database Management)
+  # ===================================
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: bus_kampus_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${PMA_PORT:-8080}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: '${DB_PASSWORD:-password}'
+    networks:
+      - bus_kampus_network
+    depends_on:
+      - mysql
+
+# ===================================
+# Networks
+# ===================================
+networks:
+  bus_kampus_network:
+    driver: bridge
+
+# ===================================
+# Volumes (Persistent Storage)
+# ===================================
+volumes:
+  bus_kampus_mysql_data:
+    driver: local
+  bus_kampus_redis_data:
+    driver: local

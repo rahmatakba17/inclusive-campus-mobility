@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Akun Simulasi — Bus Kampus Non-Merdeka</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f2137 60%, #0a1628 100%);
+      color: white;
+      padding: 44px 40px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(196,30,58,0.2) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Cross pattern */
+    .header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .header-logo-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px; height: 72px;
+      background: white;
+      border-radius: 50%;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+    .header-logo-wrap img { width: 52px; height: 52px; object-fit: contain; }
+    .header h1 {
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -0.5px; margin-bottom: 6px;
+      position: relative;
+    }
+    .header p {
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      font-weight: 400; position: relative;
+    }
+    .badge-password {
+      display: inline-block; margin-top: 14px;
+      background: rgba(196,30,58,0.25);
+      border: 1px solid rgba(196,30,58,0.5);
+      color: #ff9999;
+      padding: 6px 18px; border-radius: 999px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.4px;
+      position: relative;
+    }
+    .badge-password strong { color: #ff6b6b; }
+    .version-badge {
+      display: inline-block; margin-top: 8px; margin-left: 8px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.7);
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+      position: relative;
+    }
+
+    /* Section */
+    .section { padding: 28px 40px; border-bottom: 1px solid #e8edf2; }
+    .section:last-child { border-bottom: none; }
+
+    .section-title {
+      display: flex; align-items: center;
+      gap: 10px; margin-bottom: 16px;
+    }
+    .section-title .icon { font-size: 22px; }
+    .section-title h2 { font-size: 16px; font-weight: 700; color: #1a202c; }
+    .section-title .count {
+      margin-left: auto;
+      background: #eef2ff; color: #4f46e5;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+    }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: #f7f9fc; }
+    thead th {
+      text-align: left; padding: 10px 14px;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      color: #718096; border-bottom: 2px solid #e2e8f0;
+    }
+    tbody tr { border-bottom: 1px solid #f0f4f8; transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafbff; }
+    tbody td { padding: 11px 14px; vertical-align: middle; }
+
+    .name-cell { font-weight: 600; color: #2d3748; }
+    .email-cell {
+      font-family: 'Courier New', monospace; font-size: 12px;
+      background: #f7f9fc; padding: 4px 8px;
+      border-radius: 5px; color: #4a5568; display: inline-block;
+    }
+    .pass-cell {
+      font-family: 'Courier New', monospace; font-size: 12px;
+      background: #fff3cd; border: 1px solid #ffc107;
+      padding: 4px 10px; border-radius: 5px;
+      color: #856404; font-weight: 700; display: inline-block;
+    }
+    .access-cell { font-size: 11px; color: #64748b; }
+
+    /* Role badges */
+    .role-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+    }
+    .role-admin { background: #fce7f3; color: #9d174d; }
+    .role-sopir { background: #dbeafe; color: #1e40af; }
+    .role-civitas { background: #d1fae5; color: #065f46; }
+    .role-umum { background: #ede9fe; color: #5b21b6; }
+
+    .no-cell { color: #a0aec0; font-size: 12px; font-weight: 600; width: 36px; }
+
+    /* URL Section */
+    .url-section { padding: 28px 40px; background: #f7f9fc; }
+    .url-section h2 { font-size: 15px; font-weight: 700; margin-bottom: 14px; color: #1a202c; }
+    .url-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .url-item {
+      background: white; border: 1px solid #e2e8f0;
+      border-radius: 10px; padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 4px;
+      transition: box-shadow 0.15s;
+    }
+    .url-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .url-label {
+      font-size: 10px; font-weight: 700; color: #718096;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .url-value {
+      font-family: 'Courier New', monospace; font-size: 12px;
+      color: #2b6cb0; word-break: break-all;
+    }
+    .url-badge {
+      display: inline-block; margin-top: 2px;
+      font-size: 9px; font-weight: 700; padding: 1px 6px;
+      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .url-badge-public { background: #dcfce7; color: #166534; }
+    .url-badge-auth   { background: #fef3c7; color: #92400e; }
+    .url-badge-admin  { background: #fce7f3; color: #9d174d; }
+    .url-badge-sopir  { background: #dbeafe; color: #1e40af; }
+    .url-badge-user   { background: #ede9fe; color: #5b21b6; }
+
+    /* New features section */
+    .features-section { padding: 28px 40px; }
+    .features-section h2 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: #1a202c; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .feature-card {
+      background: #f8fafc; border: 1px solid #e2e8f0;
+      border-radius: 12px; padding: 14px 16px;
+      border-top: 3px solid;
+    }
+    .feature-card.red { border-top-color: #c41e3a; }
+    .feature-card.blue { border-top-color: #1e3a5f; }
+    .feature-card.green { border-top-color: #059669; }
+    .feature-card .f-icon { font-size: 20px; margin-bottom: 6px; display: block; }
+    .feature-card h3 { font-size: 12px; font-weight: 700; color: #1a202c; margin-bottom: 4px; }
+    .feature-card p { font-size: 11px; color: #64748b; line-height: 1.5; }
+
+    /* Footer */
+    .footer {
+      background: #1e3a5f; color: rgba(255,255,255,0.5);
+      text-align: center; padding: 18px;
+      font-size: 11px;
+    }
+    .footer strong { color: rgba(255,255,255,0.85); }
+
+    /* Print styles */
+    @media print {
+      body { background: white; padding: 0; }
+      .container { box-shadow: none; border-radius: 0; }
+      .print-btn { display: none !important; }
+      tbody tr:hover { background: transparent; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Print button */
+    .print-btn {
+      display: block; width: fit-content;
+      margin: 20px auto;
+      background: linear-gradient(135deg, #c41e3a, #821326);
+      color: white; border: none;
+      padding: 12px 32px; border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 14px rgba(196,30,58,0.4);
+      transition: all 0.2s;
+    }
+    .print-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196,30,58,0.5); }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Simpan / Cetak sebagai PDF</button>
+
+  <div class="container">
+
+    <!-- Header -->
+    <div class="header">
+      <div style="position:relative; z-index:1;">
+        <div class="header-logo-wrap">
+          <img src="http://localhost:8181/images/logo_kampus_non_merdeka.png" alt="Logo Kampus Non-Merdeka" onerror="this.style.display='none'; this.parentElement.innerHTML='🚌'">
+        </div>
+        <h1>Daftar Akun Simulasi</h1>
+        <p>Sistem Bus Kampus — Kampus Non-Merdeka</p>
+        <div>
+          <span class="badge-password">Semua akun: sandi <strong>password</strong></span>
+          <span class="version-badge">v3.2 · April 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">👑</span>
+        <h2>Admin</h2>
+        <span class="count">1 akun</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Nama</th><th>Email</th><th>Sandi</th><th>Role</th><th>Akses</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name-cell">Admin Transportasi</td>
+            <td><span class="email-cell">admin@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-admin">Admin</span></td>
+            <td class="access-cell">Dashboard, Fleet, Bookings, Passengers, Drivers, Laporan Keuangan, Notifikasi</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sopir -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">🚌</span>
+        <h2>Sopir (13 Armada)</h2>
+        <span class="count">13 akun</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Nama</th><th>Email</th><th>Sandi</th><th>Role</th><th>Bus</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="no-cell">01</td><td class="name-cell">Hasan Basri</td><td><span class="email-cell">sopir01@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 01</td></tr>
+          <tr><td class="no-cell">02</td><td class="name-cell">Mukhtar Lede</td><td><span class="email-cell">sopir02@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 02</td></tr>
+          <tr><td class="no-cell">03</td><td class="name-cell">Syamsul Hadi</td><td><span class="email-cell">sopir03@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 03</td></tr>
+          <tr><td class="no-cell">04</td><td class="name-cell">Ridwan Karim</td><td><span class="email-cell">sopir04@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 04</td></tr>
+          <tr><td class="no-cell">05</td><td class="name-cell">Ambo Dalle</td><td><span class="email-cell">sopir05@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 05</td></tr>
+          <tr><td class="no-cell">06</td><td class="name-cell">Nurdin Sialana</td><td><span class="email-cell">sopir06@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 06</td></tr>
+          <tr><td class="no-cell">07</td><td class="name-cell">Saharuddin</td><td><span class="email-cell">sopir07@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 07</td></tr>
+          <tr><td class="no-cell">08</td><td class="name-cell">Andi Mappa</td><td><span class="email-cell">sopir08@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 08</td></tr>
+          <tr><td class="no-cell">09</td><td class="name-cell">Baharuddin</td><td><span class="email-cell">sopir09@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 09</td></tr>
+          <tr><td class="no-cell">10</td><td class="name-cell">Suardi Usman</td><td><span class="email-cell">sopir10@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 10</td></tr>
+          <tr><td class="no-cell">11</td><td class="name-cell">Junaidi Rahman</td><td><span class="email-cell">sopir11@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 11</td></tr>
+          <tr><td class="no-cell">12</td><td class="name-cell">Kamaruddin</td><td><span class="email-cell">sopir12@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 12</td></tr>
+          <tr><td class="no-cell">13</td><td class="name-cell">Arifin Dg. Nai</td><td><span class="email-cell">sopir13@kampus-non-merdeka.ac.id</span></td><td><span class="pass-cell">password</span></td><td><span class="role-badge role-sopir">Sopir</span></td><td class="access-cell">Bus Kampus Non-Merdeka 13</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Penumpang -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">👥</span>
+        <h2>Penumpang (Civitas &amp; Umum)</h2>
+        <span class="count">5 akun</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Nama</th><th>Email</th><th>Sandi</th><th>Role</th><th>Hak &amp; Batas</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name-cell">Muh. Budi Santoso</td>
+            <td><span class="email-cell">budi@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Maks 4 kursi, E-Tol Rp 3.000, Tip 1x/minggu</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Dr. Surya Darma</td>
+            <td><span class="email-cell">surya@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Maks 4 kursi, E-Tol Rp 3.000, Tip 1x/minggu</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Riska Amalia</td>
+            <td><span class="email-cell">riska@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Maks 4 kursi, E-Tol Rp 3.000, Tip 1x/minggu</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Ani Wulandari</td>
+            <td><span class="email-cell">ani@gmail.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Maks 1 kursi, QRIS Rp 6.000, Tip 1x/minggu</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Andi Fatimah</td>
+            <td><span class="email-cell">andi@yahoo.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Maks 1 kursi, QRIS Rp 6.000, Tip 1x/minggu</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Penumpang Prioritas -->
+    <div class="section">
+      <div class="section-title">
+        <span class="icon">♿</span>
+        <h2>Penumpang Prioritas / Inklusif</h2>
+        <span class="count">8 akun</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Nama & Kategori</th><th>Email</th><th>Sandi</th><th>Role</th><th>Hak Spesial</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name-cell">Ahmad Fauzan<br><span style="font-size:10px;font-weight:700;color:#c41e3a;">♿ Kursi Roda (Tinggi)</span></td>
+            <td><span class="email-cell">ahmad.difabel@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Subsidi Kampus Non-Merdeka 100% (GRATIS)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Prof. Darwis<br><span style="font-size:10px;font-weight:700;color:#f59e0b;">🧓 Lansia (Sedang)</span></td>
+            <td><span class="email-cell">darwis.lansia@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Siti Rahma<br><span style="font-size:10px;font-weight:700;color:#3b82f6;">🏥 Medis (Lainnya)</span></td>
+            <td><span class="email-cell">siti.medis@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Nurul Aisyah<br><span style="font-size:10px;font-weight:700;color:#ec4899;">🤰 Ibu Hamil (Sedang)</span></td>
+            <td><span class="email-cell">nurul.hamil@kampus-non-merdeka.ac.id</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-civitas">Civitas</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+          <!-- UMUM -->
+          <tr>
+            <td class="name-cell">Baharuddin<br><span style="font-size:10px;font-weight:700;color:#c41e3a;">♿ Kursi Roda (Tinggi)</span></td>
+            <td><span class="email-cell">bahar.difabel@gmail.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Subsidi Kampus Non-Merdeka 100% (GRATIS)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Hj. Ramlah<br><span style="font-size:10px;font-weight:700;color:#f59e0b;">🧓 Lansia (Sedang)</span></td>
+            <td><span class="email-cell">ramlah.lansia@gmail.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Irwan Syah<br><span style="font-size:10px;font-weight:700;color:#3b82f6;">🏥 Medis (Lainnya)</span></td>
+            <td><span class="email-cell">irwan.medis@yahoo.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+          <tr>
+            <td class="name-cell">Fatimah Az-Zahra<br><span style="font-size:10px;font-weight:700;color:#ec4899;">🤰 Ibu Hamil (Sedang)</span></td>
+            <td><span class="email-cell">fatimah.hamil@gmail.com</span></td>
+            <td><span class="pass-cell">password</span></td>
+            <td><span class="role-badge role-umum">Umum</span></td>
+            <td class="access-cell">Akses Zona Depan (1-4)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- URL -->
+    <div class="url-section">
+      <h2>🌐 URL Halaman Penting</h2>
+      <div class="url-grid">
+        <div class="url-item">
+          <span class="url-label">Landing Page</span>
+          <span class="url-value">http://localhost:8181/</span>
+          <span class="url-badge url-badge-public">Publik</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">UI Pemesanan Inklusif</span>
+          <span class="url-value">http://localhost:8181/inclusive-demo.html</span>
+          <span class="url-badge url-badge-public">Publik &middot; Demo</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Login</span>
+          <span class="url-value">http://localhost:8181/login</span>
+          <span class="url-badge url-badge-public">Publik</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Peta Real-Time</span>
+          <span class="url-value">http://localhost:8181/map</span>
+          <span class="url-badge url-badge-public">Publik</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Pesan sebagai Tamu</span>
+          <span class="url-value">http://localhost:8181/guest/buses</span>
+          <span class="url-badge url-badge-public">Publik</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Dashboard Admin</span>
+          <span class="url-value">http://localhost:8181/admin/dashboard</span>
+          <span class="url-badge url-badge-admin">Admin</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Laporan Keuangan</span>
+          <span class="url-value">http://localhost:8181/admin/revenue</span>
+          <span class="url-badge url-badge-admin">Admin</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Daftar Penumpang</span>
+          <span class="url-value">http://localhost:8181/admin/users</span>
+          <span class="url-badge url-badge-admin">Admin</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Dashboard Sopir</span>
+          <span class="url-value">http://localhost:8181/sopir/dashboard</span>
+          <span class="url-badge url-badge-sopir">Sopir</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Dashboard User</span>
+          <span class="url-value">http://localhost:8181/user/dashboard</span>
+          <span class="url-badge url-badge-user">User</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Daftar Bus (Pesan Tiket)</span>
+          <span class="url-value">http://localhost:8181/user/buses</span>
+          <span class="url-badge url-badge-user">User</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Notifikasi API</span>
+          <span class="url-value">http://localhost:8181/notifications</span>
+          <span class="url-badge url-badge-auth">Auth Required</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">API Posisi Bus</span>
+          <span class="url-value">http://localhost:8181/api/simulation/buses</span>
+          <span class="url-badge url-badge-public">Publik &middot; JSON</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Dashboard Uji Error Pages</span>
+          <span class="url-value">http://localhost:8181/test-error/</span>
+          <span class="url-badge" style="background:#fef9c3;color:#854d0e;">Local Only</span>
+        </div>
+        <div class="url-item">
+          <span class="url-label">Uji Error Spesifik</span>
+          <span class="url-value">http://localhost:8181/test-error/{401|403|404|500|503}</span>
+          <span class="url-badge" style="background:#fef9c3;color:#854d0e;">Local Only</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="features-section">
+      <h2>✨ Fitur Terbaru (Versi 3.1)</h2>
+      <div class="feature-grid">
+        <div class="feature-card red">
+          <span class="f-icon">🔔</span>
+          <h3>Notifikasi Bell Real-Time</h3>
+          <p>Dropdown notifikasi di semua layout (Admin/User/Sopir). Auto-refresh 30 detik, badge unread merah, konten berbeda per peran.</p>
+        </div>
+        <div class="feature-card blue">
+          <span class="f-icon">📋</span>
+          <h3>Laporan Maintenance Beruntun</h3>
+          <p>Admin wajib set nota 'Catatan Teknik' sebelum Bus berstatus Perawatan dan Sopir diwajibkan input 'Kondisi Harian', bersatu di Riwayat Panel Armada.</p>
+        </div>
+        <div class="feature-card green">
+          <span class="f-icon">⚡</span>
+          <h3>Auto-Finish Trip & Delete Protect</h3>
+          <p>Selain bus tiba di tujuan hapus otomatis penumpang, armada yang tidak aktif mutlak ditahan untuk dihapus layernya.</p>
+        </div>
+        <div class="feature-card red">
+          <span class="f-icon">♿</span>
+          <h3>Inclusive UI & WCAG 2.1 Focus</h3>
+          <p>Toolbar ♿ (font size, kontras tinggi, reduced motion) plus Purwarupa Pemesanan "Smart Blocking" khusus penyandang disabilitas.</p>
+        </div>
+        <div class="feature-card blue">
+          <span class="f-icon">🚨</span>
+          <h3>Error Pages + Testing Dashboard</h3>
+          <p>Halaman error kustom (401,403,404,419,500,503) berdesain Kampus Non-Merdeka. Dashboard uji di <code>/test-error/</code> hanya aktif di environment lokal.</p>
+        </div>
+        <div class="feature-card green">
+          <span class="f-icon">🗺️</span>
+          <h3>Dual-Route + Admin Sync Grid</h3>
+          <p>Maks 2 bus aktif per rute pada Main Live Map. Serta di Daftar Bus Admin berflashing label Trip Status tanpa polling reload dari admin.</p>
+        </div>
+        <div class="feature-card yellow">
+          <span class="f-icon">⏲️</span>
+          <h3>Auto-Cancel 15s & Driver Revive</h3>
+          <p>Proteksi 15 detik Geofencing khusus kursi reguler. Mendukung <i>Driver Override</i>: Sopir menekan "Hadir" seketika di-revive kembali!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <strong>Bus Kampus Non-Merdeka</strong> &nbsp;&middot;&nbsp; Dokumen Simulasi v3.2
+      &nbsp;&middot;&nbsp; Total: <strong>19 akun</strong>
+      &nbsp;&middot;&nbsp; Semua sandi: <strong>password</strong>
+      &nbsp;&middot;&nbsp; Sprint 15 &amp; 16 — Keamanan Notifikasi & Auto-Cancel Simulasi
+      &nbsp;&middot;&nbsp; &copy; April 2026
+    </div>
+
+  </div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Simpan / Cetak sebagai PDF</button>
+
+</body>
+</html>

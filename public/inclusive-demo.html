@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemesanan Kursi Inklusif — Bus Kampus UNHAS</title>
+  <meta name="description" content="Sistem pemesanan kursi bus kampus UNHAS yang inklusif untuk sivitas akademika, tamu, dan pengguna prioritas.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: { DEFAULT: '#800000', light: '#a00000', dark: '#5c0000' },
+            gold:   { DEFAULT: '#FFD700', light: '#fff0a0' }
+          },
+          keyframes: {
+            priorityPulse: {
+              '0%,100%': { boxShadow: '0 0 0 0 rgba(59,130,246,0.5)' },
+              '60%':     { boxShadow: '0 0 0 10px rgba(59,130,246,0)' }
+            }
+          },
+          animation: {
+            'priority-pulse': 'priorityPulse 1.8s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    [x-cloak] { display: none !important; }
+    body { background: #f1f3f6; padding-bottom: 148px; }
+
+    /* Custom radio hiding but accessible */
+    .role-radio { position: absolute; opacity: 0; width: 0; height: 0; }
+    .role-radio:focus-visible + .role-card { outline: 3px solid #FFD700; outline-offset: 2px; }
+
+    /* Toggle smooth */
+    .toggle-thumb { transition: transform 0.22s cubic-bezier(.4,0,.2,1); }
+    .toggle-track { transition: background-color 0.22s ease; }
+
+    /* Seat hover pop */
+    .seat { transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease; }
+    .seat:not(:disabled):hover { transform: scale(1.08); }
+    .seat:not(:disabled):active { transform: scale(0.97); }
+    .seat:focus-visible { outline: 3px solid #FFD700; outline-offset: 2px; }
+
+    /* Priority seat pulse */
+    .seat-priority-active { animation: priorityPulse 1.8s ease-in-out infinite; }
+
+    @keyframes priorityPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.5); }
+      60%     { box-shadow: 0 0 0 10px rgba(59,130,246,0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div x-data="bookingApp()" x-init="calcPrice()">
+
+  <!-- ░░░ STICKY HEADER ░░░ -->
+  <header role="banner" class="sticky top-0 z-50 shadow-md"
+          style="background: linear-gradient(135deg, #800000 0%, #5c0000 100%);">
+    <!-- Gold accent strip -->
+    <div class="h-1" style="background: linear-gradient(to right, #FFD700, #ffe066, #FFD700);"></div>
+    <div class="max-w-md mx-auto px-4 py-3.5 flex items-center gap-3">
+      <button aria-label="Kembali" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+        <i class="fas fa-arrow-left text-sm" aria-hidden="true"></i>
+      </button>
+      <div class="flex-1 min-w-0">
+        <h1 class="text-white font-black text-base leading-tight tracking-tight">Pilih Kursi Bus</h1>
+        <p class="text-white/60 text-[11px] font-medium">Bus Kampus UNHAS · Inklusif</p>
+      </div>
+      <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(255,215,0,0.18);">
+        <i class="fas fa-bus-alt text-gold text-sm" aria-hidden="true"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- Skip to main -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-20 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-gold focus:text-slate-900 focus:font-bold focus:rounded-lg">
+    Lewati ke konten utama
+  </a>
+
+  <main id="main-content" role="main" class="max-w-md mx-auto px-4 pt-5 space-y-4">
+
+    <!-- ████████████████████████████████████████
+         STEP 1 · IDENTITY & NEED DECLARATION
+    ████████████████████████████████████████ -->
+    <section aria-labelledby="s1-heading" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+      <!-- Section header -->
+      <div class="px-5 pt-5 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-black shrink-0"
+               style="background:#800000;">1</div>
+          <div>
+            <h2 id="s1-heading" class="font-bold text-slate-800 text-sm leading-none mb-0.5">Identitas &amp; Kebutuhan</h2>
+            <p class="text-[11px] text-slate-400 font-medium">Tentukan tipe dan kebutuhan kursi Anda</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-5 py-5 space-y-5">
+
+        <!-- ── Role Selector ── -->
+        <fieldset>
+          <legend class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2.5">Tipe Pengguna</legend>
+          <div class="grid grid-cols-2 gap-2.5" role="radiogroup">
+
+            <!-- Sivitas -->
+            <div>
+              <input type="radio" id="r-civitas" name="role" value="civitas"
+                     class="role-radio"
+                     x-model="userRole"
+                     @change="handleRoleChange()">
+              <label for="r-civitas"
+                     class="role-card flex flex-col items-center gap-2 px-3 py-4 rounded-xl border-2 cursor-pointer transition-all select-none"
+                     :class="userRole==='civitas'
+                       ? 'border-maroon bg-maroon text-white shadow-lg shadow-red-900/20'
+                       : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300'">
+                <i class="fas fa-graduation-cap text-2xl" aria-hidden="true"
+                   :class="userRole==='civitas' ? 'text-gold' : 'text-slate-400'"></i>
+                <div class="text-center">
+                  <div class="font-black text-sm leading-none mb-1">Sivitas</div>
+                  <div class="text-[10px] font-medium leading-tight opacity-70">Mahasiswa · Dosen · Staf</div>
+                </div>
+                <span class="text-[9px] font-black px-2.5 py-1 rounded-full mt-0.5"
+                      :class="userRole==='civitas' ? 'bg-white/20 text-white' : 'bg-green-100 text-green-700'">
+                  E-TOL Rp 3.000
+                </span>
+              </label>
+            </div>
+
+            <!-- Tamu -->
+            <div>
+              <input type="radio" id="r-guest" name="role" value="guest"
+                     class="role-radio"
+                     x-model="userRole"
+                     @change="handleRoleChange()">
+              <label for="r-guest"
+                     class="role-card flex flex-col items-center gap-2 px-3 py-4 rounded-xl border-2 cursor-pointer transition-all select-none"
+                     :class="userRole==='guest'
+                       ? 'border-maroon bg-maroon text-white shadow-lg shadow-red-900/20'
+                       : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300'">
+                <i class="fas fa-user text-2xl" aria-hidden="true"
+                   :class="userRole==='guest' ? 'text-gold' : 'text-slate-400'"></i>
+                <div class="text-center">
+                  <div class="font-black text-sm leading-none mb-1">Tamu Umum</div>
+                  <div class="text-[10px] font-medium leading-tight opacity-70">Eksternal · Pengunjung</div>
+                </div>
+                <span class="text-[9px] font-black px-2.5 py-1 rounded-full mt-0.5"
+                      :class="userRole==='guest' ? 'bg-white/20 text-white' : 'bg-orange-100 text-orange-700'">
+                  QRIS Rp 5.000
+                </span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ── Priority Toggle ── -->
+        <div class="rounded-xl border-2 p-4 transition-all"
+             :class="isPriority ? 'border-blue-300 bg-blue-50' : 'border-slate-200 bg-slate-50'">
+
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors"
+                 :class="isPriority ? 'bg-blue-100' : 'bg-slate-200'">
+              <i class="fas fa-wheelchair text-base transition-colors"
+                 aria-hidden="true"
+                 :class="isPriority ? 'text-blue-600' : 'text-slate-400'"></i>
+            </div>
+            <div class="flex-1">
+              <label for="priority-sw" class="font-bold text-slate-800 text-sm cursor-pointer block leading-none mb-0.5">
+                Saya Memerlukan Kursi Prioritas
+              </label>
+              <p class="text-[11px] text-slate-500">Untuk lansia, ibu hamil, dan penyandang disabilitas</p>
+            </div>
+            <!-- Toggle Switch -->
+            <button id="priority-sw"
+                    type="button"
+                    role="switch"
+                    :aria-checked="isPriority.toString()"
+                    aria-label="Aktifkan kebutuhan kursi prioritas"
+                    @click="togglePriority()"
+                    @keydown.enter.prevent="togglePriority()"
+                    @keydown.space.prevent="togglePriority()"
+                    class="toggle-track relative shrink-0 w-12 h-6 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+                    :class="isPriority ? 'bg-blue-500' : 'bg-slate-300'">
+              <span class="toggle-thumb absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow-md"
+                    :class="isPriority ? 'translate-x-6' : 'translate-x-0'"></span>
+            </button>
+          </div>
+
+          <!-- Priority Level Dropdown -->
+          <div x-show="isPriority" x-cloak x-transition:enter="transition ease-out duration-200"
+               x-transition:enter-start="opacity-0 -translate-y-2"
+               x-transition:enter-end="opacity-100 translate-y-0"
+               class="mt-4 pt-4 border-t border-blue-200">
+            <label for="priority-level" class="block text-xs font-bold text-blue-800 mb-2">
+              <i class="fas fa-hand-holding-heart mr-1.5 text-blue-500" aria-hidden="true"></i>
+              Pilih Tingkat Kebutuhan Prioritas
+            </label>
+            <div class="relative">
+              <select id="priority-level"
+                      x-model="priorityNeed"
+                      @change="calcPrice(); clearSeatIfPriorityConflict()"
+                      class="w-full px-4 py-2.5 pr-10 bg-white border-2 border-blue-200 rounded-xl text-sm font-semibold text-slate-700 appearance-none cursor-pointer
+                             focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+                <option value="medium">🤰  Prioritas Ringan/Sedang — Lansia, Hamil</option>
+                <option value="high">♿  Prioritas Tinggi — Pengguna Kursi Roda</option>
+              </select>
+              <i class="fas fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs pointer-events-none" aria-hidden="true"></i>
+            </div>
+
+            <!-- Free subsidy notice -->
+            <div x-show="priorityNeed === 'high'" x-cloak x-transition.opacity
+                 class="mt-3 flex items-start gap-2.5 p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <i class="fas fa-tag text-emerald-500 text-sm mt-0.5 shrink-0" aria-hidden="true"></i>
+              <p class="text-xs text-emerald-700 font-semibold leading-snug">
+                <strong>Biaya disubsidi penuh oleh UNHAS.</strong> Pengguna kursi roda tidak dikenakan tarif apapun.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ████████████████████████████████████████
+         STEP 2 · SMART BLOCKING SEAT MAP
+    ████████████████████████████████████████ -->
+    <section aria-labelledby="s2-heading" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+
+      <div class="px-5 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-7 h-7 rounded-lg flex items-center justify-center text-white text-xs font-black shrink-0"
+               style="background:#800000;">2</div>
+          <div>
+            <h2 id="s2-heading" class="font-bold text-slate-800 text-sm leading-none mb-0.5">Pilih Kursi</h2>
+            <p class="text-[11px] text-slate-400 font-medium">Tap kursi yang ingin dipesan</p>
+          </div>
+        </div>
+        <!-- Live selected seat display -->
+        <div class="text-right" aria-live="polite" aria-atomic="true">
+          <p class="font-black text-base leading-none"
+             :class="selectedSeat ? 'text-maroon' : 'text-slate-300'"
+             x-text="selectedSeat || '—'"></p>
+          <p class="text-[9px] text-slate-400 font-semibold uppercase tracking-widest mt-0.5">Terpilih</p>
+        </div>
+      </div>
+
+      <div class="px-5 py-5">
+
+        <!-- Bus shell -->
+        <div class="bg-slate-50 rounded-2xl border-2 border-slate-200 p-4">
+
+          <!-- Driver row -->
+          <div class="flex items-center justify-between mb-4 pb-3.5 border-b-2 border-dashed border-slate-300">
+            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Bagian Depan</span>
+            <div class="flex items-center gap-2">
+              <div class="w-10 h-10 rounded-full border-2 border-slate-300 bg-white flex items-center justify-center text-slate-400 shadow-sm"
+                   aria-label="Posisi sopir">
+                <i class="fas fa-steering-wheel text-base" aria-hidden="true"></i>
+              </div>
+              <span class="text-[9px] text-slate-400 font-bold">SOPIR</span>
+            </div>
+          </div>
+
+          <!-- ── PRIORITY ZONE ── -->
+          <div class="mb-4">
+            <div class="flex items-center justify-between mb-2.5">
+              <div class="flex items-center gap-1.5">
+                <div class="w-1 h-4 rounded-full transition-colors"
+                     :class="activePriority ? 'bg-blue-500' : 'bg-slate-300'"></div>
+                <span class="text-[9px] font-black uppercase tracking-widest transition-colors"
+                      :class="activePriority ? 'text-blue-600' : 'text-slate-400'">Zona Prioritas</span>
+              </div>
+              <div class="flex items-center gap-1 text-sm transition-colors"
+                   :class="activePriority ? 'text-blue-400' : 'text-slate-300'">
+                <i class="fas fa-wheelchair" aria-hidden="true"></i>
+                <i class="fas fa-baby" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <!-- 4 Priority seats: [A1][A2]  [B1][B2] -->
+            <div class="grid grid-cols-9 gap-1.5 items-center">
+              <template x-for="seat in prioritySeats.slice(0,2)" :key="seat">
+                <button type="button"
+                        :id="'seat-'+seat"
+                        class="seat col-span-4 h-13 py-2 rounded-xl border-2 text-xs font-black flex flex-col items-center justify-center gap-0.5 relative"
+                        :class="getPriorityClass(seat)"
+                        :disabled="!activePriority"
+                        :aria-pressed="selectedSeat===seat"
+                        :aria-label="getPriorityAriaLabel(seat)"
+                        @click="selectSeat(seat)">
+                  <i class="fas fa-wheelchair text-[10px]" aria-hidden="true" x-show="activePriority"></i>
+                  <span x-text="seat"></span>
+                  <!-- Lock overlay -->
+                  <i x-show="!activePriority"
+                     class="fas fa-lock absolute inset-0 m-auto w-fit h-fit text-lg text-slate-400/40 pointer-events-none"
+                     aria-hidden="true"></i>
+                </button>
+              </template>
+
+              <!-- Aisle gap -->
+              <div class="col-span-1 flex justify-center">
+                <div class="h-8 w-px border-l border-dashed border-slate-300"></div>
+              </div>
+
+              <template x-for="seat in prioritySeats.slice(2,4)" :key="seat">
+                <button type="button"
+                        :id="'seat-'+seat"
+                        class="seat col-span-4 h-13 py-2 rounded-xl border-2 text-xs font-black flex flex-col items-center justify-center gap-0.5 relative"
+                        :class="getPriorityClass(seat)"
+                        :disabled="!activePriority"
+                        :aria-pressed="selectedSeat===seat"
+                        :aria-label="getPriorityAriaLabel(seat)"
+                        @click="selectSeat(seat)">
+                  <i class="fas fa-wheelchair text-[10px]" aria-hidden="true" x-show="activePriority"></i>
+                  <span x-text="seat"></span>
+                  <i x-show="!activePriority"
+                     class="fas fa-lock absolute inset-0 m-auto w-fit h-fit text-lg text-slate-400/40 pointer-events-none"
+                     aria-hidden="true"></i>
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <!-- Zone divider -->
+          <div class="relative h-px bg-slate-200 my-4">
+            <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-50 px-3 border border-slate-200 rounded-full text-[8px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">
+              Kursi Reguler
+            </span>
+          </div>
+
+          <!-- ── REGULAR ZONE (16 seats, rows C–F) ── -->
+          <div class="space-y-1.5 transition-opacity duration-300"
+               :class="activePriority ? 'opacity-55' : 'opacity-100'"
+               :aria-label="activePriority ? 'Kursi reguler, lebih baik gunakan kursi prioritas' : 'Kursi reguler tersedia'">
+            <template x-for="row in regularRows" :key="row">
+              <div class="grid grid-cols-9 gap-1.5 items-center">
+                <template x-for="seat in [row+'1', row+'2']" :key="seat">
+                  <button type="button"
+                          :id="'seat-'+seat"
+                          class="seat col-span-4 h-11 rounded-xl border-2 text-xs font-black flex items-center justify-center"
+                          :class="getRegularClass(seat)"
+                          :aria-pressed="selectedSeat===seat"
+                          :aria-label="'Kursi reguler '+seat+(selectedSeat===seat?' (dipilih)':' tersedia')"
+                          @click="selectSeat(seat)">
+                    <span x-text="seat"></span>
+                  </button>
+                </template>
+
+                <div class="col-span-1 flex justify-center">
+                  <div class="h-6 w-px border-l border-dashed border-slate-200"></div>
+                </div>
+
+                <template x-for="seat in [row+'3', row+'4']" :key="seat">
+                  <button type="button"
+                          :id="'seat-'+seat"
+                          class="seat col-span-4 h-11 rounded-xl border-2 text-xs font-black flex items-center justify-center"
+                          :class="getRegularClass(seat)"
+                          :aria-pressed="selectedSeat===seat"
+                          :aria-label="'Kursi reguler '+seat+(selectedSeat===seat?' (dipilih)':' tersedia')"
+                          @click="selectSeat(seat)">
+                    <span x-text="seat"></span>
+                  </button>
+                </template>
+              </div>
+            </template>
+          </div>
+
+        </div>
+
+        <!-- Legend -->
+        <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 justify-center" role="note" aria-label="Keterangan warna kursi">
+          <div class="flex items-center gap-1.5">
+            <div class="w-4 h-4 rounded-md bg-white border-2 border-slate-300" aria-hidden="true"></div>
+            <span class="text-[10px] text-slate-500 font-semibold">Tersedia</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="w-4 h-4 rounded-md bg-blue-50 border-2 border-blue-400" aria-hidden="true"></div>
+            <span class="text-[10px] text-slate-500 font-semibold">Prioritas Aktif</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="w-4 h-4 rounded-md border-2 border-maroon" style="background:#800000;" aria-hidden="true"></div>
+            <span class="text-[10px] text-slate-500 font-semibold">Dipilih</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="w-4 h-4 rounded-md bg-slate-200 border-2 border-slate-200 opacity-50" aria-hidden="true"></div>
+            <span class="text-[10px] text-slate-500 font-semibold">Terkunci</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="h-1" aria-hidden="true"></div>
+
+  </main>
+
+
+  <!-- ████████████████████████████████████████
+       STEP 3 · STICKY CHECKOUT SUMMARY
+  ████████████████████████████████████████ -->
+  <footer role="contentinfo"
+          aria-label="Ringkasan pemesanan"
+          class="fixed inset-x-0 bottom-0 z-50 bg-white border-t border-slate-200"
+          style="box-shadow: 0 -8px 32px rgba(0,0,0,0.1);">
+    <div class="max-w-md mx-auto px-4 pt-3.5 pb-4">
+
+      <!-- Summary grid -->
+      <div class="flex items-start gap-3 mb-3.5">
+
+        <!-- Left info -->
+        <div class="flex-1 space-y-1.5 min-w-0">
+
+          <!-- Status badges -->
+          <div class="flex flex-wrap gap-1.5">
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wide"
+                  :class="userRole==='civitas' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'">
+              <i class="fas" :class="userRole==='civitas' ? 'fa-graduation-cap' : 'fa-user'" aria-hidden="true"></i>
+              <span x-text="userRole==='civitas' ? 'Sivitas Akademika' : 'Tamu Umum'"></span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wide"
+                  :class="activePriority ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'">
+              <i class="fas" :class="activePriority ? 'fa-wheelchair' : 'fa-chair'" aria-hidden="true"></i>
+              <span x-text="activePriority ? (priorityNeed==='high' ? 'Prioritas Tinggi' : 'Prioritas Sedang') : 'Reguler'"></span>
+            </span>
+          </div>
+
+          <!-- Seat & Status line -->
+          <div class="flex items-center gap-3 text-sm">
+            <div>
+              <span class="text-slate-400 text-[10px] font-bold block leading-none mb-0.5">Nomor Kursi</span>
+              <span class="font-black"
+                    :class="selectedSeat ? 'text-maroon text-base' : 'text-slate-300 text-sm'"
+                    x-text="selectedSeat || 'Belum dipilih'"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Price display -->
+        <div class="text-right shrink-0">
+          <p class="text-[10px] text-slate-400 font-bold mb-1">Total Pembayaran</p>
+          <!-- ARIA LIVE for screen readers (WCAG 4.1.3) -->
+          <div aria-live="polite" aria-atomic="true">
+            <template x-if="price === 0">
+              <div>
+                <p class="font-black text-xl leading-none text-emerald-600">GRATIS</p>
+                <p class="text-[9px] text-emerald-500 font-bold mt-0.5">Disubsidi 100%</p>
+              </div>
+            </template>
+            <template x-if="price > 0">
+              <p class="font-black text-xl leading-none"
+                 style="color:#800000;"
+                 x-text="'Rp\u00a0' + price.toLocaleString('id-ID')"></p>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <button type="button"
+              class="w-full py-4 rounded-xl text-sm font-black uppercase tracking-wider transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-gold focus-visible:ring-offset-2 flex items-center justify-center gap-2.5"
+              :class="selectedSeat
+                ? 'text-white active:scale-[0.98]'
+                : 'bg-slate-200 text-slate-400 cursor-not-allowed'"
+              :style="selectedSeat ? 'background: linear-gradient(135deg,#800000,#a00000); box-shadow: 0 4px 20px rgba(128,0,0,0.35);' : ''"
+              :disabled="!selectedSeat"
+              :aria-disabled="(!selectedSeat).toString()"
+              @click="confirmOrder()">
+        <i class="fas" :class="selectedSeat ? 'fa-check-circle' : 'fa-ban'" aria-hidden="true"></i>
+        <span x-text="selectedSeat ? 'Konfirmasi &amp; Bayar' : 'Pilih kursi terlebih dahulu'"></span>
+      </button>
+
+    </div>
+  </footer>
+
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.data('bookingApp', () => ({
+
+    /* ─── State ─────────────────────────────────── */
+    userRole:     'civitas',   // 'civitas' | 'guest'
+    isPriority:   false,
+    priorityNeed: 'medium',    // 'medium' | 'high'
+    selectedSeat: null,
+    price:        3000,
+
+    prioritySeats: ['A1','A2','B1','B2'],
+    regularRows:   ['C','D','E','F'],
+
+    /* ─── Computed helper ───────────────────────── */
+    get activePriority() {
+      return this.isPriority;
+    },
+
+    /* ─── Init ──────────────────────────────────── */
+    init() {
+      this.$watch('userRole',     () => this.calcPrice());
+      this.$watch('isPriority',   () => { this.calcPrice(); });
+      this.$watch('priorityNeed', () => this.calcPrice());
+    },
+
+    /* ─── Pricing Engine ────────────────────────── */
+    calcPrice() {
+      const need = this.isPriority ? this.priorityNeed : 'none';
+      if (need === 'high') {
+        this.price = 0;
+      } else if (this.userRole === 'civitas') {
+        this.price = 3000;
+      } else {
+        this.price = 5000;
+      }
+    },
+
+    /* ─── Toggle priority ───────────────────────── */
+    togglePriority() {
+      this.isPriority = !this.isPriority;
+      // If turning OFF and a priority seat is selected → clear it
+      if (!this.isPriority && this.selectedSeat && this.prioritySeats.includes(this.selectedSeat)) {
+        this.selectedSeat = null;
+      }
+    },
+
+    /* ─── Clear seat on priority-level change if needed ── */
+    clearSeatIfPriorityConflict() {
+      // no conflict between medium/high in this implementation
+    },
+
+    /* ─── Role change resets state ─────────────── */
+    handleRoleChange() {
+      this.isPriority   = false;
+      this.priorityNeed = 'medium';
+      this.selectedSeat = null;
+    },
+
+    /* ─── Seat selection (single select, toggle) ─ */
+    selectSeat(seat) {
+      const isPSeat = this.prioritySeats.includes(seat);
+      if (isPSeat && !this.activePriority) return; // blocked
+      this.selectedSeat = this.selectedSeat === seat ? null : seat;
+    },
+
+    /* ─── Dynamic CSS: Priority seats ──────────── */
+    getPriorityClass(seat) {
+      if (this.selectedSeat === seat) {
+        return 'text-white border-maroon scale-105 shadow-md';
+        // inline style added separately
+      }
+      if (!this.activePriority) {
+        return 'bg-slate-200 border-slate-200 text-slate-400 opacity-60 cursor-not-allowed';
+      }
+      return 'bg-blue-50 border-blue-400 text-blue-700 cursor-pointer seat-priority-active';
+    },
+
+    /* ─── Dynamic CSS: Regular seats ───────────── */
+    getRegularClass(seat) {
+      if (this.selectedSeat === seat) {
+        return 'text-white border-maroon scale-105 shadow-md';
+      }
+      return 'bg-white border-slate-300 text-slate-700 hover:border-slate-400 cursor-pointer';
+    },
+
+    /* ─── ARIA labels ───────────────────────────── */
+    getPriorityAriaLabel(seat) {
+      if (this.selectedSeat === seat) return `Kursi Prioritas ${seat}: dipilih`;
+      if (!this.activePriority) return `Kursi Prioritas ${seat}: terkunci. Aktifkan mode prioritas untuk membuka.`;
+      return `Kursi Prioritas ${seat}: tersedia, klik untuk memilih`;
+    },
+
+    /* ─── Order confirmation ─────────────────────── */
+    confirmOrder() {
+      if (!this.selectedSeat) return;
+      const roleLabel  = this.userRole === 'civitas' ? 'Sivitas Akademika' : 'Tamu Umum';
+      const needLabel  = !this.isPriority ? 'Reguler'
+                       : this.priorityNeed === 'high' ? 'Prioritas Tinggi (Kursi Roda)' : 'Prioritas Ringan/Sedang';
+      const bayarLabel = this.price === 0 ? 'GRATIS (Disubsidi Penuh UNHAS)' : `Rp ${this.price.toLocaleString('id-ID')}`;
+      alert(
+        `✅ Booking Dikonfirmasi!\n\n` +
+        `👤 Tipe Pengguna : ${roleLabel}\n` +
+        `🏷️  Status         : ${needLabel}\n` +
+        `💺 Nomor Kursi   : ${this.selectedSeat}\n` +
+        `💳 Total Bayar   : ${bayarLabel}\n\n` +
+        `(Demonstrasi sistem — dalam implementasi nyata, data dikirim ke server Laravel.)`
+      );
+    }
+  }));
+});
+</script>
+
+<!-- Inline style override for selected seat maroon bg (Tailwind JIT limitation) -->
+<style>
+  button[aria-pressed="true"].seat {
+    background-color: #800000 !important;
+    border-color: #800000 !important;
+    color: #ffffff !important;
+  }
+</style>
+
+</body>
+</html>
