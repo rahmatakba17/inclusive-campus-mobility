@@ -5,16 +5,16 @@
     </div>
     <div class="flex-1 min-w-0">
         <p class="text-xs font-bold text-slate-800 truncate">{{ $r->passenger_name }}</p>
-        <p class="text-[10px] text-slate-400 font-semibold">{{ $r->booking_date->format('d M y') }} &bull; Bus {{ $r->bus->bus_number }}</p>
+        <p class="text-[10px] text-slate-500 font-semibold">{{ $r->booking_date->format('d M y') }} &bull; Bus {{ $r->bus->bus_number }}</p>
     </div>
     <div class="text-right">
         <p class="text-sm font-black text-emerald-600 truncate">+ Rp{{ number_format($r->price, 0, ',', '.') }}</p>
-        <p class="text-[9px] text-slate-400 font-bold uppercase">{{ $r->payment_method ?? 'CASH' }}</p>
+        <p class="text-[9px] text-slate-500 font-bold uppercase">{{ $r->payment_method ?? 'CASH' }}</p>
     </div>
 </div>
 @empty
 <div class="text-center py-6">
     <i class="fas fa-inbox text-3xl text-slate-200 mb-3"></i>
-    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Belum ada pendapatan pada periode ini.</p>
+    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Belum ada pendapatan pada periode ini.</p>
 </div>
 @endforelse

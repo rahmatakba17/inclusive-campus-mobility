@@ -6,41 +6,41 @@
 
 <div x-data="revenueManager()" x-init="startPolling()">
 
-<div class="mb-8 flex justify-between items-end">
+<div class="mb-8 flex flex-col xl:flex-row xl:justify-between items-start xl:items-end gap-6 xl:gap-0">
     <div>
-        <h2 class="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-3">
+        <h2 class="text-3xl font-black text-slate-800 tracking-tight flex items-center gap-3 flex-wrap">
             Financial Overview
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg text-[9px] font-black uppercase tracking-widest">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg text-[9px] font-black uppercase tracking-widest flex-shrink-0">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Real-Time
             </span>
         </h2>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Laporan Pemasukan Tiket Bus Kampus</p>
+        <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Laporan Pemasukan Tiket Bus Kampus</p>
     </div>
     
-    <div class="flex gap-4">
+    <div class="flex flex-col sm:flex-row flex-wrap gap-4 w-full xl:w-auto">
         <!-- Filter Form -->
-        <form id="revenueFilterForm" x-data="{ selectedPeriod: '{{ $period }}' }" method="GET" action="{{ route('admin.revenue.index') }}" class="flex gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 items-center">
+        <form id="revenueFilterForm" x-data="{ selectedPeriod: '{{ $period }}' }" method="GET" action="{{ route('admin.revenue.index') }}" class="flex flex-wrap sm:flex-nowrap gap-3 bg-white p-2 rounded-2xl shadow-sm border border-slate-100 items-center w-full sm:w-auto">
             
-            <select x-model="selectedPeriod" name="period" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none cursor-pointer">
+            <select x-model="selectedPeriod" name="period" aria-label="Pilih Periode Laporan" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none cursor-pointer flex-1 sm:flex-none">
                 <option value="yearly">Tahunan</option>
                 <option value="monthly">Bulanan</option>
                 <option value="weekly">Mingguan</option>
                 <option value="daily">Harian</option>
             </select>
             
-            <select x-show="selectedPeriod === 'yearly'" x-cloak :disabled="selectedPeriod !== 'yearly'" name="year" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none cursor-pointer w-32">
+            <select x-show="selectedPeriod === 'yearly'" x-cloak :disabled="selectedPeriod !== 'yearly'" name="year" aria-label="Pilih Tahun" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none cursor-pointer flex-1 sm:flex-none sm:min-w-[120px]">
                 @for($y = date('Y') + 1; $y >= 2024; $y--)
                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                 @endfor
             </select>
             
-            <input x-show="selectedPeriod === 'monthly'" x-cloak :disabled="selectedPeriod !== 'monthly'" type="month" name="month" value="{{ $month }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none w-36">
+            <input x-show="selectedPeriod === 'monthly'" x-cloak :disabled="selectedPeriod !== 'monthly'" type="month" name="month" aria-label="Pilih Bulan" value="{{ $month }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none flex-1 sm:flex-none sm:min-w-[140px]">
             
-            <input x-show="selectedPeriod === 'weekly'" x-cloak :disabled="selectedPeriod !== 'weekly'" type="week" name="week" value="{{ $week }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none w-44">
+            <input x-show="selectedPeriod === 'weekly'" x-cloak :disabled="selectedPeriod !== 'weekly'" type="week" name="week" aria-label="Pilih Minggu" value="{{ $week }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none flex-1 sm:flex-none sm:min-w-[160px]">
             
-            <input x-show="selectedPeriod === 'daily'" x-cloak :disabled="selectedPeriod !== 'daily'" type="date" name="date" value="{{ $date }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none w-36">
+            <input x-show="selectedPeriod === 'daily'" x-cloak :disabled="selectedPeriod !== 'daily'" type="date" name="date" aria-label="Pilih Tanggal" value="{{ $date }}" class="px-4 py-2 bg-slate-50 text-slate-700 font-bold text-sm rounded-xl border-none ring-0 outline-none flex-1 sm:flex-none sm:min-w-[140px]">
             
-            <button type="submit" class="w-10 h-10 bg-[#1e3a5f] hover:bg-slate-800 text-white rounded-xl flex items-center justify-center transition-colors">
+            <button type="submit" aria-label="Terapkan Filter" class="w-10 h-10 bg-[#1e3a5f] hover:bg-slate-800 text-white rounded-xl flex items-center justify-center transition-colors flex-shrink-0">
                 <i class="fas fa-filter text-sm"></i>
             </button>
         </form>
@@ -50,23 +50,23 @@
             const url = new URL('{{ route('admin.revenue.print') }}', window.location.origin);
             new FormData(form).forEach((val, key) => url.searchParams.append(key, val));
             window.open(url.toString(), '_blank');
-        " class="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-lg shadow-emerald-500/30 flex items-center gap-2 transition-all cursor-pointer">
+        " class="px-6 py-2 h-14 sm:h-auto bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm uppercase tracking-widest rounded-2xl shadow-lg shadow-emerald-500/30 flex items-center justify-center gap-2 transition-all cursor-pointer flex-shrink-0 w-full sm:w-auto">
             <i class="fas fa-print"></i> Cetak PDF
         </button>
     </div>
 </div>
 
 <!-- Stats ROW -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
     <div class="bg-[#1a2332] rounded-2xl p-6 text-white border border-[#2a364a] flex flex-col justify-center relative overflow-hidden">
-        <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Total Pemasukan</p>
+        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Pemasukan</p>
         <h3 class="text-3xl font-black tracking-tight text-white">Rp <span x-text="stats.total_revenue.toLocaleString('id-ID')">{{ number_format($stats['total_revenue'], 0, ',', '.') }}</span></h3>
-        <p class="text-slate-400 text-xs mt-3 font-medium"><i class="fas fa-ticket-alt mr-1 text-slate-500"></i> <span x-text="stats.total_paid_tickets" class="text-white font-bold">{{ $stats['total_paid_tickets'] }}</span> Tiket Berbayar</p>
+        <p class="text-slate-500 text-xs mt-3 font-medium"><i class="fas fa-ticket-alt mr-1 text-slate-500"></i> <span x-text="stats.total_paid_tickets" class="text-white font-bold">{{ $stats['total_paid_tickets'] }}</span> Tiket Berbayar</p>
     </div>
 
     <div class="bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-center">
         <div class="flex items-center gap-3 mb-2">
-            <div class="text-slate-400 text-sm"><i class="fas fa-qrcode"></i></div>
+            <div class="text-slate-500 text-sm"><i class="fas fa-qrcode"></i></div>
             <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Via QRIS</p>
         </div>
         <h3 class="text-2xl font-black text-slate-800 tracking-tight">Rp <span x-text="stats.total_qris.toLocaleString('id-ID')">{{ number_format($stats['total_qris'], 0, ',', '.') }}</span></h3>
@@ -74,7 +74,7 @@
 
     <div class="bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-center">
         <div class="flex items-center gap-3 mb-2">
-            <div class="text-slate-400 text-sm"><i class="fas fa-id-card"></i></div>
+            <div class="text-slate-500 text-sm"><i class="fas fa-id-card"></i></div>
             <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Via E-Toll</p>
         </div>
         <h3 class="text-2xl font-black text-slate-800 tracking-tight">Rp <span x-text="stats.total_etoll.toLocaleString('id-ID')">{{ number_format($stats['total_etoll'], 0, ',', '.') }}</span></h3>
@@ -82,10 +82,10 @@
 
     <div class="bg-white rounded-2xl p-6 border border-slate-200 flex flex-col justify-center">
         <div class="flex items-center gap-3 mb-2">
-            <div class="text-slate-400 text-sm"><i class="fas fa-users"></i></div>
+            <div class="text-slate-500 text-sm"><i class="fas fa-users"></i></div>
             <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Tiket Gratis (Civitas)</p>
         </div>
-        <h3 class="text-2xl font-black text-slate-800 tracking-tight"><span x-text="stats.total_free">{{ $stats['total_free'] }}</span> <span class="text-sm text-slate-400 font-bold">Tiket</span></h3>
+        <h3 class="text-2xl font-black text-slate-800 tracking-tight"><span x-text="stats.total_free">{{ $stats['total_free'] }}</span> <span class="text-sm text-slate-500 font-bold">Tiket</span></h3>
     </div>
 </div>
 
@@ -94,7 +94,7 @@
     <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-8">
         <h3 class="font-black text-slate-800 tracking-tight mb-6" x-text="chartTitle">{{ $chartTitle }}</h3>
         <div class="w-full h-72">
-            <canvas id="revenueChart"></canvas>
+            <canvas id="revenueChart" role="img" aria-label="Grafik visualisasi tren pemasukan tiket bus"></canvas>
         </div>
     </div>
 
@@ -109,11 +109,11 @@
             <div class="flex justify-between items-start mb-4 gap-4">
                 <div>
                     <h3 class="font-black text-slate-800 tracking-tight mb-1">Riwayat Pembayaran</h3>
-                    <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Pemasukan Berbayar</p>
+                    <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Pemasukan Berbayar</p>
                 </div>
                 <div class="relative w-36 flex-shrink-0">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" x-model="searchQuery" @input="applySearch" placeholder="Cari..." 
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-500 text-xs" aria-hidden="true"></i>
+                    <input type="text" x-model="searchQuery" @input="applySearch" placeholder="Cari..." aria-label="Cari riwayat pembayaran berdasarkan nama bus"
                            class="w-full text-xs font-bold text-slate-700 pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#1a2332] bg-slate-50 transition-colors shadow-sm">
                 </div>
             </div>
@@ -130,7 +130,7 @@
             </div>
 
             <h3 class="font-black text-slate-800 tracking-tight mb-1">Notifikasi Tip</h3>
-            <p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-6 flex items-center gap-2">
+            <p class="text-[10px] text-slate-500 font-bold tracking-widest uppercase mb-6 flex items-center gap-2">
                 Log Rahasia
             </p>
             
@@ -142,7 +142,7 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-bold text-slate-800 truncate" x-text="tip.bus_name"></p>
-                            <p class="text-[10px] text-slate-400 font-semibold" x-text="tip.time"></p>
+                            <p class="text-[10px] text-slate-500 font-semibold" x-text="tip.time"></p>
                         </div>
                         <div class="text-right">
                             <p class="text-sm font-black text-amber-600 truncate" x-text="'+ Rp' + tip.amount.toLocaleString('id-ID')"></p>
@@ -151,7 +151,7 @@
                 </template>
                 <div x-show="tips.length === 0" class="text-center py-6">
                     <i class="fas fa-inbox text-3xl text-slate-200 mb-3"></i>
-                    <p class="text-xs text-slate-400 font-bold">Belum ada tip hari ini</p>
+                    <p class="text-xs text-slate-500 font-bold">Belum ada tip hari ini</p>
                 </div>
             </div>
         </div>

@@ -192,9 +192,9 @@
                     {{-- Language Switcher --}}
                     <div class="flex items-center bg-slate-50 p-1.5 rounded-2xl border border-slate-100 shadow-inner">
                         <a href="{{ route('lang.switch', 'id') }}"
-                            class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600' }}">ID</a>
+                            class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-500 hover:text-slate-600' }}">ID</a>
                         <a href="{{ route('lang.switch', 'en') }}"
-                            class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600' }}">EN</a>
+                            class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-500 hover:text-slate-600' }}">EN</a>
                     </div>
 
                     <div class="pl-8 border-l border-slate-100 flex items-center space-x-6">
@@ -363,7 +363,7 @@
                         class="text-4xl md:text-5xl font-black text-[#1e3a5f] tracking-tighter mb-6 leading-none uppercase">
                         {{ __('Pemantauan Armada Akurat') }}
                     </h2>
-                    <p class="text-slate-400 font-medium text-lg leading-relaxed">
+                    <p class="text-slate-500 font-medium text-lg leading-relaxed">
                         {{ __('Simulasi telemetri posisi 13 armada Bus Kampus yang terhubung terpadu dengan sistem manajemen reservasi pusat.') }}
                     </p>
                 </div>
@@ -373,8 +373,7 @@
                     <div
                         class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
                         <div>
-                            <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total
-                                Armada</div>
+                            <div class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">{{ __('Total Fleet') }}</div>
                             <div class="text-3xl font-black text-blue-600" id="w-stat-total">—</div>
                         </div>
                         <div
@@ -385,8 +384,7 @@
                     <div
                         class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
                         <div>
-                            <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Sedang
-                                Jalan</div>
+                            <div class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">{{ __('On the Move') }}</div>
                             <div class="text-3xl font-black text-emerald-500" id="w-stat-jalan">—</div>
                         </div>
                         <div
@@ -397,8 +395,7 @@
                     <div
                         class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
                         <div>
-                            <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Standby
-                                Terminal</div>
+                            <div class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">{{ __('Standby at Terminal') }}</div>
                             <div class="text-3xl font-black text-amber-500" id="w-stat-standby">—</div>
                         </div>
                         <div
@@ -409,8 +406,7 @@
                     <div
                         class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm flex items-center justify-between">
                         <div>
-                            <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Sedang
-                                Istirahat</div>
+                            <div class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">{{ __('On Break') }}</div>
                             <div class="text-3xl font-black text-rose-500" id="w-stat-istirahat">—</div>
                         </div>
                         <div
@@ -426,12 +422,11 @@
                         class="absolute top-8 left-8 z-10 bg-white/90 backdrop-blur-md px-6 py-4 rounded-2xl shadow-xl border border-slate-100 max-w-xs">
                         <h3 class="text-sm font-black text-[#1e3a5f] uppercase tracking-widest mb-2"><i
                                 class="fas fa-satellite-dish text-blue-500 mr-2"></i>Live Map Engine</h3>
-                        <p class="text-[10px] text-slate-500 font-medium leading-relaxed">Map menggunakan Leaflet.js
-                            dengan sinkronisasi data langsung (*event-driven*), memastikan presisi lokasi di setiap perangkat pengguna.</p>
+                        <p class="text-[10px] text-slate-500 font-medium leading-relaxed">{{ __('Map uses Leaflet.js with live event-driven data synchronization, ensuring location precision on every user device.') }}</p>
                         <div class="mt-4 flex gap-2">
                             <a href="{{ route('map') }}"
                                 class="w-full bg-[#1e3a5f] hover:bg-[#c41e3a] text-white text-center py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"><i
-                                    class="fas fa-expand mr-1"></i> Mode Penuh</a>
+                                    class="fas fa-expand mr-1"></i> {{ __('Full Screen Mode') }}</a>
                         </div>
                     </div>
 
@@ -550,21 +545,21 @@
                             <div class="bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:bg-white hover:shadow-xl transition-all duration-300 group">
                                 <i class="fas fa-history text-2xl text-slate-300 group-hover:text-[#c41e3a] transition-colors mb-3"></i>
                                 <p class="text-3xl font-black text-[#1e3a5f]">2006</p>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ __('Diinisiasi') }}</p>
+                                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{{ __('Diinisiasi') }}</p>
                             </div>
                             
                             {{-- Stat 2 --}}
                             <div class="bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:bg-white hover:shadow-xl transition-all duration-300 group">
                                 <i class="fas fa-users text-2xl text-slate-300 group-hover:text-[#1e3a5f] transition-colors mb-3"></i>
                                 <p class="text-3xl font-black text-[#1e3a5f]">1.5k<span class="text-[#c41e3a]">+</span></p>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ __('Mobilitas Harian') }}</p>
+                                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{{ __('Mobilitas Harian') }}</p>
                             </div>
 
                             {{-- Stat 3 --}}
                             <div class="bg-slate-50 border border-slate-100 rounded-3xl p-5 hover:bg-white hover:shadow-xl transition-all duration-300 group col-span-2 md:col-span-1">
                                 <i class="fas fa-route text-2xl text-slate-300 group-hover:text-[#ffd700] transition-colors mb-3"></i>
                                 <p class="text-3xl font-black text-[#1e3a5f]">2</p>
-                                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ __('Rute Aktif') }}</p>
+                                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{{ __('Rute Aktif') }}</p>
                             </div>
                         </div>
                     </div>
@@ -598,7 +593,7 @@
                                 <div class="w-14 h-14 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex flex-shrink-0 items-center justify-center text-xl font-black text-[#ffd700] shadow-lg group-hover:bg-[#ffd700] group-hover:text-[#1e3a5f] transition-colors relative z-10">1</div>
                                 <div class="pt-2">
                                     <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">{{ __('Autentikasi / Akses Tamu') }}</h3>
-                                    <p class="text-sm text-slate-400 font-medium leading-relaxed">Login menggunakan email resmi <code class="text-rose-400 font-mono text-xs">@kampus-non-merdeka.ac.id</code> bagi sivitas akademika, atau manfaatkan form <strong class="text-white">Pesanan Tamu</strong> untuk masyarakat umum tanpa registrasi.</p>
+                                    <p class="text-sm text-slate-500 font-medium leading-relaxed">{{ __('Log in using your official @kampus-non-merdeka.ac.id email for academic staff, or use the Guest Order form for the general public without registration.') }}</p>
                                 </div>
                             </li>
 
@@ -606,7 +601,7 @@
                                 <div class="w-14 h-14 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex flex-shrink-0 items-center justify-center text-xl font-black text-[#ffd700] shadow-lg group-hover:bg-[#ffd700] group-hover:text-[#1e3a5f] transition-colors relative z-10">2</div>
                                 <div class="pt-2">
                                     <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">{{ __('Pilih Armada Standby') }}</h3>
-                                    <p class="text-sm text-slate-400 font-medium leading-relaxed">Tinjau peta telemetri armada secara langsung. Tekan opsi <strong>Lihat & Pesan</strong> pada armada rute pilihan Anda yang berstatus siap di dalam halte terminal keberangkatan.</p>
+                                    <p class="text-sm text-slate-500 font-medium leading-relaxed">{{ __('Browse the fleet telemetry map live. Tap View & Book on your preferred route\'s fleet that is on standby at the departure terminal.') }}</p>
                                 </div>
                             </li>
 
@@ -614,7 +609,7 @@
                                 <div class="w-14 h-14 rounded-full bg-white/10 border border-white/20 backdrop-blur-xl flex flex-shrink-0 items-center justify-center text-xl font-black text-[#ffd700] shadow-lg group-hover:bg-[#ffd700] group-hover:text-[#1e3a5f] transition-colors relative z-10">3</div>
                                 <div class="pt-2">
                                     <h3 class="text-xl font-black text-white mb-2 uppercase tracking-tight">{{ __('Pindai E-Ticket') }}</h3>
-                                    <p class="text-sm text-slate-400 font-medium leading-relaxed">Sistem akan segera memberikan barcode unik pada profil Anda. Tunjukkan dan pindai kode tersebut pada gawai layar pramudi saat Anda memijaki kabin bus.</p>
+                                    <p class="text-sm text-slate-500 font-medium leading-relaxed">{{ __('The system will instantly provide a unique barcode on your profile. Show and scan it on the driver\'s display device as you board the bus.') }}</p>
                                 </div>
                             </li>
                         </ol>
@@ -637,7 +632,7 @@
                                         <i class="fas fa-bus text-[#ffd700] text-sm"></i>
                                     </div>
                                     <div>
-                                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Boarding Pass</p>
+                                        <p class="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Boarding Pass</p>
                                         <p class="text-sm font-black text-white uppercase">Bus Kampus Non-Merdeka 01</p>
                                     </div>
                                 </div>
@@ -652,23 +647,23 @@
                                 </div>
                                 
                                 <h4 class="text-xl font-black text-white tracking-tighter uppercase mb-2">TIKET B02-X9</h4>
-                                <p class="text-xs text-slate-400 font-medium">Fakultas Teknik - Gowa</p>
+                                <p class="text-xs text-slate-500 font-medium">Fakultas Teknik - Gowa</p>
                             </div>
 
                             {{-- Floating Elements --}}
                             <div class="absolute -left-6 top-1/4 bg-white border border-slate-100 shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-float-slow">
                                 <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div>
                                 <div>
-                                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Status Validasi</p>
-                                    <p class="text-[10px] font-black text-slate-700 uppercase">Seat Confirmed</p>
+                                    <p class="text-[8px] font-bold text-slate-500 uppercase tracking-wider">{{ __('Status Validation') }}</p>
+                                    <p class="text-[10px] font-black text-slate-700 uppercase">{{ __('Seat Confirmed') }}</p>
                                 </div>
                             </div>
                             
                             <div class="absolute -right-8 bottom-1/4 bg-[#1e3a5f] border border-white/20 shadow-xl rounded-2xl p-3 flex items-center gap-3 animate-float-delayed">
                                 <div class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs shadow-inner"><i class="fas fa-map-marker-alt"></i></div>
                                 <div>
-                                    <p class="text-[8px] font-bold text-blue-200 uppercase tracking-wider">Telemetri Live</p>
-                                    <p class="text-[10px] font-black text-white uppercase">Terhubung GPS</p>
+                                    <p class="text-[8px] font-bold text-blue-200 uppercase tracking-wider">{{ __('Live Telemetry') }}</p>
+                                    <p class="text-[10px] font-black text-white uppercase">{{ __('Connected GPS') }}</p>
                                 </div>
                             </div>
 
@@ -700,15 +695,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Sistem tiket ini sangat
-                            membantu mobilitas saya dari Tamalanrea ke Gowa setiap hari. Presisi dan teratur!"</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('This ticketing system greatly helps my daily mobility from Tamalanrea to Gowa. Precise and organised!') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 R</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Rahmat</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Teknik
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Teknik
                                     Informatika</p>
                             </div>
                         </div>
@@ -722,15 +716,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Penentuan kursi lewat web
-                            membuat saya tidak perlu berebutan lagi saat bus tiba. Sangat inovatif!"</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('Seat allocation via the web means I no longer have to rush when the bus arrives. Very innovative!') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 S</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Siti Nurhaliza</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">
                                     Kedokteran Gigi</p>
                             </div>
                         </div>
@@ -744,15 +737,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Terima kasih Kampus Non-Merdeka!
-                            Perjalanan antar-kampus kini jauh lebih nyaman dan modern dengan sistem digital ini."</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('Thank you Non-Merdeka Campus! Inter-campus travel is now far more comfortable and modern with this digital system.') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 B</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Budi Santoso</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Dosen
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Dosen
                                     Ekonomi</p>
                             </div>
                         </div>
@@ -766,14 +758,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Saya tidak perlu antre fisik lagi. Semuanya termonitor dengan akurat langsung lewat smartphone. Luar biasa!"</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('I no longer need to queue physically. Everything is accurately monitored right from my smartphone. Amazing!') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 F</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Faisal Ridho</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Hukum</p>
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Hukum</p>
                             </div>
                         </div>
                     </div>
@@ -786,14 +778,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star-half-alt"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Sangat informatif. Fitur notifikasinya sangat membantu sehingga saya tahu kapan saya harus berjalan menuju terminal."</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('Very informative. The notification feature is very helpful so I know when to head to the terminal.') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 A</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Andi Riska</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Sospol</p>
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Sospol</p>
                             </div>
                         </div>
                     </div>
@@ -806,14 +798,14 @@
                                 class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star"
                                 aria-hidden="true"></i>
                         </div>
-                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"Integrasinya 100% mulus. Pramudi dapat mengecek e-Ticket saya dari smartphone mereka hanya dalam dua detik!"</p>
+                        <p class="text-slate-500 font-medium italic mb-10 leading-relaxed">"{{ __('Integration is 100% seamless. The driver can check my e-Ticket from their smartphone in just two seconds!') }}"</p>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-[#1e3a5f] shadow-inner">
                                 W</div>
                             <div>
                                 <h4 class="font-black text-[#1e3a5f] text-sm uppercase">Wahyu Pratama</h4>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Kehutanan</p>
+                                <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Kehutanan</p>
                             </div>
                         </div>
                     </div>
@@ -837,13 +829,12 @@
                     <span class="text-3xl font-black tracking-tighter uppercase leading-none">BUS KAMPUS<br><span
                             class="text-[#c41e3a]">Kampus Non-Merdeka</span></span>
                 </div>
-                <p class="text-slate-500 font-medium leading-relaxed max-w-sm">Solusi mobilitas modern dan terintegrasi
-                    untuk mendukung aktivitas akademik di Kampus Non-Merdeka.</p>
+                <p class="text-slate-500 font-medium leading-relaxed max-w-sm">{{ __('Modern and integrated mobility solution to support academic activities at the Non-Merdeka Campus.') }}</p>
             </div>
 
             <div class="space-y-6">
-                <h4 class="text-sm font-black uppercase tracking-[0.3em] text-[#ffd700]">Kontak Resmi</h4>
-                <ul class="space-y-4 text-sm text-slate-400 font-medium">
+                <h4 class="text-sm font-black uppercase tracking-[0.3em] text-[#ffd700]">{{ __('Official Contact') }}</h4>
+                <ul class="space-y-4 text-sm text-slate-500 font-medium">
                     <li class="flex gap-4"><i class="fas fa-map-marker-alt text-[#c41e3a] mt-1 pr-1"
                             aria-hidden="true"></i>Jl. Perintis Kemerdekaan KM.10, Makassar</li>
                     <li class="flex gap-4"><i class="fas fa-phone text-[#c41e3a] mt-1 pr-1" aria-hidden="true"></i>+62

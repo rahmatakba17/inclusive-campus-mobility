@@ -24,7 +24,7 @@
             </div>
             <h1 class="text-4xl font-black text-slate-800 tracking-tight mb-2">Error Page Test Dashboard</h1>
             <p class="text-slate-500 font-medium">Klik kartu di bawah untuk menguji tampilan halaman error Bus Kampus Non-Merdeka.</p>
-            <p class="text-xs text-slate-400 mt-2 font-mono bg-white inline-block px-3 py-1 rounded-lg border border-slate-200 mt-3">
+            <p class="text-xs text-slate-500 mt-2 font-mono bg-white inline-block px-3 py-1 rounded-lg border border-slate-200 mt-3">
                 Route aktif hanya di <strong>APP_ENV=local</strong>
             </p>
         </div>
@@ -37,7 +37,7 @@
                     <div class="w-12 h-12 rounded-2xl {{ $err['color'] }} flex items-center justify-center">
                         <i class="fas {{ $err['icon'] }} text-xl"></i>
                     </div>
-                    <span class="text-xs font-black text-slate-300 uppercase tracking-widest group-hover:text-slate-400 transition-colors">PREVIEW →</span>
+                    <span class="text-xs font-black text-slate-300 uppercase tracking-widest group-hover:text-slate-500 transition-colors">PREVIEW →</span>
                 </div>
                 <p class="text-5xl font-black text-slate-800 tracking-tighter leading-none mb-2">{{ $err['code'] }}</p>
                 <p class="text-sm font-bold text-slate-500 uppercase tracking-wide">{{ $err['label'] }}</p>
@@ -111,7 +111,7 @@
             <a href="/" class="inline-flex items-center gap-2 bg-[#1e3a5f] text-white px-6 py-3 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-[#0f2137] transition-colors shadow-lg">
                 <i class="fas fa-home"></i> Kembali ke Beranda
             </a>
-            <p class="text-xs text-slate-400 mt-4 font-mono">
+            <p class="text-xs text-slate-500 mt-4 font-mono">
                 Route ini <strong>tidak tersedia</strong> di production (APP_ENV=production)
             </p>
         </div>

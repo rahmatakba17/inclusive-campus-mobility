@@ -18,7 +18,7 @@
         </div>
         <div>
             <p class="text-2xl font-black text-slate-800 tracking-tight">{{ $stats['total'] }}</p>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Total Entry') }}</p>
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Total Entry') }}</p>
         </div>
     </div>
     <div class="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm flex items-center gap-5 group hover:shadow-md transition-all">
@@ -27,7 +27,7 @@
         </div>
         <div>
             <p class="text-2xl font-black text-slate-800 tracking-tight">{{ $stats['pending'] }}</p>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Awaiting') }}</p>
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Awaiting') }}</p>
         </div>
     </div>
     <div class="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm flex items-center gap-5 group hover:shadow-md transition-all">
@@ -36,7 +36,7 @@
         </div>
         <div>
             <p class="text-2xl font-black text-slate-800 tracking-tight">{{ $stats['confirmed'] }}</p>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Authorized') }}</p>
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Authorized') }}</p>
         </div>
     </div>
     <div class="bg-white rounded-[2rem] p-6 border border-slate-100 shadow-sm flex items-center gap-5 group hover:shadow-md transition-all">
@@ -45,7 +45,7 @@
         </div>
         <div>
             <p class="text-2xl font-black text-slate-800 tracking-tight">{{ $stats['cancelled'] }}</p>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Voided') }}</p>
+            <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Voided') }}</p>
         </div>
     </div>
 </div>
@@ -76,7 +76,7 @@
         {{-- Clear button —tampil hanya saat ada teks --}}
         @if(request('q'))
         <a href="{{ route('admin.bookings.index', array_diff_key(request()->query(), ['q' => ''])) }}"
-           class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-all flex-shrink-0"
+           class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-600 transition-all flex-shrink-0"
            aria-label="{{ __('Hapus pencarian') }}">
             <i class="fas fa-times text-[9px]"></i>
         </a>
@@ -124,7 +124,7 @@
         {{-- Reset — hanya muncul jika ada filter aktif --}}
         @if(request()->hasAny(['q','status','bus_id','date']))
         <a href="{{ route('admin.bookings.index') }}"
-           class="flex-shrink-0 inline-flex items-center gap-1.5 text-[9px] font-black text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors px-3 py-2.5"
+           class="flex-shrink-0 inline-flex items-center gap-1.5 text-[9px] font-black text-slate-500 hover:text-red-500 uppercase tracking-widest transition-colors px-3 py-2.5"
            aria-label="{{ __('Reset semua filter') }}">
             <i class="fas fa-rotate-left text-[9px]"></i>
             Reset
@@ -134,7 +134,7 @@
         {{-- Active filter indicators --}}
         @if(request()->hasAny(['q','status','bus_id','date']))
         <div class="w-full flex items-center gap-2 flex-wrap pt-1" aria-live="polite">
-            <span class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ __('Aktif') }}:</span>
+            <span class="text-[8px] font-black text-slate-500 uppercase tracking-widest">{{ __('Aktif') }}:</span>
             @if(request('q'))
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-[#1e3a5f]/8 text-[#1e3a5f] border border-[#1e3a5f]/15 rounded-lg text-[8px] font-black uppercase tracking-widest">
                     <i class="fas fa-search text-[7px]"></i> "{{ Str::limit(request('q'), 25) }}"
@@ -167,7 +167,7 @@
     <div class="overflow-x-auto">
         <table class="w-full">
             <thead>
-                <tr class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] bg-slate-50/30 border-b border-slate-50">
+                <tr class="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] bg-slate-50/30 border-b border-slate-50">
                     <th class="px-10 py-6 text-left">{{ __('Internal ID') }}</th>
                     <th class="px-10 py-6 text-left">{{ __('Traveler Identity') }}</th>
                     <th class="px-10 py-6 text-left">{{ __('Service Unit') }}</th>
@@ -179,7 +179,7 @@
             <tbody class="divide-y divide-slate-50/50">
                 @forelse($bookings as $booking)
                 <tr class="hover:bg-slate-50/30 transition-all duration-300 group">
-                    <td class="px-10 py-6 font-mono text-[10px] font-bold text-slate-400">#{{ $booking->booking_code }}</td>
+                    <td class="px-10 py-6 font-mono text-[10px] font-bold text-slate-500">#{{ $booking->booking_code }}</td>
                     <td class="px-10 py-6">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 text-white flex items-center justify-center font-black text-xs shadow-sm shadow-orange-500/20 transition-transform group-hover:scale-105">
@@ -187,7 +187,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-bold text-slate-800 leading-tight">{{ $booking->passenger_name }}</p>
-                                <p class="text-[10px] text-slate-400 font-semibold mt-0.5">{{ $booking->passenger_contact }}</p>
+                                <p class="text-[10px] text-slate-500 font-semibold mt-0.5">{{ $booking->passenger_contact }}</p>
                             </div>
                         </div>
                     </td>
@@ -209,7 +209,7 @@
                     <td class="px-10 py-6 text-right">
                         <div class="flex items-center justify-end gap-3">
                             <a href="{{ route('admin.bookings.show', $booking) }}"
-                               class="w-10 h-10 bg-slate-50 hover:bg-slate-900 hover:text-white text-slate-400 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm">
+                               class="w-10 h-10 bg-slate-50 hover:bg-slate-900 hover:text-white text-slate-500 rounded-xl flex items-center justify-center transition-all duration-300 shadow-sm">
                                 <i class="fas fa-eye text-xs"></i>
                             </a>
                             <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST"
@@ -226,13 +226,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="py-32 text-center text-slate-400 relative overflow-hidden">
+                    <td colspan="6" class="py-32 text-center text-slate-500 relative overflow-hidden">
                         <div class="absolute inset-0 bg-slate-50/20 -z-10"></div>
                         <div class="w-24 h-24 bg-white rounded-[2rem] shadow-xl flex items-center justify-center mx-auto mb-6">
                             <i class="fas fa-inbox text-slate-200 text-4xl"></i>
                         </div>
                         <h4 class="text-xl font-black text-slate-800">{{ __('No Transaction Records') }}</h4>
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">{{ __('The analysis found no matching entries') }}</p>
+                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-2">{{ __('The analysis found no matching entries') }}</p>
                     </td>
                 </tr>
                 @endforelse

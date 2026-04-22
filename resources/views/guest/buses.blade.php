@@ -53,7 +53,7 @@
             <div class="flex items-center justify-between mb-6 px-1 bg-transparent border-b border-slate-200 pb-3">
                 <div>
                     <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">{{ __('Rute Perintis → Gowa') }}</h3>
-                    <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-widest mt-1">
                         <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'perintis_to_gowa').length || 0" class="text-[#c41e3a]"></span> Armada
                     </p>
                 </div>
@@ -61,7 +61,7 @@
                 {{-- Custom Slider Navigation --}}
                 <div class="flex items-center gap-3">
                     <button @click="scrollLeft()" type="button" aria-label="Geser ke Kiri"
-                            class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#1e3a5f] hover:border-[#1e3a5f] hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
+                            class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e3a5f] hover:border-[#1e3a5f] hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
                         <i class="fas fa-chevron-left text-sm" aria-hidden="true"></i>
                     </button>
                     <button @click="scrollRight()" type="button" aria-label="Geser ke Kanan"
@@ -101,7 +101,7 @@
             <div class="flex items-center justify-between mb-6 px-1 bg-transparent border-b border-slate-200 pb-3">
                 <div>
                     <h3 class="text-lg font-black text-slate-800 uppercase tracking-tight">{{ __('Rute Gowa → Perintis') }}</h3>
-                    <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                    <p class="text-[11px] text-slate-500 font-bold uppercase tracking-widest mt-1">
                         <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'gowa_to_perintis').length || 0" class="text-[#c41e3a]"></span> Armada
                     </p>
                 </div>
@@ -109,7 +109,7 @@
                 {{-- Custom Slider Navigation --}}
                 <div class="flex items-center gap-3">
                     <button @click="scrollLeft()" type="button" aria-label="Geser ke Kiri"
-                            class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#1e3a5f] hover:border-[#1e3a5f] hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
+                            class="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e3a5f] hover:border-[#1e3a5f] hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
                         <i class="fas fa-chevron-left text-sm" aria-hidden="true"></i>
                     </button>
                     <button @click="scrollRight()" type="button" aria-label="Geser ke Kanan"
@@ -242,7 +242,7 @@
                     return 'bg-orange-50 text-orange-400 cursor-not-allowed border-orange-100';
                 return this.canBook(busId, targetRoute)
                     ? 'bg-[#1e3a5f] border-[#1e3a5f] hover:bg-[#c41e3a] hover:border-[#c41e3a] text-white shadow-[0_5px_15px_rgba(0,0,0,0.2)]'
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed border-transparent';
+                    : 'bg-slate-100 text-slate-500 cursor-not-allowed border-transparent';
             },
 
             bookHref(busId, targetRoute, baseUrl) {

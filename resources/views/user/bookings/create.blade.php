@@ -14,11 +14,11 @@
 <div class="max-w-5xl mx-auto">
     {{-- Header --}}
     <div class="mb-8">
-        <a href="{{ route('user.buses') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#c41e3a] uppercase tracking-widest transition-colors mb-4">
+        <a href="{{ route('user.buses') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#c41e3a] uppercase tracking-widest transition-colors mb-4">
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Bus
         </a>
         <h1 class="text-2xl font-black text-[#1e3a5f] tracking-tighter uppercase leading-none">Pesan Tiket Bus</h1>
-        <p class="mt-1 text-sm text-slate-400 font-medium">{{ $bus->name }} — {{ $bus->route }}</p>
+        <p class="mt-1 text-sm text-slate-500 font-medium">{{ $bus->name }} — {{ $bus->route }}</p>
     </div>
 
     @if(session('error'))
@@ -296,7 +296,7 @@
 
             {{-- Tarif --}}
             <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
-                <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Tarif Perjalanan</h4>
+                <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Tarif Perjalanan</h4>
                 <div class="flex justify-between items-center py-2 border-b border-slate-50">
                     <span class="text-sm font-semibold text-slate-600">{{ $isCivitas ? 'Sivitas Akademika' : 'Umum/Tamu' }}</span>
                     <span class="font-black text-[#1e3a5f]" x-text="pricePerSeat === 0 ? 'GRATIS' : 'Rp ' + pricePerSeat.toLocaleString('id-ID') + '/kursi'">Rp {{ number_format($harga, 0, ',', '.') }}/kursi</span>
@@ -306,7 +306,7 @@
                     <span class="font-black text-[#c41e3a] text-lg" x-text="totalHarga === 0 ? 'GRATIS' : 'Rp ' + totalHarga.toLocaleString('id-ID')">Rp 0</span>
                 </div>
                 <div class="mt-3 space-y-1">
-                    <div class="text-[10px] text-slate-400 font-medium">
+                    <div class="text-[10px] text-slate-500 font-medium">
                         {{ $isUmum ? '⚠️ Maks. 1 kursi per transaksi' : '✅ Multi-kursi tersedia (maks. 4)' }}
                     </div>
                     <div x-show="isPriority && priorityNeed === 'high'" x-cloak
@@ -345,7 +345,7 @@
                 </div>
                 <h2 class="text-xl font-black uppercase tracking-tighter mb-2">Pemesanan Ditutup</h2>
                 <p class="text-slate-300 text-sm mb-1 font-medium" x-text="'Status Bus: ' + busStatusLabel"></p>
-                <p class="text-slate-400 text-xs leading-relaxed max-w-xs">
+                <p class="text-slate-500 text-xs leading-relaxed max-w-xs">
                     Bus ini tidak lagi menerima pemesanan karena sudah meninggalkan terminal. Pantau peta realtime dan pesan saat bus kembali ke status <strong class="text-yellow-300">Standby</strong>.
                 </p>
                 <a href="{{ route('user.buses') }}"
@@ -362,7 +362,7 @@
                             <i class="fas fa-credit-card text-2xl text-[#1e3a5f]"></i>
                         </div>
                         <h2 class="text-xl font-black text-[#1e3a5f] uppercase tracking-tighter">Pilih Metode Pembayaran</h2>
-                        <p class="text-slate-400 text-sm mt-2 font-medium">Transaksi hanya saat bus dalam status <strong class="text-yellow-600">Standby</strong></p>
+                        <p class="text-slate-500 text-sm mt-2 font-medium">Transaksi hanya saat bus dalam status <strong class="text-yellow-600">Standby</strong></p>
                     </div>
 
                     {{-- Pilihan Metode — diblokir ketika bus sudah tidak standby --}}
@@ -376,12 +376,12 @@
                                 ]"
                                 class="p-5 border-2 rounded-2xl flex flex-col items-center gap-3 transition-all">
                             <div class="w-14 h-14 rounded-xl flex items-center justify-center"
-                                 :class="paymentMethod === 'etoll' ? 'bg-[#1e3a5f] text-white' : 'bg-slate-50 text-slate-400'">
+                                 :class="paymentMethod === 'etoll' ? 'bg-[#1e3a5f] text-white' : 'bg-slate-50 text-slate-500'">
                                 <i class="fas fa-id-card text-2xl"></i>
                             </div>
                             <div class="text-center">
                                 <div class="font-black text-sm text-slate-800">Kartu E-Tol</div>
-                                <div class="text-[10px] text-slate-400 mt-1">Tap kartu ke reader</div>
+                                <div class="text-[10px] text-slate-500 mt-1">Tap kartu ke reader</div>
                             </div>
                             <div x-show="paymentMethod === 'etoll'" class="text-[10px] font-bold text-[#1e3a5f] bg-[#1e3a5f]/10 px-3 py-1 rounded-full">
                                 ✓ Dipilih
@@ -397,12 +397,12 @@
                                 ]"
                                 class="p-5 border-2 rounded-2xl flex flex-col items-center gap-3 transition-all">
                             <div class="w-14 h-14 rounded-xl flex items-center justify-center"
-                                 :class="paymentMethod === 'qris' ? 'bg-[#c41e3a] text-white' : 'bg-slate-50 text-slate-400'">
+                                 :class="paymentMethod === 'qris' ? 'bg-[#c41e3a] text-white' : 'bg-slate-50 text-slate-500'">
                                 <i class="fas fa-qrcode text-2xl"></i>
                             </div>
                             <div class="text-center">
                                 <div class="font-black text-sm text-slate-800">Scan QRIS</div>
-                                <div class="text-[10px] text-slate-400 mt-1">Scan QR dengan dompet digital</div>
+                                <div class="text-[10px] text-slate-500 mt-1">Scan QR dengan dompet digital</div>
                             </div>
                             <div x-show="paymentMethod === 'qris'" class="text-[10px] font-bold text-[#c41e3a] bg-[#c41e3a]/10 px-3 py-1 rounded-full">
                                 ✓ Dipilih
@@ -444,10 +444,10 @@
                                 </div>
                                 <p class="text-sm font-black text-emerald-600 mb-2">Kartu Terdeteksi!</p>
                                 <div class="bg-white border border-slate-100 rounded-xl px-4 py-2 inline-block">
-                                    <span class="text-xs text-slate-400 mr-2">No. Kartu:</span>
+                                    <span class="text-xs text-slate-500 mr-2">No. Kartu:</span>
                                     <span class="font-mono font-black text-[#1e3a5f]" x-text="etollNumber.replace(/(.{4})/g, '$1 ').trim()"></span>
                                 </div>
-                                <p class="text-xs text-slate-400 mt-2">Menuju pemilihan kursi...</p>
+                                <p class="text-xs text-slate-500 mt-2">Menuju pemilihan kursi...</p>
                             </div>
                         </div>
                     </div>
@@ -461,7 +461,7 @@
                                          alt="QRIS" class="w-36 h-36 mx-auto opacity-70">
                                 </div>
                                 <p class="text-sm text-slate-500 font-medium mb-1">Scan QR di atas menggunakan aplikasi dompet digital Anda</p>
-                                <p class="text-xs text-slate-400 mb-4">Total: <strong class="text-[#c41e3a] font-black" x-text="'Rp ' + (harga).toLocaleString('id-ID')"></strong></p>
+                                <p class="text-xs text-slate-500 mb-4">Total: <strong class="text-[#c41e3a] font-black" x-text="'Rp ' + (harga).toLocaleString('id-ID')"></strong></p>
                                 <button type="button" @click="scanQris()"
                                         class="bg-[#c41e3a] text-white font-black py-3 px-8 rounded-xl text-sm uppercase tracking-widest flex items-center gap-2 mx-auto hover:bg-[#a01830] transition-all">
                                     <i class="fas fa-qrcode"></i> Simulasi Scan QR
@@ -479,7 +479,7 @@
                                     <div class="absolute inset-0 border-4 border-[#c41e3a] rounded-lg animate-pulse"></div>
                                 </div>
                                 <p class="text-sm font-bold text-[#c41e3a]">Memverifikasi pembayaran... (<span x-text="qrCountdown"></span>s)</p>
-                                <p class="text-xs text-slate-400 mt-1">Jangan tutup halaman ini</p>
+                                <p class="text-xs text-slate-500 mt-1">Jangan tutup halaman ini</p>
                             </div>
                         </div>
                     </div>
@@ -526,7 +526,7 @@
                             </div>
                         </div>
                         <div class="flex items-center justify-between">
-                            <p class="text-xs text-slate-400 font-medium">
+                            <p class="text-xs text-slate-500 font-medium">
                                 Pilih <strong class="text-[#c41e3a]" x-text="maxSeats"></strong> kursi untuk perjalanan Anda
                                 <span class="ml-2 text-emerald-600 font-bold" id="seat-live-badge">● Kursi live</span>
                             </p>
@@ -614,7 +614,7 @@
                                     <i class="fas fa-dharmachakra text-white text-2xl" style="animation: spin 8s linear infinite;"></i>
                                 </div>
                                 <div class="flex flex-col items-end">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Entrance Area</span>
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Entrance Area</span>
                                     <div class="w-20 sm:w-24 h-4 bg-[#ffd700] rounded-full shadow-inner opacity-50"></div>
                                 </div>
                             </div>
@@ -680,7 +680,7 @@
 
                             {{-- Standing Area / Rear Section --}}
                             <div class="mt-12 sm:mt-16 border-t-4 border-dashed border-slate-200 pt-8 relative">
-                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-slate-50 text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] whitespace-nowrap">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-slate-50 text-[9px] font-black text-slate-500 uppercase tracking-[0.5em] whitespace-nowrap">
                                     {{ __('Area Berdiri') }}
                                 </div>
                                 <div class="flex justify-around items-center px-4">
@@ -761,13 +761,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
                             <button type="button" @click="rute = 'Kampus Perintis Kemerdekaan -> Kampus Gowa'"
                                     :aria-pressed="rute === 'Kampus Perintis Kemerdekaan -> Kampus Gowa'"
-                                    :class="rute === 'Kampus Perintis Kemerdekaan -> Kampus Gowa' ? 'border-[#1e3a5f] bg-[#1e3a5f]/5 text-[#1e3a5f] shadow-sm' : 'border-slate-100 text-slate-400 hover:border-slate-300'"
+                                    :class="rute === 'Kampus Perintis Kemerdekaan -> Kampus Gowa' ? 'border-[#1e3a5f] bg-[#1e3a5f]/5 text-[#1e3a5f] shadow-sm' : 'border-slate-100 text-slate-500 hover:border-slate-300'"
                                     class="border-2 rounded-xl py-3 px-2 text-[10px] font-bold transition-all text-center">
                                 Kampus Non-Merdeka Perintis Kemerdekaan <br><i class="fas fa-arrow-down my-1 text-[8px]" aria-hidden="true"></i><br> Kampus Non-Merdeka Gowa
                             </button>
                             <button type="button" @click="rute = 'Kampus Gowa -> Kampus Perintis Kemerdekaan'"
                                     :aria-pressed="rute === 'Kampus Gowa -> Kampus Perintis Kemerdekaan'"
-                                    :class="rute === 'Kampus Gowa -> Kampus Perintis Kemerdekaan' ? 'border-[#c41e3a] bg-[#c41e3a]/5 text-[#c41e3a] shadow-sm' : 'border-slate-100 text-slate-400 hover:border-slate-300'"
+                                    :class="rute === 'Kampus Gowa -> Kampus Perintis Kemerdekaan' ? 'border-[#c41e3a] bg-[#c41e3a]/5 text-[#c41e3a] shadow-sm' : 'border-slate-100 text-slate-500 hover:border-slate-300'"
                                     class="border-2 rounded-xl py-3 px-2 text-[10px] font-bold transition-all text-center">
                                 Kampus Non-Merdeka Gowa <br><i class="fas fa-arrow-down my-1 text-[8px]" aria-hidden="true"></i><br> Kampus Non-Merdeka Perintis Kemerdekaan
                             </button>
@@ -789,7 +789,7 @@
                         </button>
 
                         <button type="button" @click="tahap = 1; selectedSeats = [];"
-                                class="w-full mt-2 text-xs text-slate-400 hover:text-[#c41e3a] font-semibold py-2 transition-colors">
+                                class="w-full mt-2 text-xs text-slate-500 hover:text-[#c41e3a] font-semibold py-2 transition-colors">
                             ← Kembali (Ganti Metode Pembayaran)
                         </button>
                     </div>

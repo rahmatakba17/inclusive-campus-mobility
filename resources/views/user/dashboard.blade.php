@@ -55,13 +55,13 @@
     </div>
 
     {{-- Stats Grid --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
         @php
             $stat_items = [
                 ['key' => 'total_bookings', 'label' => 'Total Tickets', 'icon' => 'fa-ticket-alt', 'color' => 'navy', 'val' => $stats['total_bookings']],
-                ['key' => 'confirmed',  'label' => 'Aktif',     'icon' => 'fa-check-circle',  'color' => 'emerald', 'val' => $stats['confirmed']],
-                ['key' => 'completed',  'label' => 'Selesai',   'icon' => 'fa-flag-checkered','color' => 'violet',  'val' => $stats['completed']],
-                ['key' => 'cancelled',  'label' => 'Cancelled', 'icon' => 'fa-times-circle',  'color' => 'rose',    'val' => $stats['cancelled']],
+                ['key' => 'confirmed',  'label' => 'Confirmed',  'icon' => 'fa-check-circle',  'color' => 'emerald', 'val' => $stats['confirmed']],
+                ['key' => 'completed',  'label' => 'Completed',  'icon' => 'fa-flag-checkered','color' => 'violet',  'val' => $stats['completed']],
+                ['key' => 'cancelled',  'label' => 'Cancelled',  'icon' => 'fa-times-circle',  'color' => 'rose',    'val' => $stats['cancelled']],
             ];
         @endphp
 
@@ -78,7 +78,7 @@
                     </div>
                     <div>
                         <p class="text-2xl font-black text-slate-800 tracking-tight leading-none mb-1">{{ $item['val'] }}</p>
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __($item['label']) }}</p>
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __($item['label']) }}</p>
                     </div>
                 </div>
             </div>
@@ -91,20 +91,20 @@
             <h3 class="text-xs font-black text-[#1e3a5f] uppercase tracking-widest flex items-center gap-2">
                 <i class="fas fa-satellite-dish text-blue-500 animate-pulse"></i> Live Radar
             </h3>
-            <p class="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-wider">Pantauan Armada Real-time</p>
+            <p class="text-[9px] text-slate-500 mt-1 uppercase font-bold tracking-wider">{{ __('Real-Time Fleet Monitoring') }}</p>
         </div>
         <iframe src="{{ route('map', ['embed' => true]) }}" class="w-full h-full rounded-[2.5rem]" frameborder="0"></iframe>
     </div>
 
     {{-- 3-col: Riwayat gabungan (1 col) + Bus Tamalanrea (1 col) + Bus Gowa (1 col) --}}
-    <div x-data="liveAvailableBuses()" x-init="startPolling()" class="grid lg:grid-cols-3 gap-8 items-start">
+    <div x-data="liveAvailableBuses()" x-init="startPolling()" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-8 items-start">
 
         {{-- ===== Riwayat Tiket (gabungan semua rute) ===== --}}
         <div class="bg-white rounded-[2.5rem] p-7 border border-slate-100 shadow-sm flex flex-col">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-sm font-black text-slate-800 tracking-tight uppercase">{{ __('Recent Tickets') }}</h3>
                 <a href="{{ route('user.bookings.index') }}" class="text-[9px] font-black uppercase tracking-widest text-[#c41e3a] hover:text-slate-900 transition-colors flex items-center gap-1">
-                    Semua <i class="fas fa-arrow-right"></i>
+                    {{ __('View all') }} <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 
@@ -123,10 +123,10 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[10px] font-black text-slate-800 truncate tracking-tight uppercase">{{ $booking->bus->name }}</p>
-                            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                            <p class="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">
                                 {{ $booking->booking_date->translatedFormat('d M Y') }}
                                 <span class="ml-1 px-1.5 py-0.5 rounded text-[7px] font-black {{ $isGowa ? 'bg-[#c41e3a]/10 text-[#c41e3a]' : 'bg-[#1e3a5f]/10 text-[#1e3a5f]' }}">
-                                    {{ $isGowa ? 'Gowa→Perintis' : 'Perintis→Gowa' }}
+                                    {{ $isGowa ? __('Gowa→Perintis') : __('Perintis→Gowa') }}
                                 </span>
                             </p>
                         </div>
@@ -141,7 +141,7 @@
                 @empty
                     <div class="flex flex-col items-center justify-center py-12 opacity-30">
                         <i class="fas fa-ticket-alt text-3xl mb-3"></i>
-                        <p class="text-[9px] font-black uppercase tracking-widest">Belum ada tiket</p>
+                        <p class="text-[9px] font-black uppercase tracking-widest">{{ __('No tickets yet') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -155,10 +155,10 @@
                         <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
                         <h3 class="text-sm font-black text-slate-800 tracking-tight uppercase">Tamalanrea → Gowa</h3>
                     </div>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Antrian Keberangkatan Perintis</p>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{{ __('Perintis Departure Queue') }}</p>
                 </div>
                 <a href="{{ route('user.buses') }}" class="text-[9px] font-black uppercase tracking-widest text-[#c41e3a] hover:text-slate-900 transition-colors flex items-center gap-1">
-                    Semua <i class="fas fa-arrow-right"></i>
+                    {{ __('View all') }} <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 
@@ -167,7 +167,7 @@
                     <div class="flex flex-col">
                         <div x-show="index === 1" class="flex items-center gap-2 py-2 opacity-60">
                             <div class="h-px bg-gradient-to-r from-transparent to-slate-200 flex-1"></div>
-                            <span class="text-[7px] font-black uppercase tracking-widest text-slate-400">Antrian</span>
+                            <span class="text-[7px] font-black uppercase tracking-widest text-slate-500">{{ __('Queue') }}</span>
                             <div class="h-px bg-gradient-to-l from-transparent to-slate-200 flex-1"></div>
                         </div>
 
@@ -181,7 +181,7 @@
 
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative"
                                  :class="bus.trip_status === 'jalan' ? 'bg-blue-500' : (index === 0 ? 'bg-[#ffd700]' : 'bg-slate-100')">
-                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-400')"></i>
+                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-500')"></i>
                                 <span x-show="bus.trip_status === 'jalan'" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
                             </div>
 
@@ -190,18 +190,18 @@
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="text-[7px] font-bold text-white px-1.5 py-0.5 rounded uppercase flex-shrink-0"
                                           :class="bus.trip_status === 'jalan' ? 'bg-blue-500' : (index === 0 && bus.direction !== 'rest_tamal' ? 'bg-[#1e3a5f]' : (bus.direction === 'rest_tamal' ? 'bg-slate-500' : 'bg-amber-500'))"
-                                          x-text="bus.trip_status === 'jalan' ? 'ON WAY' : (index === 0 && bus.direction !== 'rest_tamal' ? 'SIAP BERANGKAT' : (bus.direction === 'rest_tamal' ? 'BARU TIBA' : 'ANTRI'))">
+                                          x-text="bus.trip_status === 'jalan' ? window._t.ON_WAY : (index === 0 && bus.direction !== 'rest_tamal' ? window._t.READY : (bus.direction === 'rest_tamal' ? window._t.JUST_ARRIVED : window._t.QUEUED))">
                                     </span>
                                     <p class="text-[7px] font-bold uppercase truncate"
-                                       :class="bus.trip_status === 'jalan' ? 'text-blue-500' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-400')"
-                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' mnt' : (bus.trip_status === 'jalan' ? 'Menuju Gowa' : '')"></p>
+                                       :class="bus.trip_status === 'jalan' ? 'text-blue-500' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-500')"
+                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' ' + window._t.MIN : (bus.trip_status === 'jalan' ? window._t.TO_GOWA : '')"></p>
                                 </div>
                             </div>
                             <a :href="bus.trip_status === 'jalan' ? '#' : '/user/bookings/create/' + bus.id"
                                class="text-white font-black py-1.5 px-3 rounded-lg text-[7px] transition-all uppercase tracking-widest flex-shrink-0"
                                :class="bus.trip_status === 'jalan' ? 'bg-blue-300 opacity-70 cursor-not-allowed' : (index === 0 ? 'bg-[#1e3a5f] hover:bg-slate-900 shadow-md shadow-navy-600/20' : 'bg-slate-400 hover:bg-slate-500')"
                                @click="bus.trip_status === 'jalan' ? $event.preventDefault() : (bus.trip_status !== 'standby' && $event.preventDefault())"
-                               x-text="bus.trip_status === 'jalan' ? 'DI JALAN' : (index === 0 ? 'PESAN' : 'ANTRI')">
+                               x-text="bus.trip_status === 'jalan' ? window._t.ON_ROAD : (index === 0 ? window._t.BOOK : window._t.QUEUED)">
                             </a>
                         </div>
                     </div>
@@ -209,7 +209,7 @@
 
                 <div x-show="busesTamalanrea.length === 0" class="py-10 flex flex-col items-center opacity-30">
                     <i class="fas fa-bus-slash text-2xl mb-2"></i>
-                    <p class="text-[8px] font-bold uppercase tracking-widest">Tidak ada bus</p>
+                    <p class="text-[8px] font-bold uppercase tracking-widest">{{ __('No buses available') }}</p>
                 </div>
             </div>
         </div>
@@ -222,10 +222,10 @@
                         <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
                         <h3 class="text-sm font-black text-slate-800 tracking-tight uppercase">Gowa → Tamalanrea</h3>
                     </div>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Antrian Keberangkatan Gowa</p>
+                    <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{{ __('Gowa Departure Queue') }}</p>
                 </div>
                 <a href="{{ route('user.buses') }}" class="text-[9px] font-black uppercase tracking-widest text-[#c41e3a] hover:text-slate-900 transition-colors flex items-center gap-1">
-                    Semua <i class="fas fa-arrow-right"></i>
+                    {{ __('View all') }} <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
 
@@ -242,7 +242,7 @@
 
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative"
                                  :class="bus.trip_status === 'jalan' ? 'bg-orange-500' : (index === 0 ? 'bg-[#ffd700]' : 'bg-slate-100')">
-                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#c41e3a]' : 'text-slate-400')"></i>
+                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#c41e3a]' : 'text-slate-500')"></i>
                                 <span x-show="bus.trip_status === 'jalan'" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
                             </div>
 
@@ -251,18 +251,18 @@
                                 <div class="flex items-center gap-1.5 mt-0.5">
                                     <span class="text-[7px] font-bold text-white px-1.5 py-0.5 rounded uppercase flex-shrink-0"
                                           :class="bus.trip_status === 'jalan' ? 'bg-orange-500' : (index === 0 ? 'bg-[#c41e3a]' : 'bg-amber-500')"
-                                          x-text="bus.trip_status === 'jalan' ? 'ON WAY' : (index === 0 ? 'SIAP BERANGKAT' : 'STANDBY')">
+                                          x-text="bus.trip_status === 'jalan' ? window._t.ON_WAY : (index === 0 ? window._t.READY : window._t.STANDBY)">
                                     </span>
                                     <p class="text-[7px] font-bold uppercase truncate"
                                        :class="bus.trip_status === 'jalan' ? 'text-orange-500' : 'text-[#c41e3a]'"
-                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' mnt' : (bus.trip_status === 'jalan' ? 'Menuju Tamalanrea' : '')"></p>
+                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' ' + window._t.MIN : (bus.trip_status === 'jalan' ? window._t.TO_TAMALANREA : '')"></p>
                                 </div>
                             </div>
                             <a :href="bus.trip_status === 'jalan' ? '#' : '/user/bookings/create/' + bus.id + '?from=gowa'"
                                class="text-white font-black py-1.5 px-3 rounded-lg text-[7px] transition-all uppercase tracking-widest flex-shrink-0"
                                :class="bus.trip_status === 'jalan' ? 'bg-orange-300 opacity-70 cursor-not-allowed' : (index === 0 ? 'bg-[#c41e3a] hover:bg-[#a01830] shadow-md shadow-red-600/20' : 'bg-slate-400 hover:bg-slate-500')"
                                @click="bus.trip_status === 'jalan' ? $event.preventDefault() : (bus.direction !== 'rest_gowa' && $event.preventDefault())"
-                               x-text="bus.trip_status === 'jalan' ? 'DI JALAN' : (index === 0 ? 'PESAN' : 'STANDBY')">
+                               x-text="bus.trip_status === 'jalan' ? window._t.ON_ROAD : (index === 0 ? window._t.BOOK : window._t.STANDBY)">
                             </a>
                         </div>
                     </div>
@@ -270,12 +270,25 @@
 
                 <div x-show="busesGowa.length === 0" class="py-10 flex flex-col items-center opacity-30">
                     <i class="fas fa-bus-slash text-2xl mb-2"></i>
-                    <p class="text-[8px] font-bold uppercase tracking-widest">Tidak ada bus</p>
+                    <p class="text-[8px] font-bold uppercase tracking-widest">{{ __('No buses available') }}</p>
                 </div>
             </div>
         </div>
 
         <script>
+            // i18n translation map for Alpine.js dynamic strings
+            window._t = {
+                ON_WAY:       '{{ __('ON WAY') }}',
+                ON_ROAD:      '{{ __('EN ROUTE') }}',
+                READY:        '{{ __('READY') }}',
+                JUST_ARRIVED: '{{ __('JUST ARRIVED') }}',
+                QUEUED:       '{{ __('QUEUED') }}',
+                STANDBY:      '{{ __('STANDBY') }}',
+                BOOK:         '{{ __('BOOK') }}',
+                MIN:          '{{ __('min') }}',
+                TO_GOWA:      '{{ __('To Gowa') }}',
+                TO_TAMALANREA:'{{ __('To Tamalanrea') }}',
+            };
             document.addEventListener('alpine:init', () => {
                 Alpine.data('liveAvailableBuses', () => ({
                     buses: [],

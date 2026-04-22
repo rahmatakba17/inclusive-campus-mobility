@@ -51,7 +51,7 @@
         <i class="fas fa-exclamation-triangle text-3xl text-red-400"></i>
     </div>
     <h1 class="text-2xl font-black text-white mb-2 tracking-tight">Belum Ditugaskan</h1>
-    <p class="text-slate-400 text-sm max-w-md leading-relaxed">
+    <p class="text-slate-500 text-sm max-w-md leading-relaxed">
         Anda belum ditugaskan untuk mengendarai armada bus manapun. Silakan hubungi Administrator sistem transportasi Bus Kampus Non-Merdeka.
     </p>
     <div class="mt-8 glass px-5 py-3 rounded-2xl">
@@ -97,21 +97,21 @@
                     <div class="flex items-center gap-2 glass px-4 py-2.5 rounded-2xl">
                         <i class="fas fa-play text-amber-400 text-[10px]"></i>
                         <div>
-                            <p class="text-[8px] text-slate-400 uppercase tracking-widest font-bold">Berangkat</p>
+                            <p class="text-[8px] text-slate-500 uppercase tracking-widest font-bold">Berangkat</p>
                             <p class="text-sm font-black text-white font-mono">{{ substr($bus->departure_time, 0, 5) }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 glass px-4 py-2.5 rounded-2xl">
                         <i class="fas fa-flag-checkered text-amber-400 text-[10px]"></i>
                         <div>
-                            <p class="text-[8px] text-slate-400 uppercase tracking-widest font-bold">Tiba</p>
+                            <p class="text-[8px] text-slate-500 uppercase tracking-widest font-bold">Tiba</p>
                             <p class="text-sm font-black text-white font-mono">{{ substr($bus->arrival_time, 0, 5) }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 glass px-4 py-2.5 rounded-2xl">
-                        <i class="fas fa-id-card text-slate-400 text-[10px]"></i>
+                        <i class="fas fa-id-card text-slate-500 text-[10px]"></i>
                         <div>
-                            <p class="text-[8px] text-slate-400 uppercase tracking-widest font-bold">Plat</p>
+                            <p class="text-[8px] text-slate-500 uppercase tracking-widest font-bold">Plat</p>
                             <p class="text-sm font-black text-white font-mono">{{ $bus->plate_number }}</p>
                         </div>
                     </div>
@@ -203,7 +203,7 @@
                     :disabled="isLoading"
                     :class="status === 'standby'
                         ? 'status-standby text-white glow scale-[1.02]'
-                        : 'bg-white/[0.06] text-slate-400 border border-white/10 hover:border-amber-500/40 hover:text-amber-300 hover:bg-amber-500/10'"
+                        : 'bg-white/[0.06] text-slate-500 border border-white/10 hover:border-amber-500/40 hover:text-amber-300 hover:bg-amber-500/10'"
                     class="status-btn py-4 px-3 rounded-2xl text-xs font-black transition-all flex flex-col items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                     aria-label="Set status ngetem atau standby">
                 <i class="fas fa-clock text-xl"></i>
@@ -217,7 +217,7 @@
                     :disabled="isLoading"
                     :class="status === 'jalan'
                         ? 'status-jalan text-white glow scale-[1.02]'
-                        : 'bg-white/[0.06] text-slate-400 border border-white/10 hover:border-emerald-500/40 hover:text-emerald-300 hover:bg-emerald-500/10'"
+                        : 'bg-white/[0.06] text-slate-500 border border-white/10 hover:border-emerald-500/40 hover:text-emerald-300 hover:bg-emerald-500/10'"
                     class="status-btn py-4 px-3 rounded-2xl text-xs font-black transition-all flex flex-col items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                     aria-label="Set status mulai perjalanan">
                 <i class="fas fa-road text-xl"></i>
@@ -235,7 +235,7 @@
                 aria-label="Tandai perjalanan selesai, reset manifest">
             <i class="fas fa-flag-checkered text-[#ffd700] text-base"></i>
             <span class="text-white">Selesai Perjalanan</span>
-            <span class="text-[9px] text-slate-400 font-semibold">(Tiba di Tujuan)</span>
+            <span class="text-[9px] text-slate-500 font-semibold">(Tiba di Tujuan)</span>
         </button>
 
         {{-- Loading indicator --}}
@@ -244,7 +244,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
             </svg>
-            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Memperbarui...</span>
+            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Memperbarui...</span>
         </div>
     </section>
 
@@ -279,7 +279,7 @@
         <form action="{{ route('sopir.dashboard.report') }}" method="POST" class="space-y-4">
             @csrf
             <div>
-                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Kondisi Fisik / Mesin Bus</label>
+                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Kondisi Fisik / Mesin Bus</label>
                 <div class="grid grid-cols-3 gap-2">
                     <label class="cursor-pointer">
                         <input type="radio" name="condition" value="good" class="peer sr-only" checked required>
@@ -303,7 +303,7 @@
             </div>
 
             <div>
-                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Catatan Detail (Wajib isi keluhan jika ada)</label>
+                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Catatan Detail (Wajib isi keluhan jika ada)</label>
                 <textarea name="notes" rows="2" placeholder="Sebutkan kondisi komponen, bahan bakar, atau keluhan teknis jika ada..." 
                           class="w-full bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-300 outline-none focus:border-amber-500/50 resize-none" required></textarea>
             </div>
@@ -330,7 +330,7 @@
             {{-- Legend --}}
             <div class="hidden md:flex items-center gap-3 text-[8px] font-bold uppercase tracking-widest">
                 <span class="flex items-center gap-1 text-blue-400"><span class="w-2 h-2 rounded bg-blue-500/30 inline-block"></span> Prioritas</span>
-                <span class="flex items-center gap-1 text-slate-400"><span class="w-2 h-2 rounded bg-slate-500/30 inline-block"></span> Reguler</span>
+                <span class="flex items-center gap-1 text-slate-500"><span class="w-2 h-2 rounded bg-slate-500/30 inline-block"></span> Reguler</span>
                 <span class="flex items-center gap-1 text-teal-400"><span class="w-2 h-2 rounded bg-teal-500/30 inline-block border border-dashed border-teal-500/40"></span> Berdiri</span>
             </div>
         </header>
@@ -372,7 +372,7 @@
                                     </p>
                                     @if($booking->user)
                                         <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[7px] font-black uppercase tracking-widest
-                                            {{ $booking->user->isCivitas() ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' : 'bg-slate-500/15 text-slate-400 border border-slate-500/25' }}">
+                                            {{ $booking->user->isCivitas() ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25' : 'bg-slate-500/15 text-slate-500 border border-slate-500/25' }}">
                                             {{ $booking->user->isCivitas() ? 'CIVITAS' : 'UMUM' }}
                                         </span>
                                     @else

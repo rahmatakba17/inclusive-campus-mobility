@@ -142,31 +142,17 @@ class Booking extends Model
     }
 
     /**
-     * Selesaikan SEMUA booking (termasuk yang auto-cancelled) saat trip selesai.
-     *
-     * PERBAIKAN BUG: finishTrip sebelumnya hanya update is_completed untuk
-     * status 'pending'/'confirmed' — booking yang ter-cancel tetap is_completed=false
-     * sehingga card tiket masih menampilkan 'CANCELLED' bukan 'SELESAI'.
-     *
-     * Logika bisnis benar: jika bus selesai perjalanan, semua booking hari ini
-     * (apapun statusnya — termasuk auto-cancelled) harus ditandai is_completed=true
-     * agar tampil sebagai 'Selesai' di riwayat perjalanan user.
+     * Selesaikan booking saat trip selesai.
+     * Tiket yang batal tidak akan diubah menjadi selesai, sesuai dengan bisnis proses yang diharapkan.
      */
     public static function completeAllForBus(int $busId): int
     {
         return static::where('bus_id', $busId)
             ->where('booking_date', now()->format('Y-m-d'))
             ->where('is_completed', false)
+            ->whereIn('status', ['pending', 'confirmed'])
             ->update([
                 'is_completed' => true,
-                // Jika ter-cancel otomatis (geofence 15 detik) namun bus sudah selesai:
-                // kembalikan status ke 'confirmed' agar ticket tampil 'Selesai' bukan 'Dibatalkan'
-                'status' => \Illuminate\Support\Facades\DB::raw(
-                    "CASE WHEN status = 'cancelled' AND notes LIKE '%Batal Otomatis%'
-                          THEN 'confirmed'
-                          ELSE status
-                     END"
-                ),
             ]);
     }
 }

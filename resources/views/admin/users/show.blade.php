@@ -18,21 +18,21 @@
 
             <div class="mt-8 space-y-4">
                 <div class="flex items-center gap-4 py-3 border-b border-slate-100">
-                    <div class="w-8 h-8 flex items-center justify-center text-slate-400">
+                    <div class="w-8 h-8 flex items-center justify-center text-slate-500">
                         <i class="far fa-envelope text-lg"></i>
                     </div>
                     <div class="text-left">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Email Address') }}</p>
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Email Address') }}</p>
                         <p class="text-sm font-bold text-slate-900 truncate w-full max-w-[180px]">{{ $user->email }}</p>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-4 py-3 border-b border-slate-100">
-                    <div class="w-8 h-8 flex items-center justify-center text-slate-400">
+                    <div class="w-8 h-8 flex items-center justify-center text-slate-500">
                         <i class="far fa-calendar-alt text-lg"></i>
                     </div>
                     <div class="text-left">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Joined Date') }}</p>
+                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Joined Date') }}</p>
                         <p class="text-sm font-bold text-slate-900">{{ $user->created_at->format('d M Y') }}</p>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
         {{-- Stats Highlight --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white p-5 border-l-4 border-slate-900 shadow-sm flex flex-col">
-                <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ __('Total') }}</p>
+                <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{{ __('Total') }}</p>
                 <p class="text-2xl font-black text-slate-900">{{ $stats['total'] }}</p>
             </div>
             <div class="bg-white p-5 border-l-4 border-slate-400 shadow-sm flex flex-col">

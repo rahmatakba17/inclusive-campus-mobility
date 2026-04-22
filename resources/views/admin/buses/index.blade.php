@@ -55,7 +55,7 @@
     {{-- Meta info strip --}}
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
         <div>
-            <nav class="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3" aria-label="Breadcrumb">
+            <nav class="flex items-center gap-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3" aria-label="Breadcrumb">
                 <i class="fas fa-home text-slate-300"></i>
                 <span>/</span>
                 <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-600 transition-colors">Admin</a>
@@ -63,7 +63,7 @@
                 <span class="text-[#1e3a5f]">Fleet Data</span>
             </nav>
             <h1 class="text-2xl font-black text-slate-900 tracking-tight leading-none">Manajemen Armada</h1>
-            <p class="text-xs text-slate-400 font-semibold mt-1.5">
+            <p class="text-xs text-slate-500 font-semibold mt-1.5">
                 Kelola seluruh unit bus operasional Bus Kampus Kampus Non-Merdeka
             </p>
         </div>
@@ -92,7 +92,7 @@
             </div>
             <div>
                 <p class="text-xl font-black text-slate-900 leading-none">{{ $total }}</p>
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Total Unit</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-0.5">Total Unit</p>
             </div>
         </div>
         <div class="bg-white border border-slate-100 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3">
@@ -101,7 +101,7 @@
             </div>
             <div>
                 <p class="text-xl font-black text-emerald-600 leading-none">{{ $active }}</p>
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Aktif</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-0.5">Aktif</p>
             </div>
         </div>
         <div class="bg-white border border-slate-100 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3">
@@ -110,7 +110,7 @@
             </div>
             <div>
                 <p class="text-xl font-black text-amber-600 leading-none">{{ $maint }}</p>
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Perawatan</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-0.5">Perawatan</p>
             </div>
         </div>
         <div class="bg-white border border-slate-100 rounded-2xl px-4 py-3 shadow-sm flex items-center gap-3">
@@ -119,7 +119,7 @@
             </div>
             <div>
                 <p class="text-xl font-black text-red-500 leading-none">{{ $inactive }}</p>
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Nonaktif</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-0.5">Nonaktif</p>
             </div>
         </div>
     </div>
@@ -145,7 +145,7 @@
             <option value="maintenance">Perawatan</option>
             <option value="inactive">Nonaktif</option>
         </select>
-        <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest px-2 hidden sm:block">
+        <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest px-2 hidden sm:block">
             {{ $buses->total() }} unit
         </span>
     </div>
@@ -194,7 +194,7 @@
             {{-- Bus Number Avatar --}}
             <div class="flex-shrink-0">
                 <div class="w-11 h-11 rounded-2xl flex items-center justify-center font-black text-xs border
-                    {{ $bus->status === 'active' ? 'bg-[#1e3a5f]/8 border-[#1e3a5f]/15 text-[#1e3a5f]' : 'bg-slate-100 border-slate-200 text-slate-400' }}">
+                    {{ $bus->status === 'active' ? 'bg-[#1e3a5f]/8 border-[#1e3a5f]/15 text-[#1e3a5f]' : 'bg-slate-100 border-slate-200 text-slate-500' }}">
                     {{ str_pad($bus->bus_number ?? $loop->iteration, 2, '0', STR_PAD_LEFT) }}
                 </div>
             </div>
@@ -211,11 +211,11 @@
                     </span>
                 </div>
                 <div class="flex items-center gap-3 flex-wrap">
-                    <span class="text-[10px] font-black text-slate-400 font-mono tracking-wider">{{ $bus->plate_number }}</span>
+                    <span class="text-[10px] font-black text-slate-500 font-mono tracking-wider">{{ $bus->plate_number }}</span>
                     <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-                    <span class="text-[10px] text-slate-400 font-medium truncate max-w-xs">{{ $bus->route }}</span>
+                    <span class="text-[10px] text-slate-500 font-medium truncate max-w-xs">{{ $bus->route }}</span>
                     <span class="w-1 h-1 rounded-full bg-slate-200"></span>
-                    <span class="text-[10px] text-slate-400 font-medium">
+                    <span class="text-[10px] text-slate-500 font-medium">
                         <i class="far fa-clock mr-0.5 text-slate-300"></i>
                         {{ substr($bus->departure_time,0,5) }} – {{ substr($bus->arrival_time,0,5) }}
                     </span>
@@ -226,12 +226,12 @@
             <div class="hidden md:flex flex-col items-end gap-1 flex-shrink-0 w-24">
                 <div class="flex items-baseline gap-1">
                     <span class="text-base font-black text-slate-700">{{ $bus->capacity }}</span>
-                    <span class="text-[9px] text-slate-400 font-semibold">kursi</span>
+                    <span class="text-[9px] text-slate-500 font-semibold">kursi</span>
                 </div>
                 <div class="cap-bar w-full">
                     <div class="cap-fill" style="width:{{ min($fillPct, 100) }}%"></div>
                 </div>
-                <span class="text-[8px] text-slate-400 font-bold">{{ $bus->bookings_count }} pemesanan</span>
+                <span class="text-[8px] text-slate-500 font-bold">{{ $bus->bookings_count }} pemesanan</span>
             </div>
 
             {{-- Action Buttons --}}
@@ -278,7 +278,7 @@
             <i class="fas fa-bus-slash text-2xl text-slate-300"></i>
         </div>
         <h3 class="text-base font-black text-slate-700 mb-1">Belum Ada Armada</h3>
-        <p class="text-xs text-slate-400 font-medium max-w-xs mx-auto mb-6">
+        <p class="text-xs text-slate-500 font-medium max-w-xs mx-auto mb-6">
             Mulai tambahkan unit bus kampus pertama untuk sistem transportasi Kampus Non-Merdeka.
         </p>
         <a href="{{ route('admin.buses.create') }}"
@@ -296,13 +296,13 @@
      class="hidden py-16 text-center bg-white border border-slate-100 rounded-3xl mt-2"
      aria-live="polite">
     <i class="fas fa-search text-2xl text-slate-200 mb-3 block"></i>
-    <p class="text-sm font-bold text-slate-400">Tidak ada hasil untuk pencarian ini</p>
+    <p class="text-sm font-bold text-slate-500">Tidak ada hasil untuk pencarian ini</p>
 </div>
 
 {{-- ===== PAGINATION ===== --}}
 @if($buses->hasPages())
 <nav class="mt-6 flex items-center justify-between" aria-label="Navigasi halaman">
-    <p class="text-xs text-slate-400 font-medium">
+    <p class="text-xs text-slate-500 font-medium">
         Menampilkan {{ $buses->firstItem() }}–{{ $buses->lastItem() }} dari {{ $buses->total() }} armada
     </p>
     <div>

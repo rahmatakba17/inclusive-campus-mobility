@@ -6,7 +6,7 @@
 <div class="max-w-2xl bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden">
     <div class="px-12 py-10 border-b border-slate-50 bg-slate-50/20">
         <h3 class="font-black text-[#1e3a5f] text-2xl tracking-tighter">{{ __('Edit Informasi Sopir') }}</h3>
-        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1.5">{{ __('Ubah data akun operasional') }}</p>
+        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1.5">{{ __('Ubah data akun operasional') }}</p>
     </div>
 
     <form action="{{ route('admin.drivers.update', $driver) }}" method="POST" class="p-10 space-y-6">
@@ -14,14 +14,14 @@
         @method('PUT')
         
         <div>
-            <label class="block text-xs font-black text-slate-400 tracking-widest uppercase mb-2">Nama Lengkap</label>
+            <label class="block text-xs font-black text-slate-500 tracking-widest uppercase mb-2">Nama Lengkap</label>
             <input type="text" name="name" value="{{ old('name', $driver->name) }}" required
                    class="w-full px-5 py-3 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-[#c41e3a] focus:border-[#c41e3a]">
             @error('name')<p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p>@enderror
         </div>
 
         <div>
-            <label class="block text-xs font-black text-slate-400 tracking-widest uppercase mb-2">Email</label>
+            <label class="block text-xs font-black text-slate-500 tracking-widest uppercase mb-2">Email</label>
             <input type="email" name="email" value="{{ old('email', $driver->email) }}" required
                    class="w-full px-5 py-3 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-[#c41e3a] focus:border-[#c41e3a]">
             @error('email')<p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p>@enderror
@@ -32,14 +32,14 @@
             
             <div class="space-y-6">
                 <div>
-                    <label class="block text-xs font-black text-slate-400 tracking-widest uppercase mb-2">Password Baru</label>
+                    <label class="block text-xs font-black text-slate-500 tracking-widest uppercase mb-2">Password Baru</label>
                     <input type="password" name="password" minlength="8" placeholder="Kosongkan jika tidak ingin diubah"
                            class="w-full px-5 py-3 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-[#c41e3a] focus:border-[#c41e3a]">
                     @error('password')<p class="text-red-500 text-xs font-bold mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
-                    <label class="block text-xs font-black text-slate-400 tracking-widest uppercase mb-2">Konfirmasi Password Baru</label>
+                    <label class="block text-xs font-black text-slate-500 tracking-widest uppercase mb-2">Konfirmasi Password Baru</label>
                     <input type="password" name="password_confirmation" minlength="8"
                            class="w-full px-5 py-3 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-[#c41e3a] focus:border-[#c41e3a]">
                 </div>

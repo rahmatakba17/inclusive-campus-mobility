@@ -30,6 +30,7 @@
             <div class="flex items-center gap-3">
                 <div class="relative w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shadow-lg flex items-center justify-center p-1.5 border border-white/20 transform hover:scale-105 transition-transform duration-500">
                     <img src="{{ asset('images/logo_kampus_non_merdeka.png') }}" class="w-full h-auto object-contain"
+                         width="1024" height="1024"
                          alt="{{ __('Logo Kampus Non-Merdeka') }}">
                 </div>
                 <div>
@@ -123,7 +124,7 @@
                     <h1 class="text-lg md:text-xl font-black text-[#1e3a5f] tracking-tighter uppercase line-clamp-1">{{ __($view_name ?? 'Dashboard') }}</h1>
                     <div class="flex items-center gap-2 mt-0.5 md:mt-1 hover:opacity-80 transition-opacity" aria-hidden="true">
                         <div class="w-1 h-1 rounded-full bg-emerald-500 shadow-[0_0_5px_#10b981] animate-pulse"></div>
-                        <p class="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest hidden sm:block">{{ __('Bus Kampus Integrated System') }}</p>
+                        <p class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest hidden sm:block">{{ __('Bus Kampus Integrated System') }}</p>
                     </div>
                 </div>
             </div>
@@ -133,10 +134,10 @@
                 <div class="hidden sm:flex items-center bg-slate-50 p-1 rounded-[15px] border border-slate-100">
                     <a href="{{ route('lang.switch', 'id') }}"
                        class="px-2 md:px-3 py-1.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all
-                              {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-sm' : 'text-slate-400 hover:text-slate-600' }}">ID</a>
+                              {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-sm' : 'text-slate-500 hover:text-slate-600' }}">ID</a>
                     <a href="{{ route('lang.switch', 'en') }}"
                        class="px-2 md:px-3 py-1.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all
-                              {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-sm' : 'text-slate-400 hover:text-slate-600' }}">EN</a>
+                              {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-sm' : 'text-slate-500 hover:text-slate-600' }}">EN</a>
                 </div>
 
                 {{-- Status Info (Desktop Only) --}}
@@ -154,7 +155,7 @@
                 <div class="flex items-center gap-3 ml-1">
                     <div class="text-right hidden xl:block">
                         <p class="text-[10px] font-black text-slate-700 leading-none">{{ auth()->user()->name }}</p>
-                        <p class="text-[8px] text-slate-400 font-bold uppercase tracking-tighter mt-1">{{ auth()->user()->email }}</p>
+                        <p class="text-[8px] text-slate-500 font-bold uppercase tracking-tighter mt-1">{{ auth()->user()->email }}</p>
                     </div>
                     <div class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-gradient-to-br from-[#1e3a5f] to-[#0f2137] text-white flex items-center justify-center font-black shadow-lg shadow-navy-900/10 cursor-pointer hover:shadow-xl transition-all">
                         {{ substr(auth()->user()->name, 0, 1) }}

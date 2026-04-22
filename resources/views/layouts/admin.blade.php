@@ -30,6 +30,7 @@
             <div class="flex items-center gap-4">
                 <div class="relative w-12 h-12 md:w-16 md:h-16 bg-white rounded-full shadow-lg flex items-center justify-center p-2 border-2 border-white/20 transform hover:scale-105 transition-transform duration-500">
                     <img src="{{ asset('images/logo_kampus_non_merdeka.png') }}" class="w-full h-auto object-contain"
+                         width="1024" height="1024"
                          alt="{{ __('Logo Kampus Non-Merdeka') }}">
                 </div>
                 <div>
@@ -143,19 +144,21 @@
              style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
 
         {{-- Topbar --}}
-        <header class="bg-white/95 backdrop-blur-xl border-b border-slate-100 px-4 md:px-8 lg:px-12 py-4 md:py-6 flex items-center justify-between z-30 sticky top-0"
+        <header class="bg-white/95 backdrop-blur-xl border-b border-slate-100 px-4 md:px-8 lg:px-12 py-4 md:py-6 flex flex-wrap items-center justify-between z-30 sticky top-0 gap-y-4"
                 role="banner">
-            <div class="flex items-center gap-3 md:gap-4">
-                {{-- Hamburger Menu (Mobile/Tablet) --}}
-                <button @click="adminMobileMenuOpen = true" class="lg:hidden p-2 text-slate-500 hover:text-[#1e3a5f] bg-slate-50 rounded-xl" aria-label="{{ __('Buka Menu Navigasi') }}">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <div>
-                    <h1 class="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter line-clamp-1">{{ __($view_name ?? 'Dashboard') }}</h1>
-                    <div class="flex items-center gap-2 mt-1 md:mt-1.5" aria-hidden="true">
-                        <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse hidden sm:block"></div>
-                        <p class="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest hidden sm:block">{{ __('Administrasi Bus Kampus Non-Merdeka') }}</p>
+            <div class="flex items-center gap-3 md:gap-4 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-3 md:gap-4">
+                    {{-- Hamburger Menu (Mobile/Tablet) --}}
+                    <button @click="adminMobileMenuOpen = true" class="lg:hidden p-2 text-slate-500 hover:text-[#1e3a5f] bg-slate-50 rounded-xl flex-shrink-0" aria-label="{{ __('Buka Menu Navigasi') }}">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="min-w-0">
+                        <h1 class="text-xl md:text-2xl font-black text-[#1e3a5f] tracking-tighter line-clamp-1 break-all sm:break-normal">{{ __($view_name ?? 'Dashboard') }}</h1>
+                        <div class="flex items-center gap-2 mt-1 md:mt-1.5" aria-hidden="true">
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse hidden sm:block"></div>
+                            <p class="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest hidden sm:block">{{ __('Administrasi Bus Kampus Non-Merdeka') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,15 +168,15 @@
                 <div class="hidden sm:flex items-center bg-slate-50 p-1 md:p-1.5 rounded-xl md:rounded-2xl border border-slate-100 shadow-sm">
                     <a href="{{ route('lang.switch', 'id') }}"
                        class="px-2 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[10px] md:text-[11px] font-black uppercase tracking-widest transition-all
-                              {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600' }}">ID</a>
+                              {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-500 hover:text-slate-600' }}">ID</a>
                     <a href="{{ route('lang.switch', 'en') }}"
                        class="px-2 md:px-4 py-1.5 md:py-2 rounded-lg md:rounded-xl text-[10px] md:text-[11px] font-black uppercase tracking-widest transition-all
-                              {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-400 hover:text-slate-600' }}">EN</a>
+                              {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-md border border-slate-100' : 'text-slate-500 hover:text-slate-600' }}">EN</a>
                 </div>
 
                 <div class="hidden lg:flex flex-col items-end">
                     <p class="text-xs md:text-sm font-black text-[#1e3a5f] tracking-tight">{{ now()->translatedFormat('l, d F Y') }}</p>
-                    <p class="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Status Sistem: Optimal') }}</p>
+                    <p class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Status Sistem: Optimal') }}</p>
                 </div>
 
                 <div class="hidden md:block w-px h-8 md:h-10 bg-slate-100"></div>

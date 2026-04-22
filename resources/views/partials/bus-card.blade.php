@@ -4,9 +4,9 @@
     $isStandby = !$isJalan && !$isIstirahat;
     
     $status_key = match($bus->trip_status) {
-        'jalan' => 'Sedang Jalan',
-        'istirahat' => 'Istirahat',
-        default => 'Standby'
+        'jalan'     => __('On the Way'),
+        'istirahat' => __('Resting'),
+        default     => __('Ready')
     };
 
     // Initial server-side rough order so it doesn't look totally random before JS kicks in
@@ -49,18 +49,18 @@
                         <i class="fas fa-pause text-[7px]" aria-hidden="true"></i>
                     </template>
                     
-                    <span x-text="{ 'jalan': 'Sedang Jalan', 'istirahat': 'Istirahat', 'standby': 'Standby' }[dynamicStatus[{{ $bus->id }}] || '{{ $bus->trip_status }}']"></span>
+                    <span x-text="{ 'jalan': window._busT ? window._busT.STATUS_JALAN : '{{ __('On the Way') }}', 'istirahat': window._busT ? window._busT.STATUS_ISTIRAHAT : '{{ __('Resting') }}', 'standby': window._busT ? window._busT.STATUS_STANDBY : '{{ __('Ready') }}' }[dynamicStatus[{{ $bus->id }}] || '{{ $bus->trip_status }}']"></span>
                 </span>
                 
                 {{-- ETA Helper (Only visible via JS injected value) --}}
                 <template x-if="dynamicETA[{{ $bus->id }}] !== undefined">
-                    <span class="inline-flex items-center text-[7.5px] font-black text-slate-400 uppercase tracking-widest bg-slate-50 px-1.5 py-1 rounded"
-                          x-text="`ETA ${dynamicETA[{{ $bus->id }}]} mnt`"></span>
+                    <span class="inline-flex items-center text-[7.5px] font-black text-slate-500 uppercase tracking-widest bg-slate-50 px-1.5 py-1 rounded"
+                          x-text="`{{ __('ETA') }} ${dynamicETA[{{ $bus->id }}]} {{ __('min') }}`"></span>
                 </template>
             </div>
             
             <h3 class="text-base font-black text-[#1e3a5f] tracking-tight truncate max-w-[180px]" title="{{ $bus->name }}">{{ $bus->name }}</h3>
-            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-0.5 font-mono">{{ $bus->plate_number }}</p>
+            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-0.5 font-mono">{{ $bus->plate_number }}</p>
         </div>
 
         <div class="w-12 h-12 border border-slate-100 rounded-2xl flex items-center justify-center p-1.5 bg-slate-50 flex-shrink-0 shadow-inner group-hover:scale-105 transition-transform duration-300">
@@ -71,11 +71,11 @@
     {{-- Precise Info Details --}}
     <div class="flex-1 space-y-4 mb-6 pt-2 border-t border-slate-100/60">
         <div class="flex items-center gap-3.5 group/info">
-            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
+            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
                 <i class="fas fa-route text-xs"></i>
             </div>
             <div class="flex-1">
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">{{ __('Rute') }}</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] mb-0.5">{{ __('Rute') }}</p>
                 <p class="text-[10px] font-bold text-slate-700 leading-tight">
                     @if($targetRoute === 'gowa_to_perintis')
                         Kampus Non-Merdeka Gowa - Perintis Kampus Non-Merdeka
@@ -87,11 +87,11 @@
         </div>
         
         <div class="flex items-center gap-3.5 group/info">
-            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
+            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
                 <i class="far fa-clock text-xs"></i>
             </div>
             <div class="flex-1">
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">{{ __('Jadwal') }}</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] mb-0.5">{{ __('Jadwal') }}</p>
                 <p class="text-[10px] font-bold text-slate-700 leading-tight">
                     {{ substr($bus->departure_time, 0, 5) }} – {{ substr($bus->arrival_time, 0, 5) }}
                 </p>
@@ -99,11 +99,11 @@
         </div>
         
         <div class="flex items-center gap-3.5 group/info">
-            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
+            <div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 border border-slate-100 transition-colors group-hover/info:border-slate-200 group-hover/info:bg-white" aria-hidden="true">
                 <i class="fas fa-users text-xs"></i>
             </div>
             <div class="flex-1">
-                <p class="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">{{ __('Kapasitas') }}</p>
+                <p class="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] mb-0.5">{{ __('Kapasitas') }}</p>
                 <p class="text-[10px] font-bold text-slate-700 leading-tight">{{ $bus->capacity }} {{ __('Kursi') }}</p>
             </div>
         </div>

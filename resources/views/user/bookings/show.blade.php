@@ -22,7 +22,7 @@
     {{-- Top navigation --}}
     <nav class="mb-6" aria-label="{{ __('Navigasi Halaman') }}">
         <a href="{{ route('user.bookings.index') }}"
-           class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#c41e3a] uppercase tracking-widest transition-colors mb-4 focus:outline-none focus:ring-2 focus:ring-[#c41e3a]/50 rounded-lg px-2 py-1 -ml-2">
+           class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#c41e3a] uppercase tracking-widest transition-colors mb-4 focus:outline-none focus:ring-2 focus:ring-[#c41e3a]/50 rounded-lg px-2 py-1 -ml-2">
             <i class="fas fa-arrow-left" aria-hidden="true"></i> {{ __('Kembali ke Riwayat') }}
         </a>
     </nav>
@@ -123,22 +123,22 @@
         <section class="p-8 space-y-8 bg-white" aria-label="{{ __('Informasi Penumpang dan Bus') }}">
             <div class="grid grid-cols-2 gap-y-6 gap-x-4">
                 <div>
-                    <h2 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ __('Penumpang') }}</h2>
+                    <h2 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">{{ __('Penumpang') }}</h2>
                     <p class="font-black text-slate-800 text-sm tracking-tight capitalize truncate" title="{{ $booking->user->name }}">{{ $booking->user->name }}</p>
                 </div>
                 <div>
-                    <h2 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ __('Tanggal') }}</h2>
+                    <h2 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">{{ __('Tanggal') }}</h2>
                     <p class="font-black text-[#1e3a5f] text-sm tracking-tight">{{ $booking->booking_date->translatedFormat('d M Y') }}</p>
                 </div>
                 <div>
-                    <h2 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ __('Kode Bus / Armada') }}</h2>
+                    <h2 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">{{ __('Kode Bus / Armada') }}</h2>
                     <p class="font-black text-slate-800 text-sm tracking-tight flex items-center gap-2">
                         {{ $booking->bus->name }}
                     </p>
                     <p class="font-mono text-[10px] text-slate-500 mt-0.5">{{ $booking->bus->plate_number }}</p>
                 </div>
                 <div>
-                    <h2 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ __('Waktu & Rute') }}</h2>
+                    <h2 class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">{{ __('Waktu & Rute') }}</h2>
                     <p class="font-black text-slate-800 text-sm tracking-tight">{{ $booking->bus->departure_time }} – {{ $booking->bus->arrival_time }}</p>
                     <p class="text-[9px] text-slate-500 uppercase font-bold mt-0.5">{{ $originCode }} → {{ $destCode }}</p>
                 </div>
@@ -152,13 +152,13 @@
                         <span class="{{ $booking->seat_number > 16 ? 'text-teal-700' : 'text-[#1e3a5f]' }} font-black text-4xl leading-none tracking-tighter">
                             {{ $booking->seat_number > 16 ? 'B' . ($booking->seat_number - 16) : str_pad($booking->seat_number, 2, '0', STR_PAD_LEFT) }}
                         </span>
-                        <span class="text-[10px] font-bold uppercase pb-1 {{ $booking->seat_number > 16 ? 'text-teal-600' : 'text-slate-400' }}">
+                        <span class="text-[10px] font-bold uppercase pb-1 {{ $booking->seat_number > 16 ? 'text-teal-600' : 'text-slate-500' }}">
                             @if($booking->seat_number > 16) {{ __('Penum. Berdiri') }} @elseif($booking->seat_number <= 4) {{ __('Prioritas') }} @else {{ __('Reguler') }} @endif
                         </span>
                     </div>
                 </div>
                 <div class="flex flex-col items-end">
-                    <p class="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1.5">{{ __('Booking Ref') }}</p>
+                    <p class="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1.5">{{ __('Booking Ref') }}</p>
                     <div class="bg-white p-2 rounded-lg border border-slate-200">
                         {{-- Simulated Barcode effect --}}
                         <div class="flex h-8 w-24 opacity-80" aria-hidden="true" title="{{ $booking->booking_code }}">
@@ -172,7 +172,7 @@
             {{-- Payment & Notes Area --}}
             <div class="text-sm bg-[#fafbfc] rounded-2xl p-5 border border-slate-100">
                 <div class="flex justify-between items-center mb-3">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('Pembayaran') }}</span>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('Pembayaran') }}</span>
                     <div class="flex items-center gap-1.5 font-black text-[#1e3a5f] text-xs">
                         @if($booking->payment_method === 'qris')
                             <i class="fas fa-qrcode text-[#c41e3a]"></i> QRIS
@@ -185,14 +185,14 @@
                 </div>
                 @if($booking->payment_method === 'etoll' && $booking->etoll_number)
                 <div class="flex justify-between items-center mb-0">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ __('No. Kartu') }}</span>
+                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ __('No. Kartu') }}</span>
                     <span class="font-mono font-black text-slate-700 text-[11px]">{{ preg_replace('/(.{4})/', '$1 ', $booking->etoll_number) }}</span>
                 </div>
                 @endif
                 
                 @if($booking->notes)
                 <div class="mt-4 pt-4 border-t border-slate-200">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2 block">{{ __('Catatan Penumpang') }}</span>
+                    <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-2 block">{{ __('Catatan Penumpang') }}</span>
                     <p class="text-[11px] font-medium text-slate-600 italic bg-white p-3 rounded-xl border border-slate-100">{{ $booking->notes }}</p>
                 </div>
                 @endif
@@ -200,7 +200,7 @@
 
             <footer class="flex justify-between items-center pt-2">
                 <span class="text-[9px] font-black text-slate-300 uppercase tracking-widest">{{ __('Diterbitkan') }}</span>
-                <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $booking->created_at->translatedFormat('d M Y H:i') }}</span>
+                <span class="text-[10px] text-slate-500 font-bold uppercase">{{ $booking->created_at->translatedFormat('d M Y H:i') }}</span>
             </footer>
         </section>
         
@@ -248,7 +248,7 @@
                          role="alert" aria-live="polite">
                         <button type="button" disabled aria-disabled="true"
                                 aria-label="Pembatalan tidak tersedia — bus sedang berjalan"
-                                class="w-full py-4 text-slate-400 font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 cursor-not-allowed">
+                                class="w-full py-4 text-slate-500 font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 cursor-not-allowed">
                             <i class="fas fa-ban" aria-hidden="true"></i>
                             Pembatalan Tidak Tersedia
                         </button>
@@ -302,10 +302,10 @@
                                 </div>
 
                                 <div x-show="openTip" x-collapse class="mt-4 pt-4 border-t border-slate-50">
-                                    <p class="text-[9px] text-slate-400 mb-3 font-medium tracking-tight"><i class="fas fa-info-circle mr-1"></i> Tip anonim, diproses langsung, maksimal Rp. 5.000 per transaksi 1x seminggu.</p>
+                                    <p class="text-[9px] text-slate-500 mb-3 font-medium tracking-tight"><i class="fas fa-info-circle mr-1"></i> Tip anonim, diproses langsung, maksimal Rp. 5.000 per transaksi 1x seminggu.</p>
                                     <div class="flex gap-2">
                                         <div class="relative flex-1">
-                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 text-xs font-black">Rp</span>
+                                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-xs font-black">Rp</span>
                                             <input type="number" x-model.number="amount" min="1000" max="5000" step="500" aria-label="Nominal Tip"
                                                    class="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-black text-slate-800 focus:ring-2 focus:ring-[#ffd700] focus:border-[#ffd700] focus:bg-white outline-none transition-all">
                                         </div>
@@ -336,11 +336,11 @@
                 <template x-if="!busIsMoving">
                     <div x-transition class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl opacity-60 cursor-not-allowed" aria-hidden="true">
                         <div class="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-lock text-slate-400 text-xs"></i>
+                            <i class="fas fa-lock text-slate-500 text-xs"></i>
                         </div>
                         <div class="flex-1">
                             <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Fitur Tip Terkunci</h3>
-                            <p class="text-[9px] text-slate-400 font-medium mt-0.5">Dapat digunakan ketika bus dalam keadaan <strong class="text-slate-500">berjalan</strong> dengan Anda di dalamnya.</p>
+                            <p class="text-[9px] text-slate-500 font-medium mt-0.5">Dapat digunakan ketika bus dalam keadaan <strong class="text-slate-500">berjalan</strong> dengan Anda di dalamnya.</p>
                         </div>
                     </div>
                 </template>

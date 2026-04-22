@@ -52,14 +52,14 @@
         <div class="flex items-center gap-4">
             <form action="{{ route('admin.users.index') }}" method="GET" x-ref="searchForm" @submit.prevent>
                 <div class="relative group">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('Search passenger...') }}"
                            @input.debounce.500ms="fetchData"
                            class="pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-none text-sm focus:ring-0 focus:border-slate-900 transition-colors w-full md:w-72 font-semibold">
                 </div>
             </form>
             <div class="bg-slate-900 text-white px-4 py-2.5 flex items-center gap-3">
-                <span class="text-xs font-black tracking-widest text-slate-400 border-r border-slate-700 pr-3">{{ __('TOTAL') }}</span>
+                <span class="text-xs font-black tracking-widest text-slate-500 border-r border-slate-700 pr-3">{{ __('TOTAL') }}</span>
                 <span class="text-base font-black tracking-tighter">{{ $users->total() }}</span>
             </div>
         </div>

@@ -29,38 +29,38 @@
 
                 <div class="space-y-4 pt-6 border-t border-slate-100">
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 flex items-center justify-center text-slate-400 bg-slate-50 border border-slate-100 shrink-0">
+                        <div class="w-8 h-8 flex items-center justify-center text-slate-500 bg-slate-50 border border-slate-100 shrink-0">
                             <i class="fas fa-id-card text-xs"></i>
                         </div>
                         <div>
-                            <span class="text-slate-400 block text-[9px] font-black uppercase tracking-widest">{{ __('License Plate') }}</span>
+                            <span class="text-slate-500 block text-[9px] font-black uppercase tracking-widest">{{ __('License Plate') }}</span>
                             <span class="text-slate-900 font-bold text-sm">{{ $bus->plate_number }}</span>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 flex items-center justify-center text-slate-400 bg-slate-50 border border-slate-100 shrink-0">
+                        <div class="w-8 h-8 flex items-center justify-center text-slate-500 bg-slate-50 border border-slate-100 shrink-0">
                             <i class="fas fa-route text-xs"></i>
                         </div>
                         <div>
-                            <span class="text-slate-400 block text-[9px] font-black uppercase tracking-widest">{{ __('Route Area') }}</span>
+                            <span class="text-slate-500 block text-[9px] font-black uppercase tracking-widest">{{ __('Route Area') }}</span>
                             <span class="text-slate-900 font-bold text-sm">{{ $bus->route }}</span>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 flex items-center justify-center text-slate-400 bg-slate-50 border border-slate-100 shrink-0">
+                        <div class="w-8 h-8 flex items-center justify-center text-slate-500 bg-slate-50 border border-slate-100 shrink-0">
                             <i class="fas fa-clock text-xs"></i>
                         </div>
                         <div>
-                            <span class="text-slate-400 block text-[9px] font-black uppercase tracking-widest">{{ __('Operation Window') }}</span>
+                            <span class="text-slate-500 block text-[9px] font-black uppercase tracking-widest">{{ __('Operation Window') }}</span>
                             <span class="text-slate-900 font-bold text-sm">{{ $bus->departure_time }} – {{ $bus->arrival_time }}</span>
                         </div>
                     </div>
                     <div class="flex items-start gap-4">
-                        <div class="w-8 h-8 flex items-center justify-center text-slate-400 bg-slate-50 border border-slate-100 shrink-0">
+                        <div class="w-8 h-8 flex items-center justify-center text-slate-500 bg-slate-50 border border-slate-100 shrink-0">
                             <i class="fas fa-users text-xs"></i>
                         </div>
                         <div>
-                            <span class="text-slate-400 block text-[9px] font-black uppercase tracking-widest">{{ __('Capacity') }}</span>
+                            <span class="text-slate-500 block text-[9px] font-black uppercase tracking-widest">{{ __('Capacity') }}</span>
                             <span class="text-slate-900 font-bold text-sm">{{ $bus->capacity }} {{ __('tickets') }}</span>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
 
                 @if($bus->description)
                 <div class="pt-6 border-t border-slate-100">
-                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">{{ __('Review') }}</p>
+                    <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1.5">{{ __('Review') }}</p>
                     <p class="text-sm text-slate-600 font-medium leading-relaxed">{{ $bus->description }}</p>
                 </div>
                 @endif
@@ -92,7 +92,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-white border-l-4 border-slate-900 p-4 shadow-sm flex flex-col">
                     <div class="text-2xl font-black text-slate-900">{{ $stats['total_bookings'] }}</div>
-                    <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ __('Total') }}</div>
+                    <div class="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{{ __('Total') }}</div>
                 </div>
                 <div class="bg-white border-l-4 border-slate-400 p-4 shadow-sm flex flex-col">
                     <div class="text-2xl font-black text-slate-700">{{ $stats['confirmed'] }}</div>
@@ -174,7 +174,7 @@
         <section class="bg-white shadow-sm border border-slate-200">
             <div class="px-8 py-6 border-b-2 border-slate-900 bg-slate-50 flex items-center justify-between">
                 <h2 class="font-black text-slate-900 text-xl tracking-tighter">
-                    <i class="fas fa-hand-holding-usd text-slate-400 mr-2"></i>{{ __('Riwayat Tip Anonim') }}
+                    <i class="fas fa-hand-holding-usd text-slate-500 mr-2"></i>{{ __('Riwayat Tip Anonim') }}
                 </h2>
                 <span class="bg-slate-900 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 shadow-sm">
                     <i class="fas fa-eye-slash mr-1"></i>{{ __('Identitas Disembunyikan') }}
@@ -217,7 +217,7 @@
         <section class="bg-white shadow-sm border border-slate-200">
             <div class="px-8 py-6 border-b-2 border-slate-900 bg-slate-50 flex items-center justify-between">
                 <h2 class="font-black text-slate-900 text-xl tracking-tighter">
-                    <i class="fas fa-clipboard-check text-slate-400 mr-2"></i>{{ __('Riwayat Laporan Armada') }}
+                    <i class="fas fa-clipboard-check text-slate-500 mr-2"></i>{{ __('Riwayat Laporan Armada') }}
                 </h2>
                 <span class="bg-blue-100 text-blue-700 border border-blue-200 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded">
                     Sopir & Admin

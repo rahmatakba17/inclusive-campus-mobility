@@ -7,7 +7,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div class="mb-12">
-            <a href="{{ route('guest.buses') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-orange-500 uppercase tracking-widest transition-colors mb-4">
+            <a href="{{ route('guest.buses') }}" class="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-orange-500 uppercase tracking-widest transition-colors mb-4">
                 <i class="fas fa-arrow-left"></i> Kembali ke Daftar Bus
             </a>
             <h1 class="text-3xl font-extrabold text-gray-900">Pemesanan Tamu</h1>
@@ -157,7 +157,7 @@
                     </div>
                     <h2 class="text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 leading-none text-red-400">Bus Telah <br>Berangkat!</h2>
                     <p class="text-slate-300 text-sm mb-4 font-bold tracking-widest uppercase" x-text="'STATUS TERKINI: ' + busStatusLabel"></p>
-                    <p class="text-slate-400 font-medium leading-relaxed max-w-sm mt-2 text-sm">
+                    <p class="text-slate-500 font-medium leading-relaxed max-w-sm mt-2 text-sm">
                         Transaksi dihentikan otomatis karena armada terpilih sudah melaju dari terminal. Sistem menyarankan Anda untuk mengalihkan reservasi ke bus lain yang berstatus <strong class="text-emerald-400">Standby</strong>.
                     </p>
                     <a href="{{ route('guest.buses') }}"
@@ -260,7 +260,7 @@
                                     <i class="fas fa-steering-wheel text-white text-2xl animate-pulse-slow"></i>
                                 </div>
                                 <div class="flex flex-col items-end">
-                                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-1">Entrance Area</span>
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-1">Entrance Area</span>
                                     <div class="w-24 h-4 bg-[#ffd700] rounded-full shadow-inner opacity-50"></div>
                                 </div>
                             </div>
@@ -296,7 +296,7 @@
 
                             {{-- Standing Area / Rear Section --}}
                             <div class="mt-12 sm:mt-16 border-t-4 border-dashed border-slate-200 pt-8 relative">
-                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-slate-50 text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] whitespace-nowrap">
+                                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-slate-50 text-[9px] font-black text-slate-500 uppercase tracking-[0.5em] whitespace-nowrap">
                                     {{ __('Area Berdiri') }}
                                 </div>
                                 <div class="flex justify-around items-center px-4">

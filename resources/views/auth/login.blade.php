@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Masuk - Sistem Booking Bus Kampus Non-Merdeka | Reservasi Transportasi Civitas Hasanuddin')
-@section('meta_description', 'Login ke Sistem Informasi Bus Kampus Non-Merdeka. Pesan tiket bus kampus secara online, pantau posisi bus secara real-time, dan nikmati perjalanan menuju Kampus Non-Merdeka.')
+@section('title', __('Login — Non-Merdeka Campus Bus Booking & Transport System'))
+@section('meta_description', __('Sign in to the Non-Merdeka Campus Bus Information System. Book campus bus tickets online, track bus positions in real-time, and enjoy your journey to the Non-Merdeka Campus.'))
 
 @section('content')
 
@@ -20,9 +20,9 @@
                     <i class="fas fa-bus text-white text-xl"></i>
                 </div>
                 <div>
-                    <a href="{{ route('home') }}" class="hover:opacity-90 transition-opacity" aria-label="Beranda Bus Kampus Non-Merdeka">
-                        <h1 class="text-white font-extrabold text-2xl tracking-tight leading-tight drop-shadow-md">Bus Kampus Non-Merdeka</h1>
-                        <p class="text-red-200 text-sm font-medium drop-shadow">Sistem Informasi Transportasi Kampus Resmi</p>
+                    <a href="{{ route('home') }}" class="hover:opacity-90 transition-opacity" aria-label="{{ __('Home') }} Bus Kampus Non-Merdeka">
+                        <h1 class="text-white font-extrabold text-2xl tracking-tight leading-tight drop-shadow-md">{{ __('Bus Kampus Non-Merdeka') }}</h1>
+                        <p class="text-red-200 text-sm font-medium drop-shadow">{{ __('Official Campus Transport Information System') }}</p>
                     </a>
                 </div>
             </header>
@@ -34,22 +34,22 @@
                         <i class="fas fa-route text-red-100 text-xl"></i>
                     </div>
                     <h2 id="hero-heading" class="text-white text-3xl lg:text-4xl font-extrabold leading-tight mb-4 drop-shadow-md tracking-tight">
-                        Perjalanan Aman &amp; Nyaman<br>untuk <span class="text-red-200 inline-block mt-1">Civitas Kampus Non-Merdeka</span>
+                        {{ __('Safe & Comfortable Journey') }}<br>{{ __('for') }} <span class="text-red-200 inline-block mt-1">{{ __('Civitas Kampus Non-Merdeka') }}</span>
                     </h2>
                     <p class="text-blue-50 text-base leading-relaxed mb-6 font-light drop-shadow">
-                        Platform booking transportasi kampus resmi Kampus Non-Merdeka. Pantau posisi bus secara <em class="font-semibold">real-time</em>, pesan tiket kapan saja, dan tiba di tujuan tepat waktu.
+                        {{ __('The official campus transport booking platform for Non-Merdeka Campus. Track bus positions in') }} <em class="font-semibold">real-time</em>, {{ __('book tickets anytime, and arrive at your destination on time.') }}
                     </p>
 
                     {{-- Feature badges --}}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <span class="bg-white/10 text-white font-medium text-sm px-4 py-2.5 rounded-2xl md:rounded-full border border-white/20 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
-                            <i class="fas fa-map-marker-alt text-red-300"></i> Pelacakan Real-time
+                            <i class="fas fa-map-marker-alt text-red-300"></i> {{ __('Real-time Tracking') }}
                         </span>
                         <span class="bg-white/10 text-white font-medium text-sm px-4 py-2.5 rounded-2xl md:rounded-full border border-white/20 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
-                            <i class="fas fa-ticket-alt text-red-300"></i> Booking Online
+                            <i class="fas fa-ticket-alt text-red-300"></i> {{ __('Online Booking') }}
                         </span>
                         <span class="sm:col-span-2 bg-white/10 text-white font-medium text-sm px-4 py-2.5 rounded-2xl md:rounded-full border border-white/20 flex items-center justify-center gap-2 shadow-sm backdrop-blur-sm">
-                            <i class="fas fa-shield-alt text-red-300"></i> Sistem Terverifikasi
+                            <i class="fas fa-shield-alt text-red-300"></i> {{ __('Verified System') }}
                         </span>
                     </div>
                 </div>
@@ -61,15 +61,15 @@
                             <i class="fas fa-bus text-red-100"></i>
                         </div>
                         <div class="text-3xl font-extrabold text-white drop-shadow-md">5+</div>
-                        <div class="text-red-100 text-sm mt-1 font-semibold">Armada Bus</div>
-                        <div class="text-white/60 text-xs">ber-AC &amp; modern</div>
+                        <div class="text-red-100 text-sm mt-1 font-semibold">{{ __('Bus Fleet') }}</div>
+                        <div class="text-white/60 text-xs">{{ __('AC & modern') }}</div>
                     </div>
                     <div class="rounded-2xl p-5 text-center backdrop-blur-md bg-white/10 border border-white/20 group hover:bg-white/20 transition-all shadow-lg hover:-translate-y-1">
                         <div class="w-10 h-10 bg-red-500/30 rounded-xl flex items-center justify-center mx-auto mb-3 transition-transform group-hover:scale-110">
                             <i class="fas fa-road text-red-100"></i>
                         </div>
                         <div class="text-3xl font-extrabold text-white drop-shadow-md">2</div>
-                        <div class="text-red-100 text-sm mt-1 font-semibold">Rute Aktif</div>
+                        <div class="text-red-100 text-sm mt-1 font-semibold">{{ __('Active Routes') }}</div>
                         <div class="text-white/60 text-xs">Perintis ↔ Gowa</div>
                     </div>
                     <div class="rounded-2xl p-5 text-center backdrop-blur-md bg-white/10 border border-white/20 group hover:bg-white/20 transition-all shadow-lg hover:-translate-y-1">
@@ -77,20 +77,31 @@
                             <i class="fas fa-satellite-dish text-red-100"></i>
                         </div>
                         <div class="text-3xl font-extrabold text-white drop-shadow-md">GPS</div>
-                        <div class="text-red-100 text-sm mt-1 font-semibold">Tracking Langsung</div>
-                        <div class="text-white/60 text-xs">posisi real-time</div>
+                        <div class="text-red-100 text-sm mt-1 font-semibold">{{ __('Live Tracking') }}</div>
+                        <div class="text-white/60 text-xs">{{ __('real-time position') }}</div>
                     </div>
                 </div>
             </article>
 
             <footer class="text-white/50 text-xs tracking-wide">
-                &copy; {{ date('Y') }} Kampus Non-Merdeka. Hak Cipta Terlindungi. Sistem Informasi Bus Kampus Non-Merdeka.
+                &copy; {{ date('Y') }} {{ __('Non-Merdeka Campus. All Rights Reserved. Non-Merdeka Campus Bus Information System.') }}
             </footer>
         </section>
 
         {{-- Right panel - Login Form --}}
         <section aria-labelledby="login-heading" class="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-10 relative z-10">
             <div class="w-full max-w-md">
+
+                {{-- Language Switcher --}}
+                <div class="flex justify-end mb-4">
+                    <div class="flex items-center bg-white/10 backdrop-blur-md p-1 rounded-2xl border border-white/20 shadow-inner gap-0.5">
+                        <a href="{{ route('lang.switch', 'id') }}"
+                           class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'id' ? 'bg-white text-[#c41e3a] shadow-md' : 'text-white/60 hover:text-white' }}">ID</a>
+                        <a href="{{ route('lang.switch', 'en') }}"
+                           class="px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all {{ App::getLocale() === 'en' ? 'bg-white text-[#c41e3a] shadow-md' : 'text-white/60 hover:text-white' }}">EN</a>
+                    </div>
+                </div>
+
                 <div class="bg-white/95 backdrop-blur-sm rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] p-8 animate-slide-up border border-white/20">
 
                     {{-- Header --}}
@@ -98,9 +109,9 @@
                         <div class="w-16 h-16 bg-gradient-to-br from-red-600 to-red-800 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-red-500/30 transform transition-transform hover:scale-105">
                             <i class="fas fa-sign-in-alt text-white text-2xl"></i>
                         </div>
-                        <h2 id="login-heading" class="text-2xl font-extrabold text-gray-900 tracking-tight">Masuk ke Akun Anda</h2>
+                        <h2 id="login-heading" class="text-2xl font-extrabold text-gray-900 tracking-tight">{{ __('Sign In to Your Account') }}</h2>
                         <p class="text-gray-500 mt-2 text-sm leading-relaxed px-4">
-                            Akses fitur lengkap Sistem Bus Kampus Non-Merdeka – booking tiket, pantau bus, dan kelola perjalanan.
+                            {{ __('Access the full features of the Non-Merdeka Campus Bus System — book tickets, track buses, and manage your journeys.') }}
                         </p>
                     </header>
 
@@ -110,7 +121,7 @@
                             <div class="flex items-start gap-3">
                                 <i class="fas fa-check-circle text-emerald-500 mt-0.5 text-base"></i>
                                 <div>
-                                    <strong class="font-bold block">Berhasil</strong>
+                                    <strong class="font-bold block">{{ __('Success') }}</strong>
                                     <span class="block mt-1 text-emerald-700">{{ session('success') }}</span>
                                 </div>
                             </div>
@@ -123,7 +134,7 @@
                             <div class="flex items-start gap-3">
                                 <i class="fas fa-exclamation-circle text-red-500 mt-0.5 text-base"></i>
                                 <div>
-                                    <strong class="font-bold block">Login Gagal</strong>
+                                    <strong class="font-bold block">{{ __('Login Failed') }}</strong>
                                     <span class="block mt-1 text-red-700">{{ $errors->first() }}</span>
                                 </div>
                             </div>
@@ -138,7 +149,7 @@
                         <div>
                             <label for="email" class="block text-sm font-bold text-gray-700 mb-1.5 flex items-center gap-1.5">
                                 <i class="fas fa-user-circle text-gray-400"></i>
-                                Alamat Email Kampus Non-Merdeka
+                                {{ __('Non-Merdeka Campus Email Address') }}
                             </label>
                             <div class="relative group">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-red-600">
@@ -146,7 +157,7 @@
                                 </div>
                                 <input type="email" id="email" name="email" value="{{ old('email') }}" required
                                     autocomplete="email"
-                                    placeholder="nama@kampus-non-merdeka.ac.id"
+                                    placeholder="{{ __('name@kampus-non-merdeka.ac.id') }}"
                                     aria-required="true"
                                     class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all bg-gray-50 focus:bg-white text-sm shadow-sm placeholder-gray-400 font-medium text-gray-800 hover:border-gray-300">
                             </div>
@@ -161,7 +172,7 @@
                         <div>
                             <label for="password-input" class="block text-sm font-bold text-gray-700 mb-1.5 flex items-center gap-1.5">
                                 <i class="fas fa-key text-gray-400"></i>
-                                Kata Sandi
+                                {{ __('Password') }}
                             </label>
                             <div class="relative group">
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors group-focus-within:text-red-600">
@@ -169,10 +180,10 @@
                                 </div>
                                 <input type="password" name="password" required id="password-input"
                                     autocomplete="current-password"
-                                    placeholder="Masukkan kata sandi"
+                                    placeholder="{{ __('Enter your password') }}"
                                     aria-required="true"
                                     class="w-full pl-11 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all bg-gray-50 focus:bg-white text-sm shadow-sm placeholder-gray-400 font-medium text-gray-800 hover:border-gray-300">
-                                <button type="button" onclick="togglePassword()" aria-label="Tampilkan/Sembunyikan Kata Sandi"
+                                <button type="button" onclick="togglePassword()" aria-label="{{ __('Show/Hide Password') }}"
                                     class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-red-600 transition-colors focus:outline-none">
                                     <i class="fas fa-eye text-base" id="eye-icon"></i>
                                 </button>
@@ -192,7 +203,7 @@
                                         class="peer appearance-none w-4 h-4 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:ring-offset-1 checked:bg-red-600 checked:border-red-600 transition-colors cursor-pointer">
                                     <i class="fas fa-check absolute text-[10px] text-white opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></i>
                                 </div>
-                                <span class="text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors select-none">Ingat saya di perangkat ini</span>
+                                <span class="text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors select-none">{{ __('Remember me on this device') }}</span>
                             </label>
                         </div>
 
@@ -202,7 +213,7 @@
                             <span class="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                             <div class="relative z-10 flex items-center justify-center gap-2">
                                 <i class="fas fa-sign-in-alt group-hover:translate-x-1 transition-transform"></i>
-                                <span>Masuk ke Akun</span>
+                                <span>{{ __('Sign In') }}</span>
                             </div>
                         </button>
                     </form>
@@ -210,20 +221,20 @@
                     {{-- Register Link --}}
                     <div class="mt-6 pt-5 border-t border-gray-100 text-center">
                         <p class="text-gray-500 text-sm font-medium">
-                            Belum memiliki akun civitas? 
+                            {{ __("Don't have a civitas account?") }}
                             <a href="{{ route('register') }}"
                                 class="text-red-600 font-bold hover:text-red-800 transition-colors inline-flex items-center gap-1.5 ml-1 group decoration-2 underline-offset-4 hover:underline">
-                                Daftar Sekarang
+                                {{ __('Register Now') }}
                                 <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
                             </a>
                         </p>
                     </div>
 
                     {{-- Demo credentials --}}
-                    <aside class="mt-6 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-inner" aria-label="Kredensial Demo Eksperimental">
+                    <aside class="mt-6 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-inner" aria-label="{{ __('Experimental Demo Credentials') }}">
                         <header class="text-xs font-extrabold text-blue-900 mb-4 flex items-center gap-2 uppercase tracking-wide">
                             <i class="fas fa-vial text-blue-600 text-sm"></i>
-                            Akun Uji Coba Sistem
+                            {{ __('System Test Accounts') }}
                         </header>
                         <div class="space-y-3">
                             <div class="flex items-center gap-3 p-3 bg-white/80 backdrop-blur-sm rounded-lg border border-white hover:border-blue-200 transition-colors hover:shadow-sm">
@@ -231,7 +242,7 @@
                                     <i class="fas fa-user-shield text-sm"></i>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">Administrator</div>
+                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">{{ __('Administrator') }}</div>
                                     <div class="text-[11px] font-mono text-gray-500 mt-0.5"><span class="text-blue-600 font-semibold">admin@kampus-non-merdeka.ac.id</span> / <span class="bg-gray-100 rounded px-1 transition-colors hover:bg-gray-200 cursor-text">password</span></div>
                                 </div>
                             </div>
@@ -240,7 +251,7 @@
                                     <i class="fas fa-id-card text-sm"></i>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">Supir / Operator</div>
+                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">{{ __('Driver / Operator') }}</div>
                                     <div class="text-[11px] font-mono text-gray-500 mt-0.5"><span class="text-indigo-600 font-semibold">sopir1@kampus-non-merdeka.ac.id</span> / <span class="bg-gray-100 rounded px-1 transition-colors hover:bg-gray-200 cursor-text">password</span></div>
                                 </div>
                             </div>
@@ -249,7 +260,7 @@
                                     <i class="fas fa-user-graduate text-sm"></i>
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">Civitas / Umum</div>
+                                    <div class="font-bold text-gray-800 text-sm tracking-tight truncate">{{ __('Civitas / General') }}</div>
                                     <div class="text-[11px] font-mono text-gray-500 mt-0.5"><span class="text-emerald-600 font-semibold">budi@kampus-non-merdeka.ac.id</span> / <span class="bg-gray-100 rounded px-1 transition-colors hover:bg-gray-200 cursor-text">password</span></div>
                                 </div>
                             </div>

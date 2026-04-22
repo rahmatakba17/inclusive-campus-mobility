@@ -34,13 +34,13 @@
                 </div>
                 <h2 class="text-2xl font-black text-[#1e3a5f] tracking-tight uppercase mb-2">{{ __('Pantau & Pesan Tiket') }}</h2>
                 <p class="text-xs text-slate-500 max-w-xl leading-relaxed font-medium">
-                    Pemesanan tiket hanya dapat dilakukan pada armada dengan status <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-[0.4rem] font-bold text-[10px] uppercase tracking-wider mx-0.5">Standby</span> di titik terminal. Diurutkan secara otomatis sesuai <strong class="text-slate-700">antrian real-time</strong>.
+                    {{ __('Tickets can only be ordered for fleets with Standby status at the terminal. Sorted automatically by real-time queue.') }}
                 </p>
             </div>
             
             <a href="{{ route('map') }}" target="_blank" aria-label="{{ __('Buka Peta Live') }}"
                class="relative z-10 bg-white border border-slate-200 hover:border-[#1e3a5f] hover:text-[#1e3a5f] text-slate-700 shadow-sm hover:shadow-md px-6 py-3.5 rounded-xl font-black transition-all flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest w-full md:w-auto flex-shrink-0 group">
-                <i class="fas fa-map-marked-alt text-slate-400 group-hover:text-[#1e3a5f] transition-colors" aria-hidden="true"></i> {{ __('Buka Peta Live') }}
+                <i class="fas fa-map-marked-alt text-slate-500 group-hover:text-[#1e3a5f] transition-colors" aria-hidden="true"></i> {{ __('Buka Peta Live') }}
             </a>
         </div>
     </section>
@@ -53,18 +53,18 @@
         <div class="flex items-center justify-between mb-5 px-1 bg-transparent">
             <div>
                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">{{ __('Rute Perintis → Gowa') }}</h3>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                    <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'perintis_to_gowa').length || 0"></span> Armada
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">
+                    <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'perintis_to_gowa').length || 0"></span> {{ __('Fleet') }}
                 </p>
             </div>
             
             {{-- Custom Slider Navigation --}}
             <div class="flex items-center gap-2">
-                <button @click="scrollLeft()" type="button" aria-label="Geser ke Kiri"
-                        class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#1e3a5f] hover:border-[#1e3a5f] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
+                <button @click="scrollLeft()" type="button" aria-label="{{ __('Scroll Left') }}"
+                        class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e3a5f] hover:border-[#1e3a5f] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
                     <i class="fas fa-chevron-left text-xs" aria-hidden="true"></i>
                 </button>
-                <button @click="scrollRight()" type="button" aria-label="Geser ke Kanan"
+                <button @click="scrollRight()" type="button" aria-label="{{ __('Scroll Right') }}"
                         class="w-10 h-10 rounded-full bg-[#1e3a5f] flex items-center justify-center text-white hover:bg-slate-900 transition-colors shadow-sm shadow-[#1e3a5f]/20 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/50">
                     <i class="fas fa-chevron-right text-xs" aria-hidden="true"></i>
                 </button>
@@ -101,18 +101,18 @@
         <div class="flex items-center justify-between mb-5 px-1 bg-transparent">
             <div>
                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">{{ __('Rute Gowa → Perintis') }}</h3>
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                    <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'gowa_to_perintis').length || 0"></span> Armada
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">
+                    <span x-text="Object.values(dynamicRouteGroup).filter(r => r === 'gowa_to_perintis').length || 0"></span> {{ __('Fleet') }}
                 </p>
             </div>
             
             {{-- Custom Slider Navigation --}}
             <div class="flex items-center gap-2">
-                <button @click="scrollLeft()" type="button" aria-label="Geser ke Kiri"
-                        class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#1e3a5f] hover:border-[#1e3a5f] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
+                <button @click="scrollLeft()" type="button" aria-label="{{ __('Scroll Left') }}"
+                        class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e3a5f] hover:border-[#1e3a5f] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20">
                     <i class="fas fa-chevron-left text-xs" aria-hidden="true"></i>
                 </button>
-                <button @click="scrollRight()" type="button" aria-label="Geser ke Kanan"
+                <button @click="scrollRight()" type="button" aria-label="{{ __('Scroll Right') }}"
                         class="w-10 h-10 rounded-full bg-[#1e3a5f] flex items-center justify-center text-white hover:bg-slate-900 transition-colors shadow-sm shadow-[#1e3a5f]/20 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/50">
                     <i class="fas fa-chevron-right text-xs" aria-hidden="true"></i>
                 </button>
@@ -145,6 +145,16 @@
 @push('scripts')
 <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
 <script>
+    // i18n for dynamic bus labels
+    window._busT = {
+        OPERATING:        '🚌 {{ __('Currently Operating') }}',
+        ON_BREAK:         '⏸ {{ __('On Break') }}',
+        VIEW_BOOK:        '{{ __('View & Book') }} →',
+        NOT_AVAILABLE:    '{{ __('Not Available') }}',
+        STATUS_JALAN:     '{{ __('On the Way') }}',
+        STATUS_ISTIRAHAT: '{{ __('Resting') }}',
+        STATUS_STANDBY:   '{{ __('Ready') }}',
+    };
     document.addEventListener('alpine:init', () => {
         Alpine.data('busSlider', () => ({
             busOrder: {},          // order css property per bus
@@ -237,9 +247,9 @@
             /** Label tombol pesan */
             bookLabel(busId, targetRoute) {
                 const stat = this.dynamicStatus[busId] || '';
-                if (stat === 'jalan')     return '🚌 Sedang Beroperasi';
-                if (stat === 'istirahat') return '⏸ Sedang Istirahat';
-                return this.canBook(busId, targetRoute) ? 'Lihat & Pesan →' : 'Belum Tersedia';
+                if (stat === 'jalan')     return window._busT.OPERATING;
+                if (stat === 'istirahat') return window._busT.ON_BREAK;
+                return this.canBook(busId, targetRoute) ? window._busT.VIEW_BOOK : window._busT.NOT_AVAILABLE;
             },
 
             /** CSS class tombol pesan */
@@ -251,7 +261,7 @@
                     return 'bg-orange-50 text-orange-400 cursor-not-allowed border-orange-100';
                 return this.canBook(busId, targetRoute)
                     ? 'bg-slate-900 border-slate-800 hover:bg-[#1e3a5f] hover:border-[#1e3a5f] text-white shadow-[0_5px_15px_rgba(0,0,0,0.1)]'
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed border-transparent';
+                    : 'bg-slate-100 text-slate-500 cursor-not-allowed border-transparent';
             },
 
             /** URL tujuan tombol pesan */

@@ -29,7 +29,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
     <div>
         <h2 class="text-2xl lg:text-3xl font-black text-[#1e3a5f] tracking-tighter uppercase">{{ __('Riwayat Perjalanan') }}</h2>
-        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
             {{ $bookings->total() }} {{ __('tiket ditemukan') }}
         </p>
     </div>
@@ -51,15 +51,15 @@
 <div class="grid grid-cols-3 gap-3 md:gap-4 mb-8">
     <div class="bg-white rounded-2xl p-4 md:p-5 border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
         <p class="text-2xl md:text-3xl font-black text-[#1e3a5f] leading-none mb-1">{{ $cntAktif }}</p>
-        <p class="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Aktif') }}</p>
+        <p class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Aktif') }}</p>
     </div>
     <div class="bg-white rounded-2xl p-4 md:p-5 border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
         <p class="text-2xl md:text-3xl font-black text-emerald-500 leading-none mb-1">{{ $cntSelesai }}</p>
-        <p class="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Selesai') }}</p>
+        <p class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Selesai') }}</p>
     </div>
     <div class="bg-white rounded-2xl p-4 md:p-5 border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center">
         <p class="text-2xl md:text-3xl font-black text-rose-500 leading-none mb-1">{{ $cntBatal }}</p>
-        <p class="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ __('Batal') }}</p>
+        <p class="text-[8px] md:text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ __('Batal') }}</p>
     </div>
 </div>
 
@@ -70,7 +70,7 @@
     <form action="{{ route('user.bookings.index') }}" method="GET" x-data="{}" class="flex flex-col lg:flex-row gap-3 mb-6">
         <div class="relative flex-1">
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-search text-slate-400"></i>
+                <i class="fas fa-search text-slate-500"></i>
             </div>
             <input type="text" name="query" value="{{ request('query') }}" 
                    @input.debounce.500ms="$event.target.form.submit()"
@@ -95,7 +95,7 @@
                     <option value="selesai" @selected(request('status') == 'selesai')>{{ __('Selesai') }}</option>
                     <option value="batal" @selected(request('status') == 'batal')>{{ __('Batal') }}</option>
                 </select>
-                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-500">
                     <i class="fas fa-chevron-down text-[10px]"></i>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                     <i class="fas fa-ticket-alt text-3xl text-slate-300"></i>
                 </div>
                 <h3 class="font-black text-slate-800 text-lg mb-2 tracking-tighter">{{ __('Belum Ada Tiket') }}</h3>
-                <p class="text-slate-400 text-xs mb-8 max-w-xs mx-auto font-medium leading-relaxed">{{ request('query') || request('date') || request('status') ? __('Tidak ada tiket yang cocok dengan filter pencarian Anda.') : __('Anda belum memesan tiket perjalanan apapun. Silakan pesan tiket untuk memulai perjalanan Anda.') }}</p>
+                <p class="text-slate-500 text-xs mb-8 max-w-xs mx-auto font-medium leading-relaxed">{{ request('query') || request('date') || request('status') ? __('Tidak ada tiket yang cocok dengan filter pencarian Anda.') : __('Anda belum memesan tiket perjalanan apapun. Silakan pesan tiket untuk memulai perjalanan Anda.') }}</p>
                 
                 @if(request('query') || request('date') || request('status'))
                 <a href="{{ route('user.bookings.index') }}"

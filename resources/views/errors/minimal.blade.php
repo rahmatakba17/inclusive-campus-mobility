@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <div class="mt-12 text-[11px] text-slate-400 font-black uppercase tracking-[0.3em]">
+        <div class="mt-12 text-[11px] text-slate-500 font-black uppercase tracking-[0.3em]">
             &copy; {{ date('Y') }} Layanan Transportasi Kampus Non-Merdeka
         </div>
     </div>

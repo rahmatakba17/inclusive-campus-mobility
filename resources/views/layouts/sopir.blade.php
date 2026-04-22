@@ -99,7 +99,7 @@
                 {{-- Brand --}}
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl overflow-hidden bg-white/10 flex items-center justify-center border border-white/10 p-1.5">
-                        <img src="{{ asset('images/logo_kampus_non_merdeka.png') }}" class="w-full h-auto object-contain grayscale invert opacity-90" alt="Logo Kampus Non-Merdeka">
+                        <img src="{{ asset('images/logo_kampus_non_merdeka.png') }}" class="w-full h-auto object-contain grayscale invert opacity-90" width="1024" height="1024" alt="Logo Kampus Non-Merdeka">
                     </div>
                     <div>
                         <p class="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em] leading-none">Panel Armada</p>
@@ -124,7 +124,7 @@
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit"
-                                class="w-8 h-8 rounded-xl glass flex items-center justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                                class="w-8 h-8 rounded-xl glass flex items-center justify-center text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
                                 aria-label="Keluar dari sistem">
                             <i class="fas fa-sign-out-alt text-sm"></i>
                         </button>

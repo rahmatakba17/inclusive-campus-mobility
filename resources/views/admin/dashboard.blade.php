@@ -4,7 +4,7 @@
 @section('admin-content')
 
 {{-- ===== STAT CARDS ===== --}}
-<section aria-label="Ringkasan statistik sistem" class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<section aria-label="Ringkasan statistik sistem" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
 
     @php
     $cards = [
@@ -18,13 +18,13 @@
     @foreach($cards as $card)
     <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
         <div class="flex items-center justify-between mb-3">
-            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">{{ $card['label'] }}</p>
+            <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest">{{ $card['label'] }}</p>
             <div class="w-8 h-8 {{ $card['bg'] }} rounded-xl flex items-center justify-center flex-shrink-0">
                 <i class="fas {{ $card['icon'] }} {{ $card['color'] }} text-xs"></i>
             </div>
         </div>
         <p class="text-2xl font-black text-slate-900 leading-none tracking-tight">{{ $card['value'] }}</p>
-        <p class="text-[10px] text-slate-400 font-semibold mt-1.5">{{ $card['sub'] }}</p>
+        <p class="text-[10px] text-slate-500 font-semibold mt-1.5">{{ $card['sub'] }}</p>
     </article>
     @endforeach
 
@@ -40,10 +40,10 @@
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
             <h2 class="text-xs font-black text-slate-700 uppercase tracking-widest">Live Status Armada</h2>
         </div>
-        <span class="text-[9px] text-slate-400 font-mono" x-text="lastUpdate" aria-live="polite"></span>
+        <span class="text-[9px] text-slate-500 font-mono" x-text="lastUpdate" aria-live="polite"></span>
     </div>
 
-    <div class="grid grid-cols-4 gap-3">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
         @foreach([
             ['key'=>'total',    'label'=>'Total',     'color'=>'text-slate-700', 'bg'=>'bg-slate-50'],
             ['key'=>'jalan',    'label'=>'Jalan',     'color'=>'text-emerald-600','bg'=>'bg-emerald-50'],
@@ -52,7 +52,7 @@
         ] as $s)
         <div class="{{ $s['bg'] }} rounded-xl px-3 py-2.5 text-center border border-transparent">
             <p class="text-xl font-black {{ $s['color'] }}" x-text="fleet.{{ $s['key'] }}">—</p>
-            <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{{ $s['label'] }}</p>
+            <p class="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-0.5">{{ $s['label'] }}</p>
         </div>
         @endforeach
     </div>
@@ -60,10 +60,10 @@
 </section>
 
 {{-- ===== MAIN GRID ===== --}}
-<div class="grid lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
 
     {{-- Recent Bookings --}}
-    <section class="lg:col-span-2 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden"
+    <section class="xl:col-span-2 bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden"
              aria-label="Pemesanan terbaru">
 
         <header class="px-5 py-4 border-b border-slate-50 flex items-center justify-between">
@@ -87,7 +87,7 @@
                 {{-- Info --}}
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-bold text-slate-800 truncate">{{ $booking->passenger_name }}</p>
-                    <p class="text-[10px] text-slate-400 font-medium truncate">
+                    <p class="text-[10px] text-slate-500 font-medium truncate">
                         {{ $booking->bus->name }}
                         @if($booking->payment_method)
                             · <span class="{{ $booking->payment_method === 'qris' ? 'text-rose-400' : 'text-blue-400' }} font-bold uppercase">{{ $booking->payment_method }}</span>
@@ -101,13 +101,13 @@
                         {{ $booking->status === 'confirmed' ? 'bg-emerald-50 text-emerald-700' : ($booking->status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-amber-50 text-amber-700') }}">
                         {{ $booking->status }}
                     </span>
-                    <p class="text-[9px] text-slate-400 font-mono mt-1">{{ $booking->booking_date->format('d M') }} · {{ $booking->created_at->format('H:i') }}</p>
+                    <p class="text-[9px] text-slate-500 font-mono mt-1">{{ $booking->booking_date->format('d M') }} · {{ $booking->created_at->format('H:i') }}</p>
                 </div>
             </div>
             @empty
             <div class="py-16 text-center">
                 <i class="fas fa-inbox text-2xl text-slate-200 mb-2 block"></i>
-                <p class="text-xs text-slate-400 font-medium">Belum ada pemesanan</p>
+                <p class="text-xs text-slate-500 font-medium">Belum ada pemesanan</p>
             </div>
             @endforelse
         </div>
@@ -136,7 +136,7 @@
                                  style="width:{{ round(($bus->bookings_count / $maxCount) * 100) }}%"></div>
                         </div>
                     </div>
-                    <span class="text-[9px] font-black text-slate-400 flex-shrink-0">{{ $bus->bookings_count }}</span>
+                    <span class="text-[9px] font-black text-slate-500 flex-shrink-0">{{ $bus->bookings_count }}</span>
                 </li>
                 @endforeach
             </ol>
@@ -148,7 +148,7 @@
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xs font-black text-slate-700 uppercase tracking-widest">Pengguna Aktif</h2>
                 <a href="{{ route('admin.users.index') }}"
-                   class="text-[9px] font-black text-slate-400 hover:text-[#1e3a5f] uppercase tracking-widest transition-colors"
+                   class="text-[9px] font-black text-slate-500 hover:text-[#1e3a5f] uppercase tracking-widest transition-colors"
                    aria-label="Kelola pengguna">
                     Kelola <i class="fas fa-arrow-right text-[8px]"></i>
                 </a>
@@ -161,7 +161,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate">{{ $user->name }}</p>
-                        <p class="text-[9px] text-slate-400 font-medium">{{ $user->bookings_count }} tiket</p>
+                        <p class="text-[9px] text-slate-500 font-medium">{{ $user->bookings_count }} tiket</p>
                     </div>
                     <span class="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" title="Aktif"></span>
                 </li>
@@ -190,13 +190,13 @@
                         <i class="fas fa-gift text-amber-400 text-xs flex-shrink-0"></i>
                         <div class="flex-1 min-w-0">
                             <p class="text-xs font-bold text-slate-700 truncate" x-text="tip.bus_name"></p>
-                            <p class="text-[9px] text-slate-400" x-text="tip.time"></p>
+                            <p class="text-[9px] text-slate-500" x-text="tip.time"></p>
                         </div>
                         <span class="text-xs font-black text-emerald-600 flex-shrink-0" x-text="'Rp ' + tip.amount.toLocaleString('id-ID')"></span>
                     </li>
                 </template>
                 <div x-show="tips.length === 0" class="py-6 text-center">
-                    <p class="text-[10px] text-slate-400 font-medium">Belum ada tip hari ini</p>
+                    <p class="text-[10px] text-slate-500 font-medium">Belum ada tip hari ini</p>
                 </div>
             </ul>
         </section>
