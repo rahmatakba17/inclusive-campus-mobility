@@ -13,12 +13,16 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'sopir' => \App\Http\Middleware\SopirMiddleware::class,
             'user'  => \App\Http\Middleware\UserMiddleware::class,
         ]);
+
+        // Rate Limiting — Lindungi endpoint booking dari spam/brute-force
+        $middleware->throttleApi();
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -65,3 +65,34 @@
     ExpiresByType application/x-font-woff "access plus 1 year"
     ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
+
+# ======================================================================
+# | SECURITY HEADERS — OWASP Top 10 Defense                           |
+# ======================================================================
+
+<IfModule mod_headers.c>
+    # 1. Clickjacking Protection — tolak penyematan halaman di iframe milik pihak lain
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # 2. MIME Sniffing Protection — paksa browser ikut Content-Type, bukan menebak-nebak
+    Header always set X-Content-Type-Options "nosniff"
+
+    # 3. XSS Filter — aktifkan perlindungan bawaan browser lama (IE/Chrome)
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # 4. HSTS — paksa seluruh trafik lewat HTTPS selama 1 tahun penuh
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # 5. Referrer Policy — jangan bocorkan URL internal ke domain pihak ketiga
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # 6. Permissions Policy — blokir akses ke fitur hardware sensitif browser
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=()"
+
+    # 7. Content Security Policy — whitelist sumber script/CSS/font/gambar yang diizinkan
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.bunny.net https://fonts.googleapis.com; font-src 'self' https://fonts.bunny.net https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://images.unsplash.com https://*.tile.openstreetmap.org; connect-src 'self'; frame-ancestors 'self'"
+
+    # 8. Sembunyikan identitas server — jangan kasih tahu hacker pakai software apa
+    Header always unset X-Powered-By
+    Header always unset Server
+</IfModule>
