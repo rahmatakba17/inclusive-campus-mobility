@@ -18,9 +18,15 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name'     => ['required', 'string', 'max:100', 'regex:/^[\pL\s\.\-]+$/u'],
+            'email'    => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users'],
+            'password' => [
+                'required', 'string', 'min:8', 'max:128', 'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', // wajib huruf besar, kecil, dan angka
+            ],
+        ], [
+            'password.regex' => 'Password wajib mengandung minimal 1 huruf kapital, 1 huruf kecil, dan 1 angka.',
+            'name.regex'     => 'Nama hanya boleh mengandung huruf, spasi, titik, dan tanda hubung.',
         ]);
 
         $role = str_ends_with(strtolower($validated['email']), '@kampus-non-merdeka.ac.id') ? 'civitas' : 'umum';
