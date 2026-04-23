@@ -1,0 +1,24 @@
+{
+  "_vendor-axios-CeXzfzlX.js": {
+    "file": "assets/js/vendor-axios-CeXzfzlX.js",
+    "name": "vendor-axios"
+  },
+  "resources/css/app.css": {
+    "file": "assets/css/app-jBFKJJap.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/js/app-DZqzH9dl.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-axios-CeXzfzlX.js"
+    ]
+  }
+}
