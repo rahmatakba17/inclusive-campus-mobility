@@ -94,74 +94,77 @@
         </div>
 
         {{-- ── Loading state ── --}}
-        <div x-show="loading" class="flex flex-col items-center justify-center py-12 gap-3">
-            <div class="w-10 h-10 border-4 border-slate-100 border-t-[#c41e3a] rounded-full animate-spin"></div>
-            <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Memuat...</p>
-        </div>
+        <template x-if="loading">
+            <div class="flex flex-col items-center justify-center py-12 gap-3">
+                <div class="w-10 h-10 border-4 border-slate-100 border-t-[#c41e3a] rounded-full animate-spin"></div>
+                <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Memuat...</p>
+            </div>
+        </template>
 
         {{-- ── Empty state ── --}}
-        <div x-show="!loading && notifications.length === 0"
-             class="flex flex-col items-center py-14 px-6 text-center">
-            <div class="relative mb-5">
-                <div class="w-20 h-20 bg-gradient-to-br from-slate-50 to-slate-100 rounded-[2rem] flex items-center justify-center shadow-inner border border-slate-100">
-                    <i class="far fa-bell-slash text-3xl text-slate-300"></i>
+        <template x-if="!loading && notifications.length === 0">
+            <div class="flex flex-col items-center py-14 px-6 text-center">
+                <div class="relative mb-5">
+                    <div class="w-20 h-20 bg-gradient-to-br from-slate-50 to-slate-100 rounded-[2rem] flex items-center justify-center shadow-inner border border-slate-100">
+                        <i class="far fa-bell-slash text-3xl text-slate-300"></i>
+                    </div>
+                    <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center border-2 border-white shadow-sm">
+                        <i class="fas fa-check text-emerald-500 text-xs"></i>
+                    </div>
                 </div>
-                <div class="absolute -bottom-1 -right-1 w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center border-2 border-white shadow-sm">
-                    <i class="fas fa-check text-emerald-500 text-xs"></i>
-                </div>
+                <p class="text-slate-700 font-black text-sm">Semua sudah terkini!</p>
+                <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed max-w-[160px]">Tidak ada notifikasi baru untuk ditampilkan.</p>
             </div>
-            <p class="text-slate-700 font-black text-sm">Semua sudah terkini!</p>
-            <p class="text-slate-500 text-xs font-medium mt-1 leading-relaxed max-w-[160px]">Tidak ada notifikasi baru untuk ditampilkan.</p>
-        </div>
+        </template>
 
         {{-- ── Notification List ── --}}
-        <div x-show="!loading && notifications.length > 0"
-             class="overflow-y-auto divide-y divide-slate-50"
-             style="max-height: 340px;">
-            <template x-for="(notif, index) in notifications" :key="notif.id">
-                <a :href="notif.link"
-                   class="flex items-start gap-3.5 px-5 py-4 hover:bg-slate-50/80 transition-all duration-200 group relative cursor-pointer"
-                   :class="{ 'bg-blue-50/40': notif.unread }"
-                   x-transition:enter="transition ease-out duration-300"
-                   x-transition:enter-start="opacity-0 -translate-x-4"
-                   x-transition:enter-end="opacity-100 translate-x-0">
+        <template x-if="!loading && notifications.length > 0">
+            <div class="overflow-y-auto divide-y divide-slate-50" style="max-height: 340px;">
+                <template x-for="(notif, index) in notifications" :key="notif.id">
+                    <a :href="notif.link"
+                       class="flex items-start gap-3.5 px-5 py-4 hover:bg-slate-50/80 transition-all duration-200 group relative cursor-pointer"
+                       :class="{ 'bg-blue-50/40': notif.unread }"
+                       x-transition:enter="transition ease-out duration-300"
+                       x-transition:enter-start="opacity-0 -translate-x-4"
+                       x-transition:enter-end="opacity-100 translate-x-0">
 
-                    {{-- Unread indicator bar --}}
-                    <div x-show="notif.unread"
-                         class="absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b from-[#c41e3a] to-[#821326]"></div>
+                        {{-- Unread indicator bar --}}
+                        <div x-show="notif.unread"
+                             class="absolute left-0 top-0 bottom-0 w-1 rounded-r-full bg-gradient-to-b from-[#c41e3a] to-[#821326]"></div>
 
-                    {{-- Icon --}}
-                    <div class="flex-shrink-0 mt-0.5">
-                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-200"
-                             :class="{
-                                'bg-amber-100 text-amber-600 shadow-amber-100': notif.color === 'amber',
-                                'bg-emerald-100 text-emerald-600 shadow-emerald-100': notif.color === 'emerald',
-                                'bg-rose-100 text-rose-600 shadow-rose-100': notif.color === 'rose',
-                                'bg-blue-100 text-blue-600 shadow-blue-100': notif.color === 'blue',
-                             }">
-                            <i class="fas text-sm" :class="'fa-' + notif.icon"></i>
+                        {{-- Icon --}}
+                        <div class="flex-shrink-0 mt-0.5">
+                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-200"
+                                 :class="{
+                                    'bg-amber-100 text-amber-600 shadow-amber-100': notif.color === 'amber',
+                                    'bg-emerald-100 text-emerald-600 shadow-emerald-100': notif.color === 'emerald',
+                                    'bg-rose-100 text-rose-600 shadow-rose-100': notif.color === 'rose',
+                                    'bg-blue-100 text-blue-600 shadow-blue-100': notif.color === 'blue',
+                                 }">
+                                <i class="fas text-sm" :class="'fa-' + notif.icon"></i>
+                            </div>
                         </div>
-                    </div>
 
-                    {{-- Content --}}
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-start justify-between gap-1 mb-0.5">
-                            <p class="text-[11px] font-black text-slate-800 leading-tight"
-                               x-text="notif.title"></p>
-                            <span x-show="notif.unread"
-                                  class="flex-shrink-0 mt-0.5 w-2 h-2 rounded-full bg-[#c41e3a] animate-pulse"></span>
+                        {{-- Content --}}
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-1 mb-0.5">
+                                <p class="text-[11px] font-black text-slate-800 leading-tight"
+                                   x-text="notif.title"></p>
+                                <span x-show="notif.unread"
+                                      class="flex-shrink-0 mt-0.5 w-2 h-2 rounded-full bg-[#c41e3a] animate-pulse"></span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 leading-snug line-clamp-2"
+                               x-text="notif.message"></p>
+                            <div class="flex items-center gap-1.5 mt-1.5">
+                                <i class="fas fa-clock text-[8px] text-slate-300"></i>
+                                <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider"
+                                      x-text="notif.time"></span>
+                            </div>
                         </div>
-                        <p class="text-[11px] text-slate-500 leading-snug line-clamp-2"
-                           x-text="notif.message"></p>
-                        <div class="flex items-center gap-1.5 mt-1.5">
-                            <i class="fas fa-clock text-[8px] text-slate-300"></i>
-                            <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider"
-                                  x-text="notif.time"></span>
-                        </div>
-                    </div>
-                </a>
-            </template>
-        </div>
+                    </a>
+                </template>
+            </div>
+        </template>
 
         {{-- ── Footer ── --}}
         <div x-show="!loading && notifications.length > 0"
