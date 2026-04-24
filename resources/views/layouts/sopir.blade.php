@@ -21,24 +21,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
 
-    {{-- Scripts --}}
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="{{ asset('vendor/js/alpine.min.js') }}"></script>
     <script src="{{ asset('vendor/js/sweetalert2.all.min.js') }}"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        navy: { DEFAULT: '#1e3a5f', 50: '#eef3f9', 100: '#d5e2ef', 500: '#2d5a9e', 700: '#163050', 900: '#0a1929' },
-                        gold: { DEFAULT: '#f59e0b', light: '#fde68a' },
-                    }
-                }
-            }
-        }
-    </script>
 
     <style>
         * { box-sizing: border-box; }

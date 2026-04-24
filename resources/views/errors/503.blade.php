@@ -6,7 +6,7 @@
     <title>Sistem Dalam Perbaikan | Bus Kampus UNHAS</title>
     
     <!-- Menggunakan CDN Tailwind khusus untuk halaman maintenance agar layout tetap aman -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="{{ asset('vendor/css/all.min.css') }}" rel="stylesheet">
     
     <style>
