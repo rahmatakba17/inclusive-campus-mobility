@@ -10,7 +10,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="{{ asset('vendor/js/alpine.min.js') }}"></script>
+    {{-- Alpine.js v3 (CDN - stable) --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.3/dist/cdn.min.js"></script>
 
     <link rel="stylesheet" href="{{ asset('vendor/css/inter.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
