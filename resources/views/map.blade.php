@@ -7,12 +7,12 @@
     <meta name="description" content="Pantau posisi dan status 13 armada Bus Kampus Kampus Non-Merdeka secara real-time.">
 
     {{-- Leaflet CSS --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('vendor/css/leaflet.css') }}" />
     {{-- Font --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     {{-- Icons --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
 
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -252,7 +252,7 @@
 </div>
 
 {{-- Scripts --}}
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ asset('vendor/js/leaflet.js') }}"></script>
 <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
 <script src="{{ asset('js/realtime-map.js') }}?v={{ filemtime(public_path('js/realtime-map.js')) }}"></script>
 <script>

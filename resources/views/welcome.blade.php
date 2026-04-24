@@ -10,14 +10,14 @@
     <title>{{ __('Sistem Tiket Bus Kampus Non-Merdeka') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800,900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
     {{-- Slick Slider Dependencies --}}
     <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+        href="{{ asset('vendor/css/slick.min.css') }}" />
     <link rel="stylesheet" type="text/css"
-        href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+        href="{{ asset('vendor/css/slick-theme.min.css') }}" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="{{ asset('vendor/js/alpine.min.js') }}"></script>
     <style>
         /* =============================================
            WCAG 2.1 LEVEL AA — ACCESSIBILITY CSS
@@ -419,14 +419,14 @@
                     </div>
 
                     {{-- Map Container --}}
-                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+                    <link rel="stylesheet" href="{{ asset('vendor/css/leaflet.css') }}" />
                     <div id="welcome-map" class="w-full h-[500px] rounded-[2.5rem] overflow-hidden z-0 bg-slate-100">
                     </div>
                 </div>
             </div>
         </section>
 
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="{{ asset('vendor/js/leaflet.js') }}"></script>
         <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
         <script src="{{ asset('js/realtime-map.js') }}?v={{ filemtime(public_path('js/realtime-map.js')) }}"></script>
         <script>
@@ -861,8 +861,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script src="{{ asset('vendor/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/js/slick.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $('.testimonial-slider').slick({

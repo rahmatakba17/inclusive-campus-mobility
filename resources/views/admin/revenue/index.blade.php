@@ -160,7 +160,7 @@
 
 </div> <!-- end x-data -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('vendor/js/chart.min.js') }}"></script>
 
 <style>
 @keyframes slide {

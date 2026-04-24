@@ -7,7 +7,7 @@
     
     <!-- Menggunakan CDN Tailwind khusus untuk halaman maintenance agar layout tetap aman -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('vendor/css/all.min.css') }}" rel="stylesheet">
     
     <style>
         body {
