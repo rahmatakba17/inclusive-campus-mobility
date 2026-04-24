@@ -115,8 +115,11 @@ Route::get('/lang/{locale}', function ($locale) {
     return back();
 })->name('lang.switch');
 
-// ===== NOTIFICATIONS ROUTE =====
-Route::middleware('auth')->get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+// ===== NOTIFICATIONS ROUTES (Rate Limited: 20 req/menit) =====
+Route::middleware(['auth', 'throttle:20,1'])->group(function () {
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/mark-read', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
+});
 
 // ===== [DEV ONLY] ERROR PAGE TESTING ROUTES =====
 // Hanya aktif di environment local. Akses: /test-error/404, /test-error/500, dst.
