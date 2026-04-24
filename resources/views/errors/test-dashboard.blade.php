@@ -6,7 +6,7 @@
     <title>🧪 Error Page Test Dashboard — Bus Kampus Non-Merdeka</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/css/inter.css">
     <style>
         * { font-family: 'Inter', sans-serif; }
         .card-hover { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }

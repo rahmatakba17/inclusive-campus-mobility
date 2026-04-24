@@ -8,8 +8,7 @@
         content="{{ __('Pesan tiket Bus Kampus Kampus Non-Merdeka secara online. Pantau armada live, pilih kursi, dan nikmati perjalanan antar-kampus Tamalanrea-Gowa yang mudah dan efisien.') }}">
     <meta name="theme-color" content="#c41e3a">
     <title>{{ __('Sistem Tiket Bus Kampus Non-Merdeka') }}</title>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800,900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('vendor/css/inter.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/css/all.min.css') }}">
     {{-- Slick Slider Dependencies --}}
     <link rel="stylesheet" type="text/css"
