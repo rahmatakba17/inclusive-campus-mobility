@@ -119,7 +119,8 @@
                 default     => $isStandby ? __('View & Book') : __('Not Available'),
             };
         @endphp
-        <a :href="bookHref({{ $bus->id }}, '{{ $targetRoute }}', '{{ $baseUrl }}')"
+        <a href="{{ $isStandby ? $baseUrl : '#' }}"
+           :href="bookHref({{ $bus->id }}, '{{ $targetRoute }}', '{{ $baseUrl }}')"
            :class="bookClass({{ $bus->id }}, '{{ $targetRoute }}') + (!canBook({{ $bus->id }}, '{{ $targetRoute }}') ? ' pointer-events-none' : '')"
            class="block w-full py-4 border text-center rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden group {{ $isStandby ? 'bg-slate-900 border-slate-800 text-white' : 'bg-slate-100 text-slate-500' }}">
             <span x-text="bookLabel({{ $bus->id }}, '{{ $targetRoute }}')" class="relative z-10">{{ $staticLabel }}</span>
