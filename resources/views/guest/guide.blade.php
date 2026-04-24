@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="relative rounded-3xl overflow-hidden shadow-lg border border-slate-100 aspect-square md:aspect-auto">
-                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover" alt="{{ __('Interior Bus Transportasi') }}">
+                    <img src="{{ asset('images/external/bus-interior.jpg') }}" class="w-full h-full object-cover" alt="{{ __('Interior Bus Transportasi') }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f]/90 via-[#1e3a5f]/30 to-transparent flex flex-col justify-end p-6 relative z-10">
                         <i class="fas fa-id-card text-3xl text-white/90 mb-3 drop-shadow-md"></i>
                         <p class="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-1.5 drop-shadow-md">{{ __('Identifikasi Otomatis') }}</p>
@@ -151,7 +151,7 @@
             
             <div class="grid md:grid-cols-2 gap-10">
                 <div class="relative rounded-3xl overflow-hidden shadow-lg border border-slate-100 min-h-[300px]">
-                    <img src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover absolute inset-0" alt="{{ __('Sistem Validasi Tiket Elektronik') }}">
+                    <img src="{{ asset('images/external/ticket-validation.jpg') }}" class="w-full h-full object-cover absolute inset-0" alt="{{ __('Sistem Validasi Tiket Elektronik') }}">
                     <div class="absolute inset-0 bg-gradient-to-t from-teal-900/90 via-teal-900/30 to-transparent flex flex-col justify-end p-6 relative z-10">
                         <i class="fas fa-satellite-dish text-3xl text-white/90 mb-3 drop-shadow-md"></i>
                         <p class="text-[10px] font-black text-teal-200 uppercase tracking-widest mb-1.5 drop-shadow-md">{{ __('Cross-Continental Realtime Sensor') }}</p>

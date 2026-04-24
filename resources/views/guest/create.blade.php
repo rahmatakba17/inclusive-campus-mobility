@@ -220,7 +220,7 @@
                         </div>
 
                         <div class="bg-white p-8 rounded-[2rem] border-2 border-gray-100 flex items-center justify-center mb-8 shadow-inner">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                            <img src="{{ asset('images/external/qr-placeholder.svg') }}"
                                  alt="QRIS" class="w-48 h-48 opacity-90 mix-blend-multiply">
                         </div>
 

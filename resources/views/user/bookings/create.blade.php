@@ -457,7 +457,7 @@
                         <div class="bg-[#c41e3a]/5 border border-[#c41e3a]/20 rounded-2xl p-6 text-center">
                             <div x-show="!qrisScanning && tahap === 1 && qrCountdown === 0">
                                 <div class="bg-white p-4 rounded-2xl border-2 border-dashed border-[#c41e3a]/30 inline-block mb-4">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                    <img src="{{ asset('images/external/qr-placeholder.svg') }}"
                                          alt="QRIS" class="w-36 h-36 mx-auto opacity-70">
                                 </div>
                                 <p class="text-sm text-slate-500 font-medium mb-1">Scan QR di atas menggunakan aplikasi dompet digital Anda</p>
@@ -471,7 +471,7 @@
                             {{-- QR Scanning --}}
                             <div x-show="qrisScanning" x-cloak>
                                 <div class="relative w-36 h-36 mx-auto mb-4">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                    <img src="{{ asset('images/external/qr-placeholder.svg') }}"
                                          alt="QRIS" class="w-36 h-36 opacity-40">
                                     <div class="absolute inset-0 flex items-center justify-center">
                                         <div class="text-4xl font-black text-[#c41e3a]" x-text="qrCountdown"></div>

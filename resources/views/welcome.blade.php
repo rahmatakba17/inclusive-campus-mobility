@@ -256,7 +256,7 @@
         <section id="beranda" class="pt-32 pb-24 lg:pt-56 lg:pb-40 relative overflow-hidden bg-[#0f172a]">
             {{-- Background Layers --}}
             <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=70&w=1200&fm=webp&auto=format&fit=crop" fetchpriority="high" loading="eager" decoding="async" class="w-full h-full object-cover opacity-20 mix-blend-overlay" alt="Bus Background" aria-hidden="true">
+                <img src="{{ asset('images/external/bus-hero.jpg') }}" fetchpriority="high" loading="eager" decoding="async" class="w-full h-full object-cover opacity-20 mix-blend-overlay" alt="Bus Background" aria-hidden="true">
                 <div class="absolute inset-0 bg-gradient-to-tr from-[#0f172a] via-[#1e3a5f]/90 to-[#c41e3a]/70"></div>
                 <div class="hero-pattern absolute inset-0 opacity-20"></div>
             </div>
@@ -491,7 +491,7 @@
                         
                         {{-- Main Visual --}}
                         <div class="relative w-full aspect-[4/5] md:aspect-square lg:aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 group">
-                            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=70&w=600&fm=webp&auto=format&fit=crop" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000" alt="Kampus Kampus Non-Merdeka">
+                            <img src="{{ asset('images/external/kampus-photo.jpg') }}" loading="lazy" decoding="async" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000" alt="Kampus Kampus Non-Merdeka">
                             <div class="absolute inset-0 bg-gradient-to-t from-[#1e3a5f]/90 via-[#1e3a5f]/20 to-transparent"></div>
                             
                             {{-- Glassmorphism Visi Misi Overlay --}}
@@ -629,7 +629,7 @@
                             {{-- Mockup Main Content --}}
                             <div class="flex flex-col items-center mb-8">
                                 <div class="w-48 h-48 bg-white p-4 rounded-[2rem] shadow-xl relative group mb-6 hover:shadow-2xl hover:-translate-y-1 transition-all">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" class="w-full h-full object-contain mix-blend-multiply opacity-90 group-hover:opacity-100" alt="{{ __('Contoh Integrasi Validasi Barcode') }}" loading="lazy">
+                                    <img src="{{ asset('images/external/qr-placeholder.svg') }}" class="w-full h-full object-contain mix-blend-multiply opacity-90 group-hover:opacity-100" alt="{{ __('Contoh Integrasi Validasi Barcode') }}" loading="lazy">
                                     <div class="absolute inset-0 border-2 border-dashed border-[#1e3a5f]/10 rounded-[2rem] m-2 pointer-events-none"></div>
                                 </div>
                                 
