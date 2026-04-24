@@ -449,7 +449,7 @@
             lastTipCount: null,
 
             init() {
-                setInterval(() => this.checkTips(), 3000);
+                setInterval(() => this.checkTips(), 30000);
 
                 window.addEventListener('message', (e) => {
                     if (e.data && e.data.type === 'BUS_UPDATE') {
@@ -485,16 +485,19 @@
             },
 
             async checkTips() {
+                const ctrl = new AbortController();
+                const tid  = setTimeout(() => ctrl.abort(), 8000);
                 try {
                     const res  = await fetch("{{ route('sopir.dashboard.tips') }}", {
+                        signal: ctrl.signal,
                         headers: { 'Accept': 'application/json' }
                     });
+                    clearTimeout(tid);
                     const data = await res.json();
                     const newTips = data.tips || [];
 
                     if (this.lastTipCount === null) {
                         this.lastTipCount = 0;
-                        // Initial load: silently consume existing unread tips without bursting popups
                         return;
                     }
 
@@ -511,7 +514,7 @@
                             });
                         }
                     }
-                } catch(e) {}
+                } catch(e) { clearTimeout(tid); }
             },
 
             async finishTrip() {
@@ -565,9 +568,16 @@
                 const oldStatus = this.status;
                 this.status = newStatus;
 
+                // Safety: force-reset isLoading after 10s no matter what
+                const safetyTimer = setTimeout(() => { this.isLoading = false; }, 10000);
+
+                const ctrl = new AbortController();
+                const tid  = setTimeout(() => ctrl.abort(), 8000);
+
                 try {
                     const response = await fetch("{{ route('sopir.dashboard.status') }}", {
                         method: 'POST',
+                        signal: ctrl.signal,
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
@@ -575,6 +585,7 @@
                         },
                         body: JSON.stringify({ _method: 'PATCH', trip_status: newStatus })
                     });
+                    clearTimeout(tid);
                     const data = await response.json();
                     if (response.ok && data.success) {
                         if (!silent) {
@@ -589,9 +600,11 @@
                         throw new Error(data.message || 'Gagal memperbarui status');
                     }
                 } catch (error) {
+                    clearTimeout(tid);
                     this.status = oldStatus;
                     if (!silent) Swal.fire({ icon: 'error', title: 'Gagal', text: error.message, background: '#0f172a', color: '#f1f5f9' });
                 } finally {
+                    clearTimeout(safetyTimer);
                     this.isLoading = false;
                 }
             },
