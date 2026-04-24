@@ -8,56 +8,8 @@
     <title>@yield('title', __('Bus Kampus Non-Merdeka')) | {{ __('Sistem Tiket Bus Kampus Non-Merdeka') }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        kampus: {
-                            50:  '#fff1f2',
-                            100: '#ffe4e6',
-                            200: '#fecdd3',
-                            300: '#fda4af',
-                            400: '#fb7185',
-                            500: '#c41e3a', // Official Kampus Non-Merdeka Red
-                            600: '#a1182e',
-                            700: '#821326',
-                            800: '#640f1d',
-                            900: '#4c0b16',
-                            gold: '#ffd700', // Official Kampus Non-Merdeka Gold
-                        },
-                        navy: {
-                            50:  '#f0f4f8',
-                            100: '#d9e2ec',
-                            200: '#bcccdc',
-                            300: '#9fb3c8',
-                            400: '#829ab1',
-                            500: '#1e3a5f', // Kampus Non-Merdeka Navy
-                            600: '#162d4a',
-                            700: '#0f2137',
-                            800: '#091729',
-                            900: '#050c18',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in':    'fadeIn 0.5s ease-in-out',
-                        'slide-up':   'slideUp 0.4s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeIn:  { '0%': { opacity: '0' },                                           '100%': { opacity: '1' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' },            '100%': { opacity: '1', transform: 'translateY(0)' } },
-                    }
-                }
-            }
-        }
-    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
