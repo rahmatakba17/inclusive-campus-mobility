@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* ── Alpine.js: Sembunyikan elemen x-cloak sebelum Alpine init ─────── */
+/* WAJIB ADA — tanpa ini, semua elemen x-cloak terlihat saat halaman    */
+/* pertama load dan menyebabkan "flash" konten yang seharusnya tersembunyi */
+[x-cloak] { display: none !important; }
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';

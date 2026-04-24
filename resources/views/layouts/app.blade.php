@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
+    <style>[x-cloak]{display:none!important}</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ __('Sistem Tiket Bus Kampus Kampus Non-Merdeka - Pesan tiket bus kampus secara online dengan mudah dan cepat.') }}">
