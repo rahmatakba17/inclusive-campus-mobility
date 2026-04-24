@@ -112,12 +112,19 @@
     {{-- Bottom Action --}}
     <div class="mt-auto">
         @php $baseUrl = route($bookingRouteName ?? 'user.bookings.create', $bus); @endphp
+        @php
+            $staticLabel = match($bus->trip_status) {
+                'jalan'     => __('On the Way'),
+                'istirahat' => __('Resting'),
+                default     => $isStandby ? __('View & Book') : __('Not Available'),
+            };
+        @endphp
         <a :href="bookHref({{ $bus->id }}, '{{ $targetRoute }}', '{{ $baseUrl }}')"
            :class="bookClass({{ $bus->id }}, '{{ $targetRoute }}') + (!canBook({{ $bus->id }}, '{{ $targetRoute }}') ? ' pointer-events-none' : '')"
-           class="block w-full py-4 border text-center rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden group">
-            <span x-text="bookLabel({{ $bus->id }}, '{{ $targetRoute }}')" class="relative z-10"></span>
+           class="block w-full py-4 border text-center rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all relative overflow-hidden group {{ $isStandby ? 'bg-slate-900 border-slate-800 text-white' : 'bg-slate-100 text-slate-500' }}">
+            <span x-text="bookLabel({{ $bus->id }}, '{{ $targetRoute }}')" class="relative z-10">{{ $staticLabel }}</span>
             <i class="fas fa-arrow-right ml-1 relative z-10" aria-hidden="true"
-               x-show="canBook({{ $bus->id }}, '{{ $targetRoute }}')"></i>
+               x-show="canBook({{ $bus->id }}, '{{ $targetRoute }}')" style="display:{{ $isStandby ? 'inline' : 'none' }}"></i>
         </a>
     </div>
 </article>
