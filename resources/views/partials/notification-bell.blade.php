@@ -186,6 +186,7 @@ if (typeof notificationPanel === 'undefined') {
         return {
             open: false,
             loading: false,
+            error: false,
             notifications: [],
             unreadCount: 0,
             initialized: false,
@@ -193,23 +194,22 @@ if (typeof notificationPanel === 'undefined') {
 
             init() {
                 this.refresh(true);
-                this._intervalId = setInterval(() => this.refresh(false), 3000);
+                // Poll every 30s (was 3s — too aggressive, caused stuck loading)
+                this._intervalId = setInterval(() => this.refresh(false), 30000);
             },
 
             toggle() {
                 this.open = !this.open;
                 if (this.open) {
-                    this.refresh(true); // Jangan panggil toast saat buka
-                    this.markAllAsRead(); // Tandai terbaca setelah dibuka
+                    this.refresh(true);
+                    this.markAllAsRead();
                 }
             },
 
             markAllAsRead() {
-                // Setelah panel di buka 1 detik, hilangkan tanda unread
                 setTimeout(() => {
                     const readMem = JSON.parse(localStorage.getItem('bus_kampus_read_notifs') || '[]');
                     let updated = false;
-
                     this.notifications.forEach(n => {
                         if (n.unread) {
                             n.unread = false;
@@ -219,13 +219,10 @@ if (typeof notificationPanel === 'undefined') {
                             }
                         }
                     });
-
                     if (updated) {
-                        // Cegah storage penuh, simpan max 100 ID
                         if (readMem.length > 100) readMem.splice(0, readMem.length - 100);
                         localStorage.setItem('bus_kampus_read_notifs', JSON.stringify(readMem));
                     }
-                    
                     this.unreadCount = 0;
                 }, 1000);
             },
@@ -233,8 +230,15 @@ if (typeof notificationPanel === 'undefined') {
             async refresh(isInit = false) {
                 if (this.loading) return;
                 this.loading = true;
+                this.error = false;
+
+                // Timeout: abort fetch after 8 seconds to prevent stuck loading
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+
                 try {
                     const res = await fetch('/notifications', {
+                        signal: controller.signal,
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json',
@@ -242,37 +246,29 @@ if (typeof notificationPanel === 'undefined') {
                         },
                         credentials: 'same-origin'
                     });
+
+                    clearTimeout(timeoutId);
+
                     if (res.ok) {
                         const data = await res.json();
                         const latestNotifications = data.notifications || [];
-                        
-                        // Cek history read dari localStorage
                         const readMem = JSON.parse(localStorage.getItem('bus_kampus_read_notifs') || '[]');
                         let computedUnreadCount = 0;
-                        
+
                         latestNotifications.forEach(n => {
-                            // Override status dari backend jika sudah ada di LocalStorage
-                            if (n.unread && readMem.includes(n.id)) {
-                                n.unread = false;
-                            }
+                            if (n.unread && readMem.includes(n.id)) n.unread = false;
                             if (n.unread) computedUnreadCount++;
                         });
 
-                        // Tampilkan toast hanya jika ada penambahan unread baru
                         if (this.initialized && !isInit && computedUnreadCount > this.unreadCount) {
                             const newestUnread = latestNotifications.find(n => n.unread);
                             if (typeof Swal !== 'undefined' && newestUnread) {
                                 Swal.fire({
-                                    toast: true,
-                                    position: 'top-end',
-                                    icon: 'info',
+                                    toast: true, position: 'top-end', icon: 'info',
                                     title: newestUnread.title || 'Pemberitahuan Baru',
                                     text: newestUnread.message || 'Periksa menu notifikasi Anda',
-                                    showConfirmButton: false,
-                                    timer: 4500,
-                                    background: '#1e3a5f',
-                                    color: '#ffffff',
-                                    iconColor: '#ffd700'
+                                    showConfirmButton: false, timer: 4500,
+                                    background: '#1e3a5f', color: '#ffffff', iconColor: '#ffd700'
                                 });
                             }
                         }
@@ -280,9 +276,18 @@ if (typeof notificationPanel === 'undefined') {
                         this.notifications = latestNotifications;
                         this.unreadCount   = computedUnreadCount;
                         if (isInit) this.initialized = true;
+                    } else {
+                        console.warn('[Notification] API returned:', res.status);
+                        this.error = true;
                     }
                 } catch (e) {
-                    console.warn('[Notification] fetch failed:', e);
+                    clearTimeout(timeoutId);
+                    if (e.name === 'AbortError') {
+                        console.warn('[Notification] Fetch timed out after 8s');
+                    } else {
+                        console.warn('[Notification] Fetch failed:', e.message);
+                    }
+                    this.error = true;
                 } finally {
                     this.loading = false;
                 }
@@ -291,3 +296,4 @@ if (typeof notificationPanel === 'undefined') {
     }
 }
 </script>
+
