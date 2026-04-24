@@ -94,14 +94,14 @@
         </div>
 
         {{-- ── Loading state ── --}}
-        <div x-show="loading" x-cloak style="display:none" class="flex flex-col items-center justify-center py-12 gap-3">
+        <div x-show="loading" x-cloak class="flex flex-col items-center justify-center py-12 gap-3">
             <div class="w-10 h-10 border-4 border-slate-100 border-t-[#c41e3a] rounded-full animate-spin"></div>
             <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest">Memuat...</p>
         </div>
 
         {{-- ── Empty state ── --}}
         <div x-show="!loading && notifications.length === 0"
-             x-cloak style="display:none"
+             x-cloak
              class="flex flex-col items-center py-14 px-6 text-center">
             <div class="relative mb-5">
                 <div class="w-20 h-20 bg-gradient-to-br from-slate-50 to-slate-100 rounded-[2rem] flex items-center justify-center shadow-inner border border-slate-100">
@@ -186,7 +186,7 @@ if (typeof notificationPanel === 'undefined') {
     function notificationPanel() {
         return {
             open: false,
-            loading: true,
+            loading: false,
             error: false,
             notifications: [],
             unreadCount: 0,

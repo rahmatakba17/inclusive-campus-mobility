@@ -14,6 +14,7 @@
     <meta property="og:type" content="website">
 
     <title>@yield('title', 'Dashboard Sopir') — Bus Kampus Non-Merdeka</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Fonts --}}
     <link rel="stylesheet" href="{{ asset('vendor/css/inter.css') }}">

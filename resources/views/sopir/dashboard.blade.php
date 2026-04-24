@@ -451,22 +451,14 @@
             init() {
                 setInterval(() => this.checkTips(), 30000);
 
+                // Listen only for trip completion from simulation
                 window.addEventListener('message', (e) => {
-                    if (e.data && e.data.type === 'BUS_UPDATE') {
-                        const positions = e.data.buses || [];
-                        const myBus = positions.find(b => b.id == this.busId);
-                        
-                        if (myBus && myBus.trip_status) {
-                            if (this.status !== myBus.trip_status && !this.isLoading) {
-                                // Auto sync UI to simulation
-                                this.updateStatus(myBus.trip_status, true);
-                            }
-                        }
-                    } else if (e.data && e.data.type === 'TRIP_COMPLETED') {
+                    if (e.data && e.data.type === 'TRIP_COMPLETED') {
                         if (e.data.busId == this.busId) {
                             this.manifestFinished();
                         }
                     }
+                    // NOTE: BUS_UPDATE auto-sync disabled — caused infinite MEMPERBAHARUI loop
                 });
             },
 
