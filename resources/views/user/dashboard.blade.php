@@ -325,7 +325,16 @@
                     },
 
                     startPolling() {
-                        this.buses = @json($available_buses);
+                        // Inisialisasi dari DB — tambah direction default agar langsung tampil
+                        // Standby = 'queue' (antri di Tamalanrea), bukan jalan
+                        const rawBuses = @json($available_buses);
+                        this.buses = rawBuses.map(b => ({
+                            ...b,
+                            direction:   b.trip_status === 'standby'   ? 'queue'
+                                       : b.trip_status === 'istirahat' ? 'rest_tamal'
+                                       : 'go',
+                            eta_minutes: b.eta_minutes ?? 5,
+                        }));
                         window.addEventListener('message', (e) => {
                             if (e.data && e.data.type === 'BUS_UPDATE') {
                                 this.buses = e.data.buses;
