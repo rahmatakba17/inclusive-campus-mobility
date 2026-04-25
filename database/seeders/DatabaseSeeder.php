@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
         // 2. Create Admin
         User::create([
             'name'     => 'Admin Transportasi',
-            'email'    => 'admin@kampus-non-merdeka.ac.id',
+            'email'    => 'admin@unhas.ac.id',
             'password' => Hash::make('password'),
             'role'     => 'admin',
         ]);
@@ -86,7 +86,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 13; $i++) {
             $drivers[] = User::create([
                 'name'     => $driverNames[$i - 1],
-                'email'    => 'sopir' . str_pad($i, 2, '0', STR_PAD_LEFT) . '@kampus-non-merdeka.ac.id',
+                'email'    => 'sopir' . str_pad($i, 2, '0', STR_PAD_LEFT) . '@unhas.ac.id',
                 'password' => Hash::make('password'),
                 'role'     => 'sopir',
             ]);
@@ -94,11 +94,11 @@ class DatabaseSeeder extends Seeder
 
         // 4. Create Users (Civitas & Umum)
         $users = [];
-        $users[] = User::create(['name' => 'Muh. Budi Santoso', 'email' => 'budi@kampus-non-merdeka.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
+        $users[] = User::create(['name' => 'Muh. Budi Santoso', 'email' => 'budi@unhas.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
         $users[] = User::create(['name' => 'Ani Wulandari', 'email' => 'ani@gmail.com', 'password' => Hash::make('password'), 'role' => 'umum']);
-        $users[] = User::create(['name' => 'Dr. Surya Darma', 'email' => 'surya@kampus-non-merdeka.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
+        $users[] = User::create(['name' => 'Dr. Surya Darma', 'email' => 'surya@unhas.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
         $users[] = User::create(['name' => 'Andi Fatimah', 'email' => 'andi@yahoo.com', 'password' => Hash::make('password'), 'role' => 'umum']);
-        $users[] = User::create(['name' => 'Riska Amalia', 'email' => 'riska@kampus-non-merdeka.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
+        $users[] = User::create(['name' => 'Riska Amalia', 'email' => 'riska@unhas.ac.id', 'password' => Hash::make('password'), 'role' => 'civitas']);
 
         // 5. Create 13 Buses
         // Status tersebar realistis: beberapa standby, beberapa jalan, beberapa istirahat

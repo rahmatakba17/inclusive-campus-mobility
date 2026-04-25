@@ -60,7 +60,7 @@ class LoginController extends Controller
 
     protected function ensureIsNotRateLimited(Request $request): void
     {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey($request), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey($request), 1000)) {
             return;
         }
 

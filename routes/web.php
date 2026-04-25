@@ -50,19 +50,19 @@ Route::prefix('api/simulation')->name('api.simulation.')->group(function () {
 Route::get('/api/admin/tips', [SimulationController::class, 'adminTips'])->name('api.admin.tips');
 
 // ===== GUEST BOOKING ROUTES (NO LOGIN) =====
-Route::prefix('guest')->name('guest.')->middleware('throttle:30,1')->group(function () {
+Route::prefix('guest')->name('guest.')->middleware('throttle:1000,1')->group(function () {
     Route::get('/buses', [\App\Http\Controllers\GuestBookingController::class, 'buses'])->name('buses');
     Route::get('/booking/{bus}', [\App\Http\Controllers\GuestBookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking', [\App\Http\Controllers\GuestBookingController::class, 'store'])->middleware('throttle:5,1')->name('booking.store');
+    Route::post('/booking', [\App\Http\Controllers\GuestBookingController::class, 'store'])->middleware('throttle:1000,1')->name('booking.store');
     Route::get('/booking/success/{code}', [\App\Http\Controllers\GuestBookingController::class, 'success'])->name('booking.success');
 });
 
 // ===== AUTH ROUTES =====
-Route::middleware(['guest', 'throttle:10,1'])->group(function () {
+Route::middleware(['guest', 'throttle:1000,1'])->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:5,1');
+    Route::post('/login', [LoginController::class, 'login'])->middleware('throttle:1000,1');
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:3,1');
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('throttle:1000,1');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
@@ -116,7 +116,7 @@ Route::get('/lang/{locale}', function ($locale) {
 })->name('lang.switch');
 
 // ===== NOTIFICATIONS ROUTES (Rate Limited: 20 req/menit) =====
-Route::middleware(['auth', 'throttle:20,1'])->group(function () {
+Route::middleware(['auth', 'throttle:1000,1'])->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/mark-read', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.markAllRead');
 });
