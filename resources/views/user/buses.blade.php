@@ -169,65 +169,58 @@
                 setInterval(() => this.fetchAndSortBuses(), 5000);
             },
             
-            async fetchAndSortBuses() {
-                try {
-                    const res = await fetch('/api/simulation/buses');
-                    const data = await res.json();
-                    
-                    BusSimulation.init(data.buses);
-                    const positions = BusSimulation.getAllPositions();
-                    
-                    // Buat map trip_status dari DB (sumber kebenaran untuk bookability)
-                    const dbStatusMap = {};
-                    data.buses.forEach(b => { dbStatusMap[b.id] = b.trip_status; });
-                    
-                    let newOrders      = {};
-                    let newETAs        = {};
-                    let newStatus      = {};
-                    let newDirections  = {};
-                    let newGroups      = {};
-                    
-                    positions.forEach((pos, idx) => {
-                        /**
-                         * PENGELOMPOKAN RUTE REAL-TIME:
-                         * Perintis → Gowa : direction = 'go' (sedang berangkat) | 'queue' (antri di Tamal) | 'rest_tamal' (baru tiba di Tamal)
-                         * Gowa → Perintis  : direction = 'return' (sedang pulang)  | 'rest_gowa' (standby di Gowa, siap berangkat balik)
-                         */
-                        const isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
-                        newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
+            fetchAndSortBuses() {
+                var self = this;
+                fetch('/api/simulation/buses')
+                    .then(function(res) { return res.json(); })
+                    .then(function(data) {
+                        if (!data || !data.buses || data.buses.length === 0) return;
 
-                        /**
-                         * URUTAN TAMPILAN (semakin kecil = tampil lebih dulu):
-                         * - Perintis→Gowa: queue standby (eta kecil) → rest_tamal → jalan (go)
-                         * - Gowa→Perintis: rest_gowa (siap berangkat) → jalan (return)
-                         */
-                        let weight;
-                        if (isGoingToGowa) {
-                            if (pos.direction === 'queue')      weight = 0;     // siap antri → tampil dulu
-                            else if (pos.direction === 'rest_tamal') weight = 500;  // baru tiba
-                            else weight = 1000;                                      // sedang jalan ke Gowa
-                        } else {
-                            if (pos.direction === 'rest_gowa')  weight = 0;     // standby di Gowa → tampil dulu
-                            else weight = 1000;                                      // sedang pulang ke Tamal
-                        }
+                        BusSimulation.init(data.buses);
+                        var positions = BusSimulation.getAllPositions();
 
-                        newOrders[pos.id]     = weight + pos.eta_minutes + idx;
-                        newETAs[pos.id]        = pos.eta_minutes;
-                        const dbStat           = dbStatusMap[pos.id];
-                        newStatus[pos.id]      = (dbStat !== 'standby') ? dbStat : pos.trip_status;
-                        newDirections[pos.id]  = pos.direction;
+                        // Map trip_status dari DB (sumber kebenaran bookability)
+                        var dbStatusMap = {};
+                        data.buses.forEach(function(b) { dbStatusMap[b.id] = b.trip_status; });
+
+                        var newOrders      = {};
+                        var newETAs        = {};
+                        var newStatus      = {};
+                        var newDirections  = {};
+                        var newGroups      = {};
+
+                        positions.forEach(function(pos, idx) {
+                            var isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
+                            newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
+
+                            var weight;
+                            if (isGoingToGowa) {
+                                if (pos.direction === 'queue')         weight = 0;
+                                else if (pos.direction === 'rest_tamal') weight = 500;
+                                else weight = 1000;
+                            } else {
+                                if (pos.direction === 'rest_gowa') weight = 0;
+                                else weight = 1000;
+                            }
+
+                            newOrders[pos.id]    = weight + pos.eta_minutes + idx;
+                            newETAs[pos.id]       = pos.eta_minutes;
+                            var dbStat            = dbStatusMap[pos.id];
+                            newStatus[pos.id]     = (dbStat !== 'standby') ? dbStat : pos.trip_status;
+                            newDirections[pos.id] = pos.direction;
+                        });
+
+                        self.busOrder          = newOrders;
+                        self.dynamicETA        = newETAs;
+                        self.dynamicStatus     = newStatus;
+                        self.dynamicDirection  = newDirections;
+                        self.dynamicRouteGroup = newGroups;
+                    })
+                    .catch(function(e) {
+                        console.error('Failed to sync bus ordering', e);
                     });
-                    
-                    this.busOrder          = newOrders;
-                    this.dynamicETA        = newETAs;
-                    this.dynamicStatus     = newStatus;
-                    this.dynamicDirection  = newDirections;
-                    this.dynamicRouteGroup = newGroups;
-                    
-                } catch(e) {
-                    console.error("Failed to sync bus ordering", e);
-                }
             },
+
             
             /** Apakah bus bisa dipesan untuk rute tertentu?
              *  Aturan: HANYA bus berstatus 'standby' di DB yang boleh dipesan.

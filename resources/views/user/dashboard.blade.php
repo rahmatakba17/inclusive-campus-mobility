@@ -324,25 +324,28 @@
                             .slice(0, 5);
                     },
 
-                    async refreshBuses() {
-                        try {
-                            const res = await fetch('/api/simulation/buses');
-                            if (!res.ok) return;
-                            const data = await res.json();
-                            const raw = data.buses || [];
-                            if (typeof BusSimulation !== 'undefined' && raw.length > 0) {
-                                BusSimulation.init(raw);
-                                this.buses = BusSimulation.getAllPositions();
-                            } else {
-                                this.buses = raw.map(b => ({
-                                    ...b,
-                                    direction:   b.trip_status === 'standby'   ? 'queue'
-                                               : b.trip_status === 'istirahat' ? 'rest_tamal'
-                                               : 'go',
-                                    eta_minutes: b.eta_minutes ?? 5,
-                                }));
-                            }
-                        } catch(e) {}
+                    refreshBuses() {
+                        const self = this;
+                        fetch('/api/simulation/buses')
+                            .then(function(res) { return res.json(); })
+                            .then(function(data) {
+                                const raw = (data && data.buses) ? data.buses : [];
+                                if (raw.length === 0) return;
+                                if (typeof BusSimulation !== 'undefined') {
+                                    BusSimulation.init(raw);
+                                    self.buses = BusSimulation.getAllPositions();
+                                } else {
+                                    self.buses = raw.map(function(b) {
+                                        return Object.assign({}, b, {
+                                            direction:   b.trip_status === 'standby'   ? 'queue'
+                                                       : b.trip_status === 'istirahat' ? 'rest_tamal'
+                                                       : 'go',
+                                            eta_minutes: b.eta_minutes || 5,
+                                        });
+                                    });
+                                }
+                            })
+                            .catch(function() {});
                     },
 
                     startPolling() {
@@ -368,8 +371,11 @@
                 }));
             });
         </script>
-        {{-- Load simulation engine untuk kalkulasi posisi bus di queue --}}
-        <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
     </div>
+
+@push('scripts')
+<script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
+@endpush
+
 @endsection
 
