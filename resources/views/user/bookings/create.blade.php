@@ -162,56 +162,42 @@
             },
 
             // Fetch kursi terbaru sebelum submit
-            async refreshSeats() {
-                try {
-                    const res = await fetch('/api/simulation/bus/' + this.busId + '/seats');
-                    const data = await res.json();
-                    this.bookedSeats = data.booked_seats;
-                } catch(e) {}
+            refreshSeats() {
+                var self = this;
+                fetch('/api/simulation/bus/' + this.busId + '/seats')
+                    .then(function(r){ return r.json(); })
+                    .then(function(data){ self.bookedSeats = data.booked_seats || []; })
+                    .catch(function(){});
             },
 
-            // Polling realtime trip_status — dua sumber: DB + Simulasi Engine (sinkron dengan peta)
-            async pollBusStatus() {
-                try {
-                    const res = await fetch('/api/simulation/buses');
-                    const data = await res.json();
-                    const thisBus = data.buses.find(b => b.id === this.busId);
-                    if (!thisBus) return;
+            // Polling realtime trip_status — hanya DB status yang menentukan booking lock
+            pollBusStatus() {
+                var self = this;
+                fetch('/api/simulation/buses')
+                    .then(function(r){ return r.json(); })
+                    .then(function(data) {
+                        var thisBus = (data.buses || []).find(function(b){ return b.id === self.busId; });
+                        if (!thisBus) return;
 
-                    // Sumber 1: status dari DB (SATU-SATUNYA penentu booking lock)
-                    const dbStatus = thisBus.trip_status ?? 'standby';
+                        // SATU-SATUNYA sumber kebenaran: DB trip_status
+                        var dbStatus = thisBus.trip_status || 'standby';
+                        self.busStatus = dbStatus;
 
-                    // Sumber 2: status simulasi — hanya untuk DISPLAY badge, bukan penentu lock
-                    let displayStatus = dbStatus;
-                    try {
-                        if (typeof BusSimulation !== 'undefined') {
-                            BusSimulation.init(data.buses);
-                            const positions = BusSimulation.getAllPositions();
-                            const simBus = positions.find(p => p.id === this.busId);
-                            if (simBus && dbStatus !== 'standby') {
-                                // Hanya pakai sim status jika DB memang bukan standby
-                                displayStatus = simBus.trip_status ?? dbStatus;
-                            }
+                        var labels = {
+                            standby   : 'Standby — Siap Menerima Penumpang',
+                            jalan     : 'Sedang Berjalan — Pemesanan Ditutup',
+                            istirahat : 'Istirahat — Pemesanan Ditutup',
+                        };
+                        self.busStatusLabel = labels[dbStatus] || dbStatus;
+
+                        // Reset step jika bus locked dan belum masuk flow pembayaran aktif
+                        if (self.isBookingLocked && self.tahap === 1 && !self.paymentMethod) {
+                            self.etollScanned = false;
                         }
-                    } catch(simErr) {}
-
-                    // KRITIS: Hanya DB status yang menentukan apakah booking LOCKED
-                    // Simulasi waktu bisa salah kalkulasi di production → jangan pakai untuk lock
-                    this.busStatus = dbStatus;
-                    const labels = {
-                        'standby'   : 'Standby — Siap Menerima Penumpang',
-                        'jalan'     : 'Sedang Berjalan — Pemesanan Ditutup',
-                        'istirahat' : 'Istirahat — Pemesanan Ditutup',
-                    };
-                    this.busStatusLabel = labels[dbStatus] ?? dbStatus;
-
-                    // Jika sedang di Tahap 2 dan bus tiba-tiba locked, reset ke Tahap 1
-                    if (this.isBookingLocked && this.tahap === 1) {
-                        this.paymentMethod = null;
-                        this.etollScanned  = false;
-                    }
-                } catch(e) {}
+                    })
+                    .catch(function(){});
             },
+
 
             init() {
                 this.pollBusStatus();
@@ -819,42 +805,31 @@
  * Guard submit form — cek sekali lagi status bus via simulasi engine
  * TIDAK dapat di-bypass karena berjalan sinkron sebelum submit
  */
-document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+document.getElementById('bookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const formEl = this;
+    var formEl = this;
 
-    try {
-        const res  = await fetch('/api/simulation/buses');
-        const data = await res.json();
-        const busId = {{ $bus->id }};
-        const dbBus = data.buses.find(b => b.id === busId);
+    // Cek HANYA status DB — simulasi tidak digunakan untuk block payment
+    fetch('/api/simulation/buses')
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+            var busId = {{ $bus->id }};
+            var dbBus = (data.buses || []).find(function(b){ return b.id === busId; });
 
-        // Cek DB status
-        if (dbBus && dbBus.trip_status !== 'standby') {
-            alert('⚠️ Pemesanan Dibatalkan\n\nBus ini sudah dalam status "' + (dbBus.trip_status_label ?? dbBus.trip_status) + '".\nSilakan kembali dan pilih bus yang masih Standby.');
-            return;
-        }
-
-        // Cek status via mesin simulasi (sinkron dengan peta)
-        if (typeof BusSimulation !== 'undefined' && dbBus) {
-            BusSimulation.init(data.buses);
-            const positions = BusSimulation.getAllPositions();
-            const simBus = positions.find(p => p.id === busId);
-            if (simBus && simBus.trip_status !== 'standby') {
-                alert('⚠️ Pemesanan Dibatalkan\n\nStatus real-time bus di peta menunjukkan bus sudah "' + simBus.trip_status + '".\nPemesanan hanya bisa dilakukan saat bus berstatus Standby di terminal.');
+            if (dbBus && dbBus.trip_status && dbBus.trip_status !== 'standby') {
+                alert('⚠️ Pemesanan Dibatalkan\n\nBus ini sudah dalam status "' + (dbBus.trip_status_label || dbBus.trip_status) + '".\nSilakan kembali dan pilih bus yang masih Standby.');
                 return;
             }
-        }
 
-        // Lolos semua pengecekan — lanjutkan submit
-        formEl.submit();
-
-    } catch(err) {
-        // Jika gagal fetch API, tetap izinkan submit (server-side guard akan menangkap)
-        console.warn('Bus status check failed, proceeding with server-side validation.', err);
-        formEl.submit();
-    }
+            // Lolos pengecekan DB — submit
+            formEl.submit();
+        })
+        .catch(function() {
+            // Jika API gagal, tetap izinkan submit (server-side guard akan menangkap)
+            formEl.submit();
+        });
 });
+
 </script>
 
 @endsection

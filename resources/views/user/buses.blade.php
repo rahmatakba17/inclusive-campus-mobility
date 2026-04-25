@@ -205,8 +205,10 @@
 
                             newOrders[pos.id]    = weight + pos.eta_minutes + idx;
                             newETAs[pos.id]       = pos.eta_minutes;
-                            var dbStat            = dbStatusMap[pos.id];
-                            newStatus[pos.id]     = (dbStat !== 'standby') ? dbStat : pos.trip_status;
+                            var dbStat            = dbStatusMap[pos.id] || 'standby';
+                            // DB status adalah SATU-SATUNYA penentu bookability
+                            // Simulasi hanya untuk posisi & urutan, bukan status booking
+                            newStatus[pos.id]     = dbStat;
                             newDirections[pos.id] = pos.direction;
                         });
 
