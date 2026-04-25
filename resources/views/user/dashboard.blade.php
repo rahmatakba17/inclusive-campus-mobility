@@ -97,7 +97,7 @@
     </div>
 
     {{-- 3-col: Riwayat gabungan (1 col) + Bus Tamalanrea (1 col) + Bus Gowa (1 col) --}}
-    <div x-data="liveAvailableBuses()" x-init="startPolling()" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-8 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 xl:gap-8 items-start">
 
         {{-- ===== Riwayat Tiket (gabungan semua rute) ===== --}}
         <div class="bg-white rounded-[2.5rem] p-7 border border-slate-100 shadow-sm flex flex-col">
@@ -162,52 +162,8 @@
                 </a>
             </div>
 
-            <div class="space-y-2 relative z-10 flex-1" x-cloak>
-                <template x-for="(bus, index) in busesTamalanrea" :key="'tamal-'+bus.id">
-                    <div class="flex flex-col">
-                        <div x-show="index === 1" class="flex items-center gap-2 py-2 opacity-60">
-                            <div class="h-px bg-gradient-to-r from-transparent to-slate-200 flex-1"></div>
-                            <span class="text-[7px] font-black uppercase tracking-widest text-slate-500">{{ __('Queue') }}</span>
-                            <div class="h-px bg-gradient-to-l from-transparent to-slate-200 flex-1"></div>
-                        </div>
-
-                        <div class="flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 relative overflow-hidden"
-                             :class="bus.trip_status === 'jalan' ? 'border-blue-400 bg-blue-50 shadow-sm' 
-                                 : (index === 0 ? 'border-[#ffd700] bg-[rgba(255,215,0,0.08)] shadow-sm'
-                                 : 'border-slate-100 bg-[#fafbfc] hover:bg-white hover:shadow-md')">
-
-                            <div class="absolute right-0 top-0 bottom-0 w-1"
-                                 :class="bus.trip_status === 'jalan' ? 'bg-blue-500' : (index === 0 ? 'bg-[#1e3a5f]' : 'bg-slate-200')"></div>
-
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative"
-                                 :class="bus.trip_status === 'jalan' ? 'bg-blue-500' : (index === 0 ? 'bg-[#ffd700]' : 'bg-slate-100')">
-                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-500')"></i>
-                                <span x-show="bus.trip_status === 'jalan'" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
-                            </div>
-
-                            <div class="flex-1 min-w-0">
-                                <p class="text-[9px] font-black text-slate-800 truncate tracking-tight uppercase" x-text="bus.name"></p>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="text-[7px] font-bold text-white px-1.5 py-0.5 rounded uppercase flex-shrink-0"
-                                          :class="bus.trip_status === 'jalan' ? 'bg-blue-500' : (index === 0 && bus.direction !== 'rest_tamal' ? 'bg-[#1e3a5f]' : (bus.direction === 'rest_tamal' ? 'bg-slate-500' : 'bg-amber-500'))"
-                                          x-text="bus.trip_status === 'jalan' ? window._t.ON_WAY : (index === 0 && bus.direction !== 'rest_tamal' ? window._t.READY : (bus.direction === 'rest_tamal' ? window._t.JUST_ARRIVED : window._t.QUEUED))">
-                                    </span>
-                                    <p class="text-[7px] font-bold uppercase truncate"
-                                       :class="bus.trip_status === 'jalan' ? 'text-blue-500' : (index === 0 ? 'text-[#1e3a5f]' : 'text-slate-500')"
-                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' ' + window._t.MIN : (bus.trip_status === 'jalan' ? window._t.TO_GOWA : '')"></p>
-                                </div>
-                            </div>
-                            <a :href="bus.trip_status === 'jalan' ? '#' : '/user/bookings/create/' + bus.id"
-                               class="text-white font-black py-1.5 px-3 rounded-lg text-[7px] transition-all uppercase tracking-widest flex-shrink-0"
-                               :class="bus.trip_status === 'jalan' ? 'bg-blue-300 opacity-70 cursor-not-allowed' : (index === 0 ? 'bg-[#1e3a5f] hover:bg-slate-900 shadow-md shadow-navy-600/20' : 'bg-slate-400 hover:bg-slate-500')"
-                               @click="bus.trip_status === 'jalan' ? $event.preventDefault() : (bus.trip_status !== 'standby' && $event.preventDefault())"
-                               x-text="bus.trip_status === 'jalan' ? window._t.ON_ROAD : (index === 0 ? window._t.BOOK : window._t.QUEUED)">
-                            </a>
-                        </div>
-                    </div>
-                </template>
-
-                <div x-show="busesTamalanrea.length === 0" class="py-10 flex flex-col items-center opacity-30">
+            <div id="queue-tamalanrea" class="space-y-2 relative z-10 flex-1">
+                <div id="queue-tamalanrea-empty" class="py-10 flex flex-col items-center opacity-30">
                     <i class="fas fa-bus-slash text-2xl mb-2"></i>
                     <p class="text-[8px] font-bold uppercase tracking-widest">{{ __('No buses available') }}</p>
                 </div>
@@ -229,46 +185,8 @@
                 </a>
             </div>
 
-            <div class="space-y-2 relative z-10 flex-1" x-cloak>
-                <template x-for="(bus, index) in busesGowa" :key="'gowa-'+bus.id">
-                    <div class="flex flex-col mb-2">
-                        <div class="flex items-center gap-3 p-3 rounded-xl border transition-all duration-300 relative overflow-hidden"
-                             :class="bus.trip_status === 'jalan' ? 'border-orange-400 bg-orange-50 shadow-sm'
-                                 : (index === 0 ? 'border-[#ffd700] bg-[rgba(255,215,0,0.08)] shadow-sm'
-                                 : 'border-slate-100 bg-[#fafbfc] hover:bg-white hover:shadow-md')">
-
-                            <div class="absolute right-0 top-0 bottom-0 w-1"
-                                 :class="bus.trip_status === 'jalan' ? 'bg-orange-500' : (index === 0 ? 'bg-[#c41e3a]' : 'bg-slate-200')"></div>
-
-                            <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 relative"
-                                 :class="bus.trip_status === 'jalan' ? 'bg-orange-500' : (index === 0 ? 'bg-[#ffd700]' : 'bg-slate-100')">
-                                <i class="fas fa-bus text-xs" :class="bus.trip_status === 'jalan' ? 'text-white' : (index === 0 ? 'text-[#c41e3a]' : 'text-slate-500')"></i>
-                                <span x-show="bus.trip_status === 'jalan'" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
-                            </div>
-
-                            <div class="flex-1 min-w-0">
-                                <p class="text-[9px] font-black text-slate-800 truncate tracking-tight uppercase" x-text="bus.name"></p>
-                                <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="text-[7px] font-bold text-white px-1.5 py-0.5 rounded uppercase flex-shrink-0"
-                                          :class="bus.trip_status === 'jalan' ? 'bg-orange-500' : (index === 0 ? 'bg-[#c41e3a]' : 'bg-amber-500')"
-                                          x-text="bus.trip_status === 'jalan' ? window._t.ON_WAY : (index === 0 ? window._t.READY : window._t.STANDBY)">
-                                    </span>
-                                    <p class="text-[7px] font-bold uppercase truncate"
-                                       :class="bus.trip_status === 'jalan' ? 'text-orange-500' : 'text-[#c41e3a]'"
-                                       x-text="bus.true_eta !== undefined && bus.trip_status !== 'jalan' ? '~' + bus.true_eta + ' ' + window._t.MIN : (bus.trip_status === 'jalan' ? window._t.TO_TAMALANREA : '')"></p>
-                                </div>
-                            </div>
-                            <a :href="bus.trip_status === 'jalan' ? '#' : '/user/bookings/create/' + bus.id + '?from=gowa'"
-                               class="text-white font-black py-1.5 px-3 rounded-lg text-[7px] transition-all uppercase tracking-widest flex-shrink-0"
-                               :class="bus.trip_status === 'jalan' ? 'bg-orange-300 opacity-70 cursor-not-allowed' : (index === 0 ? 'bg-[#c41e3a] hover:bg-[#a01830] shadow-md shadow-red-600/20' : 'bg-slate-400 hover:bg-slate-500')"
-                               @click="bus.trip_status === 'jalan' ? $event.preventDefault() : (bus.direction !== 'rest_gowa' && $event.preventDefault())"
-                               x-text="bus.trip_status === 'jalan' ? window._t.ON_ROAD : (index === 0 ? window._t.BOOK : window._t.STANDBY)">
-                            </a>
-                        </div>
-                    </div>
-                </template>
-
-                <div x-show="busesGowa.length === 0" class="py-10 flex flex-col items-center opacity-30">
+            <div id="queue-gowa" class="space-y-2 relative z-10 flex-1">
+                <div id="queue-gowa-empty" class="py-10 flex flex-col items-center opacity-30">
                     <i class="fas fa-bus-slash text-2xl mb-2"></i>
                     <p class="text-[8px] font-bold uppercase tracking-widest">{{ __('No buses available') }}</p>
                 </div>
@@ -276,100 +194,142 @@
         </div>
 
         <script>
-            // i18n translation map for Alpine.js dynamic strings
-            window._t = {
-                ON_WAY:       '{{ __('ON WAY') }}',
-                ON_ROAD:      '{{ __('EN ROUTE') }}',
-                READY:        '{{ __('READY') }}',
-                JUST_ARRIVED: '{{ __('JUST ARRIVED') }}',
-                QUEUED:       '{{ __('QUEUED') }}',
-                STANDBY:      '{{ __('STANDBY') }}',
-                BOOK:         '{{ __('BOOK') }}',
-                MIN:          '{{ __('min') }}',
-                TO_GOWA:      '{{ __('To Gowa') }}',
-                TO_TAMALANREA:'{{ __('To Tamalanrea') }}',
-            };
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('liveAvailableBuses', () => ({
-                    buses: [],
+        // i18n
+        var _t = {
+            ON_WAY:'{{ __('ON WAY') }}', ON_ROAD:'{{ __('EN ROUTE') }}',
+            READY:'{{ __('READY') }}', JUST_ARRIVED:'{{ __('JUST ARRIVED') }}',
+            QUEUED:'{{ __('QUEUED') }}', STANDBY:'{{ __('STANDBY') }}',
+            BOOK:'{{ __('BOOK') }}', MIN:'{{ __('min') }}',
+            TO_GOWA:'{{ __('To Gowa') }}', TO_TAMALANREA:'{{ __('To Tamalanrea') }}',
+            NO_BUSES: '{{ __('No buses available') }}',
+        };
 
-                    get busesTamalanrea() {
-                        return [...this.buses]
-                            .filter(b => 
-                                (b.trip_status === 'standby' && b.direction !== 'rest_gowa') ||
-                                (b.trip_status === 'jalan' && b.direction === 'go')
-                            )
-                            .map(b => {
-                                let true_eta = b.eta_minutes || 0;
-                                if (b.trip_status === 'jalan') true_eta -= 1000;
-                                else if (b.direction === 'rest_tamal') true_eta += 106;
-                                return { ...b, true_eta };
-                            })
-                            .sort((a, b) => a.true_eta - b.true_eta)
-                            .slice(0, 5);
-                    },
+        function buildBusCard(bus, index, isTamal) {
+            var isJalan  = bus.trip_status === 'jalan';
+            var isFirst  = index === 0;
+            var isRest   = bus.direction === 'rest_tamal' || bus.direction === 'rest_gowa';
+            var color    = isTamal ? '#1e3a5f' : '#c41e3a';
+            var movColor = isTamal ? '#3b82f6' : '#f97316';
+            var borderCls= isJalan ? 'border-color:'+movColor+';background:'+movColor+'11'
+                         : isFirst ? 'border-color:#ffd700;background:rgba(255,215,0,0.08)'
+                         : 'border-color:#e2e8f0;background:#fafbfc';
+            var iconBg   = isJalan ? movColor : isFirst ? '#ffd700' : '#f1f5f9';
+            var iconClr  = isJalan ? '#fff'   : isFirst ? color     : '#94a3b8';
+            var badgeBg  = isJalan ? movColor : isFirst && !isRest ? color : '#f59e0b';
+            var badgeTxt = isJalan ? _t.ON_WAY
+                         : (isFirst && bus.direction !== 'rest_tamal') ? _t.READY
+                         : bus.direction === 'rest_tamal' ? _t.JUST_ARRIVED : _t.QUEUED;
+            if (!isTamal) badgeTxt = isJalan ? _t.ON_WAY : isFirst ? _t.READY : _t.STANDBY;
+            var etaTxt   = (!isJalan && bus.eta_minutes != null)
+                         ? ('~' + Math.round(bus.eta_minutes) + ' ' + _t.MIN)
+                         : (isJalan ? (isTamal ? _t.TO_GOWA : _t.TO_TAMALANREA) : '');
+            var btnHref  = isJalan ? '#' : ('/user/bookings/create/' + bus.id + (isTamal ? '' : '?from=gowa'));
+            var btnLabel = isJalan ? _t.ON_ROAD : (isFirst ? _t.BOOK : (isTamal ? _t.QUEUED : _t.STANDBY));
+            var btnBg    = isJalan ? movColor+'88' : isFirst ? color : '#94a3b8';
+            var ping     = isJalan ? '<span style="position:absolute;top:-4px;right:-4px;width:10px;height:10px;background:red;border-radius:50%;animation:ping 1s infinite"></span>' : '';
+            return '<div class="flex items-center gap-3 p-3 rounded-xl border mb-2 relative overflow-hidden" style="' + borderCls + ';">'
+                + '<div style="position:absolute;right:0;top:0;bottom:0;width:3px;background:' + (isJalan?movColor:isFirst?color:'#e2e8f0') + '"></div>'
+                + '<div style="width:40px;height:40px;border-radius:12px;background:' + iconBg + ';display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0">'
+                + '<i class="fas fa-bus" style="color:' + iconClr + ';font-size:12px"></i>' + ping + '</div>'
+                + '<div style="flex:1;min-width:0">'
+                + '<p style="font-size:9px;font-weight:900;color:#1e293b;text-transform:uppercase;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + bus.name + '</p>'
+                + '<div style="display:flex;align-items:center;gap:4px;margin-top:2px">'
+                + '<span style="font-size:7px;font-weight:700;color:#fff;padding:2px 6px;border-radius:4px;background:' + badgeBg + ';text-transform:uppercase">' + badgeTxt + '</span>'
+                + '<span style="font-size:7px;font-weight:700;color:' + (isJalan?movColor:isFirst?color:'#64748b') + ';text-transform:uppercase">' + etaTxt + '</span>'
+                + '</div></div>'
+                + '<a href="' + btnHref + '" style="color:#fff;font-weight:900;padding:6px 10px;border-radius:8px;font-size:7px;letter-spacing:.08em;text-transform:uppercase;background:' + btnBg + ';text-decoration:none;white-space:nowrap;flex-shrink:0"' + (isJalan?' onclick="return false"':'') + '>' + btnLabel + '</a>'
+                + '</div>';
+        }
 
-                    get busesGowa() {
-                        return [...this.buses]
-                            .filter(b => 
-                                b.direction === 'rest_gowa' ||
-                                (b.trip_status === 'jalan' && b.direction === 'return')
-                            )
-                            .map(b => {
-                                let true_eta = b.eta_minutes || 0;
-                                if (b.trip_status === 'jalan') true_eta -= 1000;
-                                return { ...b, true_eta };
-                            })
-                            .sort((a, b) => a.true_eta - b.true_eta)
-                            .slice(0, 5);
-                    },
+        function renderQueues(buses) {
+            var tamalEl = document.getElementById('queue-tamalanrea');
+            var gowaEl  = document.getElementById('queue-gowa');
+            var emptyT  = document.getElementById('queue-tamalanrea-empty');
+            var emptyG  = document.getElementById('queue-gowa-empty');
+            if (!tamalEl || !gowaEl) return;
 
-                    refreshBuses() {
-                        const self = this;
-                        fetch('/api/simulation/buses')
-                            .then(function(res) { return res.json(); })
-                            .then(function(data) {
-                                const raw = (data && data.buses) ? data.buses : [];
-                                if (raw.length === 0) return;
-                                if (typeof BusSimulation !== 'undefined') {
-                                    BusSimulation.init(raw);
-                                    self.buses = BusSimulation.getAllPositions();
-                                } else {
-                                    self.buses = raw.map(function(b) {
-                                        return Object.assign({}, b, {
-                                            direction:   b.trip_status === 'standby'   ? 'queue'
-                                                       : b.trip_status === 'istirahat' ? 'rest_tamal'
-                                                       : 'go',
-                                            eta_minutes: b.eta_minutes || 5,
-                                        });
-                                    });
-                                }
-                            })
-                            .catch(function() {});
-                    },
+            var tamal = buses.filter(function(b) {
+                return (b.trip_status === 'standby' && b.direction !== 'rest_gowa')
+                    || (b.trip_status === 'jalan'   && b.direction === 'go');
+            }).map(function(b) {
+                var eta = b.eta_minutes || 0;
+                if (b.trip_status === 'jalan') eta -= 1000;
+                return Object.assign({}, b, {_w: eta});
+            }).sort(function(a,b){return a._w - b._w;}).slice(0,5);
 
-                    startPolling() {
-                        // Inisialisasi langsung dari DB — tidak tunggu API
-                        const rawBuses = @json($available_buses);
-                        this.buses = rawBuses.map(b => ({
-                            ...b,
-                            direction:   b.trip_status === 'standby'   ? 'queue'
-                                       : b.trip_status === 'istirahat' ? 'rest_tamal'
-                                       : 'go',
-                            eta_minutes: b.eta_minutes ?? 5,
+            var gowa = buses.filter(function(b) {
+                return b.direction === 'rest_gowa'
+                    || (b.trip_status === 'jalan' && b.direction === 'return');
+            }).map(function(b) {
+                var eta = b.eta_minutes || 0;
+                if (b.trip_status === 'jalan') eta -= 1000;
+                return Object.assign({}, b, {_w: eta});
+            }).sort(function(a,b){return a._w - b._w;}).slice(0,5);
+
+            // Clear previous dynamic cards
+            tamalEl.querySelectorAll('.dyn-card').forEach(function(el){el.remove();});
+            gowaEl.querySelectorAll('.dyn-card').forEach(function(el){el.remove();});
+
+            if (tamal.length > 0) {
+                emptyT && (emptyT.style.display = 'none');
+                tamal.forEach(function(bus, i) {
+                    var wrap = document.createElement('div');
+                    wrap.className = 'dyn-card';
+                    wrap.innerHTML = buildBusCard(bus, i, true);
+                    tamalEl.insertBefore(wrap, emptyT);
+                });
+            } else {
+                emptyT && (emptyT.style.display = '');
+            }
+
+            if (gowa.length > 0) {
+                emptyG && (emptyG.style.display = 'none');
+                gowa.forEach(function(bus, i) {
+                    var wrap = document.createElement('div');
+                    wrap.className = 'dyn-card';
+                    wrap.innerHTML = buildBusCard(bus, i, false);
+                    gowaEl.insertBefore(wrap, emptyG);
+                });
+            } else {
+                emptyG && (emptyG.style.display = '');
+            }
+        }
+
+        function pollQueues() {
+            fetch('/api/simulation/buses')
+                .then(function(r){ return r.json(); })
+                .then(function(data) {
+                    var raw = (data && data.buses) ? data.buses : [];
+                    if (raw.length === 0) return;
+                    if (typeof BusSimulation !== 'undefined') {
+                        BusSimulation.init(raw);
+                        renderQueues(BusSimulation.getAllPositions());
+                    } else {
+                        renderQueues(raw.map(function(b){
+                            return Object.assign({}, b, {
+                                direction: b.trip_status === 'standby' ? 'queue'
+                                         : b.trip_status === 'istirahat' ? 'rest_tamal' : 'go',
+                                eta_minutes: 5
+                            });
                         }));
-                        // Polling mandiri — TIDAK bergantung iframe postMessage
-                        this.refreshBuses();
-                        setInterval(() => this.refreshBuses(), 5000);
-                        // Hanya dengarkan TRIP_COMPLETED dari iframe (bukan BUS_UPDATE)
-                        window.addEventListener('message', (e) => {
-                            if (e.data && e.data.type === 'TRIP_COMPLETED') {
-                                window.location.reload();
-                            }
-                        });
                     }
-                }));
+                }).catch(function(){});
+        }
+
+        // Mulai polling setelah DOM siap
+        document.addEventListener('DOMContentLoaded', function() {
+            pollQueues();
+            setInterval(pollQueues, 5000);
+            // Reload saat TRIP_COMPLETED dari map iframe
+            window.addEventListener('message', function(e) {
+                if (e.data && e.data.type === 'TRIP_COMPLETED') window.location.reload();
             });
+        });
+
+        // CSS ping animation
+        var st = document.createElement('style');
+        st.textContent = '@keyframes ping{0%{transform:scale(1);opacity:1}100%{transform:scale(2);opacity:0}}';
+        document.head.appendChild(st);
         </script>
     </div>
 
