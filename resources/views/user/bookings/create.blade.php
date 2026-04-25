@@ -178,32 +178,32 @@
                     const thisBus = data.buses.find(b => b.id === this.busId);
                     if (!thisBus) return;
 
-                    // Sumber 1: status dari DB
+                    // Sumber 1: status dari DB (SATU-SATUNYA penentu booking lock)
                     const dbStatus = thisBus.trip_status ?? 'standby';
 
-                    // Sumber 2: status yang dihitung mesin simulasi (sama dengan peta realtime)
-                    let simStatus = dbStatus;
+                    // Sumber 2: status simulasi — hanya untuk DISPLAY badge, bukan penentu lock
+                    let displayStatus = dbStatus;
                     try {
                         if (typeof BusSimulation !== 'undefined') {
                             BusSimulation.init(data.buses);
                             const positions = BusSimulation.getAllPositions();
                             const simBus = positions.find(p => p.id === this.busId);
-                            if (simBus) simStatus = simBus.trip_status ?? dbStatus;
+                            if (simBus && dbStatus !== 'standby') {
+                                // Hanya pakai sim status jika DB memang bukan standby
+                                displayStatus = simBus.trip_status ?? dbStatus;
+                            }
                         }
                     } catch(simErr) {}
 
-                    // Gabungkan: LOCKED jika salah satu dari DB atau simulasi bukan standby
-                    const finalStatus = (dbStatus !== 'standby') ? dbStatus
-                                      : (simStatus !== 'standby') ? simStatus
-                                      : 'standby';
-
-                    this.busStatus = finalStatus;
+                    // KRITIS: Hanya DB status yang menentukan apakah booking LOCKED
+                    // Simulasi waktu bisa salah kalkulasi di production → jangan pakai untuk lock
+                    this.busStatus = dbStatus;
                     const labels = {
                         'standby'   : 'Standby — Siap Menerima Penumpang',
                         'jalan'     : 'Sedang Berjalan — Pemesanan Ditutup',
                         'istirahat' : 'Istirahat — Pemesanan Ditutup',
                     };
-                    this.busStatusLabel = labels[finalStatus] ?? finalStatus;
+                    this.busStatusLabel = labels[dbStatus] ?? dbStatus;
 
                     // Jika sedang di Tahap 2 dan bus tiba-tiba locked, reset ke Tahap 1
                     if (this.isBookingLocked && this.tahap === 1) {
@@ -338,6 +338,7 @@
 
             {{-- OVERLAY REALTIME: Muncul ketika bus sudah bukan Standby --}}
             <div x-show="isBookingLocked" x-transition.duration.300ms
+                 style="display:none"
                  class="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-3xl bg-slate-900/90 backdrop-blur-sm text-white text-center p-8"
                  aria-live="assertive" role="alert">
                 <div class="w-20 h-20 bg-red-500/20 border-2 border-red-400/40 rounded-3xl flex items-center justify-center mb-5 animate-pulse">
