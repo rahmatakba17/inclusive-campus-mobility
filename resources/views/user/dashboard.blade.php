@@ -324,9 +324,29 @@
                             .slice(0, 5);
                     },
 
+                    async refreshBuses() {
+                        try {
+                            const res = await fetch('/api/simulation/buses');
+                            if (!res.ok) return;
+                            const data = await res.json();
+                            const raw = data.buses || [];
+                            if (typeof BusSimulation !== 'undefined' && raw.length > 0) {
+                                BusSimulation.init(raw);
+                                this.buses = BusSimulation.getAllPositions();
+                            } else {
+                                this.buses = raw.map(b => ({
+                                    ...b,
+                                    direction:   b.trip_status === 'standby'   ? 'queue'
+                                               : b.trip_status === 'istirahat' ? 'rest_tamal'
+                                               : 'go',
+                                    eta_minutes: b.eta_minutes ?? 5,
+                                }));
+                            }
+                        } catch(e) {}
+                    },
+
                     startPolling() {
-                        // Inisialisasi dari DB — tambah direction default agar langsung tampil
-                        // Standby = 'queue' (antri di Tamalanrea), bukan jalan
+                        // Inisialisasi langsung dari DB — tidak tunggu API
                         const rawBuses = @json($available_buses);
                         this.buses = rawBuses.map(b => ({
                             ...b,
@@ -335,10 +355,12 @@
                                        : 'go',
                             eta_minutes: b.eta_minutes ?? 5,
                         }));
+                        // Polling mandiri — TIDAK bergantung iframe postMessage
+                        this.refreshBuses();
+                        setInterval(() => this.refreshBuses(), 5000);
+                        // Hanya dengarkan TRIP_COMPLETED dari iframe (bukan BUS_UPDATE)
                         window.addEventListener('message', (e) => {
-                            if (e.data && e.data.type === 'BUS_UPDATE') {
-                                this.buses = e.data.buses;
-                            } else if (e.data && e.data.type === 'TRIP_COMPLETED') {
+                            if (e.data && e.data.type === 'TRIP_COMPLETED') {
                                 window.location.reload();
                             }
                         });
@@ -346,5 +368,8 @@
                 }));
             });
         </script>
+        {{-- Load simulation engine untuk kalkulasi posisi bus di queue --}}
+        <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
     </div>
 @endsection
+
