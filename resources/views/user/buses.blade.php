@@ -176,52 +176,62 @@
                     .then(function(data) {
                         if (!data || !data.buses || data.buses.length === 0) return;
 
-                        BusSimulation.init(data.buses);
-                        var positions = BusSimulation.getAllPositions();
+                        // ── STEP 1: Update status dari DB DULU (prioritas tertinggi, tidak tergantung simulasi) ──
+                        var newStatus = {};
+                        data.buses.forEach(function(b) {
+                            newStatus[b.id] = b.trip_status || 'standby';
+                        });
+                        self.dynamicStatus = newStatus; // Langsung apply — tidak menunggu simulasi
 
-                        // Map trip_status dari DB (sumber kebenaran bookability)
-                        var dbStatusMap = {};
-                        data.buses.forEach(function(b) { dbStatusMap[b.id] = b.trip_status; });
+                        // ── STEP 2: Jalankan simulasi untuk ETA, direction, dan grouping ──
+                        try {
+                            BusSimulation.init(data.buses);
+                            var positions = BusSimulation.getAllPositions();
 
-                        var newOrders      = {};
-                        var newETAs        = {};
-                        var newStatus      = {};
-                        var newDirections  = {};
-                        var newGroups      = {};
-
-                        positions.forEach(function(pos, idx) {
-                            var isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
-                            newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
-
-                            var weight;
-                            if (isGoingToGowa) {
-                                if (pos.direction === 'queue')         weight = 0;
-                                else if (pos.direction === 'rest_tamal') weight = 500;
-                                else weight = 1000;
-                            } else {
-                                if (pos.direction === 'rest_gowa') weight = 0;
-                                else weight = 1000;
+                            if (!positions || positions.length === 0) {
+                                // Simulasi gagal → grouping default: semua ke perintis_to_gowa (fallback)
+                                console.warn('[BusSimulation] getAllPositions() returned empty. Using DB status only.');
+                                return;
                             }
 
-                            newOrders[pos.id]    = weight + pos.eta_minutes + idx;
-                            newETAs[pos.id]       = pos.eta_minutes;
-                            var dbStat            = dbStatusMap[pos.id] || 'standby';
-                            // DB status adalah SATU-SATUNYA penentu bookability
-                            // Simulasi hanya untuk posisi & urutan, bukan status booking
-                            newStatus[pos.id]     = dbStat;
-                            newDirections[pos.id] = pos.direction;
-                        });
+                            var newOrders     = {};
+                            var newETAs       = {};
+                            var newDirections = {};
+                            var newGroups     = {};
 
-                        self.busOrder          = newOrders;
-                        self.dynamicETA        = newETAs;
-                        self.dynamicStatus     = newStatus;
-                        self.dynamicDirection  = newDirections;
-                        self.dynamicRouteGroup = newGroups;
+                            positions.forEach(function(pos, idx) {
+                                var isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
+                                newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
+
+                                var weight;
+                                if (isGoingToGowa) {
+                                    if (pos.direction === 'queue')          weight = 0;
+                                    else if (pos.direction === 'rest_tamal') weight = 500;
+                                    else                                     weight = 1000;
+                                } else {
+                                    if (pos.direction === 'rest_gowa') weight = 0;
+                                    else                               weight = 1000;
+                                }
+
+                                newOrders[pos.id]    = weight + (pos.eta_minutes || 0) + idx;
+                                newETAs[pos.id]      = pos.eta_minutes || 0;
+                                newDirections[pos.id] = pos.direction;
+                            });
+
+                            self.busOrder          = newOrders;
+                            self.dynamicETA        = newETAs;
+                            self.dynamicDirection  = newDirections;
+                            self.dynamicRouteGroup = newGroups;
+
+                        } catch(simErr) {
+                            console.warn('[BusSimulation] Error during simulation positioning:', simErr.message);
+                        }
                     })
                     .catch(function(e) {
-                        console.error('Failed to sync bus ordering', e);
+                        console.error('[fetchAndSortBuses] API call failed:', e);
                     });
             },
+
 
             
             /** Apakah bus bisa dipesan untuk rute tertentu?

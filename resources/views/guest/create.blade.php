@@ -115,35 +115,30 @@
                         document.getElementById('selectedSeatsInput').value = this.selectedSeats.join(',');
                     },
 
-                    async pollBusStatus() {
-                        try {
-                            const res = await fetch('/api/simulation/buses');
-                            const data = await res.json();
-                            const dbBus = data.buses.find(b => b.id === this.busId);
-                            if (!dbBus) return;
-                            
-                            let simStatus = dbBus.trip_status ?? 'standby';
-                            if (typeof BusSimulation !== 'undefined') {
-                                BusSimulation.init(data.buses);
-                                const positions = BusSimulation.getAllPositions();
-                                const simBus = positions.find(p => p.id === this.busId);
-                                if (simBus && simBus.trip_status !== 'standby') simStatus = simBus.trip_status;
-                            }
-                            
-                            const finalStatus = (dbBus.trip_status !== 'standby') ? dbBus.trip_status : simStatus;
-                            
-                            this.busStatus = finalStatus;
-                            const labels = {
-                                'standby': 'Standby',
-                                'jalan': 'Sedang Beroperasi',
-                                'istirahat': 'Sedang Istirahat'
-                            };
-                            this.busStatusLabel = labels[finalStatus] ?? finalStatus;
-                            
-                            if (this.isBookingLocked && this.showQris) {
-                                this.showQris = false;
-                            }
-                        } catch(e) {}
+                    pollBusStatus() {
+                        var self = this;
+                        fetch('/api/simulation/buses')
+                            .then(function(r){ return r.json(); })
+                            .then(function(data) {
+                                var dbBus = (data.buses || []).find(function(b){ return b.id === self.busId; });
+                                if (!dbBus) return;
+
+                                // SATU-SATUNYA sumber kebenaran: DB trip_status
+                                var finalStatus = dbBus.trip_status || 'standby';
+                                self.busStatus = finalStatus;
+                                var labels = {
+                                    'standby': 'Standby',
+                                    'jalan': 'Sedang Beroperasi',
+                                    'istirahat': 'Sedang Istirahat'
+                                };
+                                self.busStatusLabel = labels[finalStatus] || finalStatus;
+
+                                // Tutup modal QRIS hanya jika bus benar-benar sudah tidak standby di DB
+                                if (self.isBookingLocked && self.showQris) {
+                                    self.showQris = false;
+                                }
+                            })
+                            .catch(function(){});
                     }
                  }"
                  x-init="pollBusStatus(); setInterval(() => pollBusStatus(), 2000);">
@@ -373,34 +368,30 @@
 
 <script src="{{ asset('js/bus-simulation.js') }}?v={{ filemtime(public_path('js/bus-simulation.js')) }}"></script>
 <script>
-document.getElementById('guestForm').addEventListener('submit', async function(e) {
+document.getElementById('guestForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const formEl = this;
-    try {
-        const res  = await fetch('/api/simulation/buses');
-        const data = await res.json();
-        const busId = {{ $bus->id }};
-        const dbBus = data.buses.find(b => b.id === busId);
-        
-        if (dbBus && dbBus.trip_status !== 'standby') {
-            alert('⚠️ Transaksi Batal\n\nBus ini sudah tidak Standby.\nAnda akan dialihkan ke bus lain.');
-            window.location.href = "{{ route('guest.buses') }}";
-            return;
-        }
+    var formEl = this;
 
-        if (typeof BusSimulation !== 'undefined' && dbBus) {
-            BusSimulation.init(data.buses);
-            const simBus = BusSimulation.getAllPositions().find(p => p.id === busId);
-            if (simBus && simBus.trip_status !== 'standby') {
-                alert('⚠️ Transaksi Batal\n\nPantauan simulasi menunjukkan bus telah berangkat.\nAnda akan dialihkan ke bus lain.');
+    // Cek HANYA status DB — simulasi TIDAK digunakan untuk blokir pembayaran
+    fetch('/api/simulation/buses')
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+            var busId = {{ $bus->id }};
+            var dbBus = (data.buses || []).find(function(b){ return b.id === busId; });
+
+            if (dbBus && dbBus.trip_status && dbBus.trip_status !== 'standby') {
+                alert('⚠️ Transaksi Batal\n\nBus ini sudah tidak Standby.\nAnda akan dialihkan ke bus lain.');
                 window.location.href = "{{ route('guest.buses') }}";
                 return;
             }
-        }
-        formEl.submit();
-    } catch(err) {
-        formEl.submit();
-    }
+
+            // Lolos pengecekan DB — submit langsung
+            formEl.submit();
+        })
+        .catch(function() {
+            // Jika API gagal, izinkan submit (server-side guard akan menangkap)
+            formEl.submit();
+        });
 });
 </script>
 @endsection

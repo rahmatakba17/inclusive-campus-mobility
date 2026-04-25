@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (config('app.env') !== 'local' || (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'bus-inclusive.my.id'))) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }

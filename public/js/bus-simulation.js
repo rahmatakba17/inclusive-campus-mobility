@@ -64,7 +64,11 @@ const BusSimulation = (() => {
     /** Waktu simulasi dalam menit (WITA × SPEED) */
     function getSimMinutes() {
         const now  = new Date();
-        const wita = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Makassar' }));
+        // Fallback aman untuk semua browser (terutama Safari/iOS)
+        // Makassar selalu UTC+8 (tanpa DST)
+        const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000);
+        const wita  = new Date(utcMs + (3600000 * 8));
+
         const realSec = wita.getHours() * 3600 + wita.getMinutes() * 60 + wita.getSeconds()
                       + wita.getMilliseconds() / 1000;
         return (realSec / 60) * SPEED;
@@ -265,9 +269,14 @@ const BusSimulation = (() => {
                     busStates[bus.id].user_has_booking   = bus.user_has_booking  || false;
                     busStates[bus.id].user_booking_notes = bus.user_booking_notes || null;
                 }
-                // Selalu update data umum (kursi, penumpang)
-                busStates[bus.id].db_available      = bus.available_seats;
-                busStates[bus.id].booked_passengers = bus.booked_passengers;
+                // Selalu update data umum dan status terbaru
+                busStates[bus.id].db_available           = bus.available_seats;
+                busStates[bus.id].booked_passengers      = bus.booked_passengers;
+                busStates[bus.id].trip_status            = bus.trip_status;
+                busStates[bus.id].driver_name            = bus.driver_name;
+                busStates[bus.id].driver_id              = bus.driver_id;
+                busStates[bus.id].driver_on_board        = bus.driver_on_board;
+                busStates[bus.id].current_user_is_driver = bus.current_user_is_driver;
             }
         });
     }

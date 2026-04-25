@@ -50,8 +50,8 @@
             isPriority: false,
             priorityNeed: '',  // '' | 'medium' | 'high' | 'other'
             busId: {{ $bus->id }},
-            busStatus: 'standby',
-            busStatusLabel: 'Standby — Siap Menerima Penumpang',
+            busStatus: '{{ $bus->trip_status ?? 'standby' }}',
+            busStatusLabel: '{{ match($bus->trip_status ?? 'standby') { 'jalan' => 'Sedang Berjalan — Pemesanan Ditutup', 'istirahat' => 'Istirahat — Pemesanan Ditutup', default => 'Standby — Siap Menerima Penumpang' } }}',
 
             priorityLockSeconds: {{ $lockRemaining }},
             isPriorityLocked: {{ $lockRemaining > 0 ? 'true' : 'false' }},
