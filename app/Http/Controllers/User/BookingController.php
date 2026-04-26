@@ -60,7 +60,7 @@ class BookingController extends Controller
     {
         \App\Models\Booking::cleanupExpiredUnconfirmed();
 
-        if ($bus->status !== 'active') {
+        if ($bus->status !== 'active' || is_null($bus->driver_id)) {
             return back()->with('error', 'Bus ini sedang tidak beroperasi.');
         }
 
@@ -137,7 +137,7 @@ class BookingController extends Controller
 
         $bus = Bus::findOrFail($validated['bus_id']);
 
-        if ($bus->status !== 'active') {
+        if ($bus->status !== 'active' || is_null($bus->driver_id)) {
             return back()->with('error', 'Bus ini sedang tidak beroperasi (status armada: ' . $bus->status . '. Hubungi admin jika ada pertanyaan.');
         }
 
@@ -391,7 +391,7 @@ class BookingController extends Controller
 
     public function buses()
     {
-        $buses = Bus::where('status', 'active')
+        $buses = Bus::where('status', 'active')->whereNotNull('driver_id')
             ->orderBy('bus_number')
             ->get()
             ->sortBy(function ($bus) {

@@ -119,7 +119,7 @@ class Booking extends Model
         // Ambil bus ID yang sedang benar-benar berjalan
         $departedBusIds = \Illuminate\Support\Facades\DB::table('buses')
             ->where('trip_status', 'jalan')
-            ->where('status', 'active')
+            ->where('status', 'active')->whereNotNull('driver_id')
             ->pluck('id');
 
         if ($departedBusIds->isEmpty()) {

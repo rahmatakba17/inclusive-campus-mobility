@@ -51,7 +51,7 @@ class DashboardController extends Controller
         // Untuk backward-compat tetap kirim recent_bookings (semua, termasuk selesai)
         $recent_bookings = $all_recent->take(5);
 
-        $available_buses = Bus::where('status', 'active')
+        $available_buses = Bus::where('status', 'active')->whereNotNull('driver_id')
             ->orderBy('bus_number')
             ->get()
             ->sortBy(function($bus) {

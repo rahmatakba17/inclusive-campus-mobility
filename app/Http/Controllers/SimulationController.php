@@ -40,7 +40,7 @@ class SimulationController extends Controller
         }
 
         $buses = Bus::with('driver:id,name')
-            ->where('status', 'active')
+            ->where('status', 'active')->whereNotNull('driver_id')
             ->orderBy('bus_number')
             ->get()
             ->map(function (Bus $bus) use ($userActiveBookings, $currentUserId, $currentUserRole) {
@@ -126,7 +126,7 @@ class SimulationController extends Controller
      */
     public function status(): JsonResponse
     {
-        $buses = Bus::where('status', 'active')->get();
+        $buses = Bus::where('status', 'active')->whereNotNull('driver_id')->get();
         return response()->json([
             'total'     => $buses->count(),
             'jalan'     => $buses->where('trip_status', 'jalan')->count(),
@@ -177,7 +177,7 @@ class SimulationController extends Controller
     {
         \App\Models\Booking::cleanupExpiredUnconfirmed();
 
-        $buses = Bus::where('status', 'active')->get();
+        $buses = Bus::where('status', 'active')->whereNotNull('driver_id')->get();
 
         $bookingsToday = Booking::whereDate('booking_date', today())
             ->whereIn('status', ['pending', 'confirmed'])

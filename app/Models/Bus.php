@@ -72,6 +72,7 @@ class Bus extends Model
     public function isBookable(): bool
     {
         if ($this->status !== 'active') return false;
+        if (is_null($this->driver_id)) return false;
         if ($this->trip_status === 'standby') return true;
         return false;
     }

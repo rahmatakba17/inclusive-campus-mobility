@@ -14,7 +14,7 @@ class DashboardController extends Controller
     {
         $stats = [
             'total_buses' => Bus::count(),
-            'active_buses' => Bus::where('status', 'active')->count(),
+            'active_buses' => Bus::where('status', 'active')->whereNotNull('driver_id')->count(),
             'total_bookings' => Booking::count(),
             'confirmed_bookings' => Booking::where('status', 'confirmed')->count(),
             'pending_bookings' => Booking::where('status', 'pending')->count(),

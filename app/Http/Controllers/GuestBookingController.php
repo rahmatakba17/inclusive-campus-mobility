@@ -11,7 +11,7 @@ class GuestBookingController extends Controller
 {
     public function buses()
     {
-        $buses = Bus::where('status', 'active')
+        $buses = Bus::where('status', 'active')->whereNotNull('driver_id')
             ->orderByRaw("FIELD(trip_status, 'standby', 'jalan', 'istirahat')")
             ->get();
         return view('guest.buses', compact('buses'));
@@ -19,7 +19,7 @@ class GuestBookingController extends Controller
 
     public function create(Bus $bus, Request $request)
     {
-        if ($bus->status !== 'active') {
+        if ($bus->status !== 'active' || is_null($bus->driver_id)) {
             return redirect()->route('guest.buses')->with('error', 'Bus ini sedang tidak beroperasi.');
         }
 
@@ -66,7 +66,7 @@ class GuestBookingController extends Controller
 
         $bus = Bus::findOrFail($validated['bus_id']);
 
-        if ($bus->status !== 'active') {
+        if ($bus->status !== 'active' || is_null($bus->driver_id)) {
             return redirect()->route('guest.buses')->with('error', 'Bus ini sedang tidak beroperasi.');
         }
 
