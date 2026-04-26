@@ -189,17 +189,9 @@
                         const isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
                         newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
 
-                        let weight;
-                        if (isGoingToGowa) {
-                            if (pos.direction === 'queue')      weight = 0;
-                            else if (pos.direction === 'rest_tamal') weight = 500;
-                            else weight = 1000;
-                        } else {
-                            if (pos.direction === 'rest_gowa')  weight = 0;
-                            else weight = 1000;
-                        }
-
-                        newOrders[pos.id]      = weight + pos.eta_minutes + idx;
+                        // Urutkan murni berdasarkan ETA (waktu tunggu paling sedikit di awal)
+                        // Kalikan 100 untuk memberikan ruang bagi index sebagai tie-breaker
+                        newOrders[pos.id]      = (pos.eta_minutes * 100) + idx;
                         newETAs[pos.id]        = pos.eta_minutes;
                         const dbStat           = dbStatusMap[pos.id];
                         // [SIMULATION FIX] Hanya hormati status 'istirahat' dari DB, selebihnya percaya pada mesin simulasi map
