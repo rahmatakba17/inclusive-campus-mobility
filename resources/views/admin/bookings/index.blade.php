@@ -261,6 +261,30 @@
                         window.location.reload();
                     }
                 });
+
+                // Real-time polling
+                this.startPolling();
+            },
+            startPolling() {
+                setInterval(async () => {
+                    // Cek jika sedang loading, sedang mengetik pencarian, atau sedang klik dropdown status
+                    const activeEl = document.activeElement;
+                    const isInputActive = activeEl === this.$refs.qInput || (activeEl && activeEl.tagName === 'SELECT');
+                    
+                    if (this.loadingGrid || isInputActive) return;
+                    
+                    try {
+                        // Menggunakan URL saat ini agar pagination & filter tetap terjaga
+                        const url = window.location.href;
+                        const res = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                        if (res.ok) {
+                            const html = await res.text();
+                            this.refreshDOM(html);
+                        }
+                    } catch (error) {
+                        // Silent fail for polling
+                    }
+                }, 3000); // Polling setiap 3 detik
             },
             async fetchData() {
                 this.loadingGrid = true;
