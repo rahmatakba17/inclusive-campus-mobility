@@ -1,7 +1,7 @@
-# Laporan Pengembangan Sistem Informasi Tiket Bus Kampus Non-Merdeka
+# Laporan Pengembangan Sistem Informasi Tiket Bus Kampus Inclusive
 
 **Mata Kuliah:** Rekayasa Perangkat Lunak Lanjut (Magister Rekayasa Perangkat Lunak)  
-**Proyek:** Sistem Informasi Tiket Bus Kampus Kampus Non-Merdeka  
+**Proyek:** Sistem Informasi Tiket Bus Kampus Universitas Hasanuddin  
 **Pendekatan:** Agile Software Development  
 **Versi Sistem:** 3.2 — April 2026  
 
@@ -9,8 +9,8 @@
 
 ## 1. PENDAHULUAN (Apa dan Mengapa)
 
-### 1.1. Apa itu Sistem Bus Kampus Non-Merdeka?
-Sistem Bus Kampus Non-Merdeka adalah platform berbasis web yang melayani pemesanan (ticketing) dan pemantauan operasional bus transit antarkampus Kampus Non-Merdeka. Platform ini dilengkapi dengan identitas visual resmi Kampus Non-Merdeka (logo universitas) di seluruh antarmuka, dan menyediakan antarmuka yang disesuaikan berdasarkan perannya:
+### 1.1. Apa itu Sistem Bus Kampus Inclusive?
+Sistem Bus Kampus Inclusive adalah platform berbasis web yang melayani pemesanan (ticketing) dan pemantauan operasional bus transit antarkampus Universitas Hasanuddin. Platform ini dilengkapi dengan identitas visual resmi Universitas Hasanuddin (logo universitas) di seluruh antarmuka, dan menyediakan antarmuka yang disesuaikan berdasarkan perannya:
 - **Tamu/Umum:** Pengguna tanpa akun yang dapat memesan tiket tunggal tanpa login.
 - **Civitas Akademika:** Mahasiswa, dosen, dan staf dengan akses penuh — maks 4 kursi per transaksi, tarif khusus E-Tol Rp 3.000.
 - **Sopir Bus:** Operator armada yang mengelola manifes penumpang, memperbarui status perjalanan secara *real-time*, dan menerima tip anonim beserta notifikasi masuk.
@@ -24,7 +24,7 @@ Sistem Bus Kampus Non-Merdeka adalah platform berbasis web yang melayani pemesan
 5. **Minimnya Komunikasi Digital:** Tidak ada sistem notifikasi yang memberitahu penumpang/admin perubahan status.
 6. **Inklusivitas & Aksesibilitas:** Sistem belum mempertimbangkan kebutuhan pengguna difabel atau preferensi visual.
 
-Sistem ini menyelesaikan semua permasalahan di atas melalui digitalisasi alur pemesanan dengan Role-Based Access Control, dual-route queue simulation, proteksi multi-pemesanan, sistem tip berbatas, laporan keuangan terpusat, notifikasi real-time, standar aksesibilitas WCAG 2.1, dan branding identitas visual Kampus Non-Merdeka yang konsisten.
+Sistem ini menyelesaikan semua permasalahan di atas melalui digitalisasi alur pemesanan dengan Role-Based Access Control, dual-route queue simulation, proteksi multi-pemesanan, sistem tip berbatas, laporan keuangan terpusat, notifikasi real-time, standar aksesibilitas WCAG 2.1, dan branding identitas visual Universitas Hasanuddin yang konsisten.
 
 ---
 
@@ -50,7 +50,7 @@ Sistem ini dikembangkan menggunakan kerangka kerja **Agile Software Development*
 | Sprint 5 | Peta real-time Leaflet.js, simulasi 13 armada dual-route |
 | Sprint 6 | Auto-finish trip, ikon ANDA real-time, tip anonim |
 | Sprint 7 | Laporan keuangan admin, grafik tren + ekspor PDF |
-| Sprint 8 | Branding logo Kampus Non-Merdeka (seluruh antarmuka + error pages) |
+| Sprint 8 | Branding logo Universitas Hasanuddin (seluruh antarmuka + error pages) |
 | Sprint 9 | Sistem notifikasi bell (Admin/User/Sopir), z-index fix |
 | Sprint 10 | Bug fix: auto-finish alert hanya muncul 1x, ikon Pro FA replacement |
 | Sprint 11 | **Aksesibilitas WCAG 2.1 Level AA** — skip nav, ARIA roles, toolbar ♿, kontras, reduced motion |
@@ -256,15 +256,15 @@ erDiagram
 
 ## 4. FITUR SISTEM (Versi 3.2)
 
-### 4.1 Branding Kampus Non-Merdeka
+### 4.1 Branding Universitas Hasanuddin
 - Logo resmi `logo_kampus_non_merdeka.png` diintegrasikan di seluruh antarmuka: Sidebar Admin, Sidebar User, Navbar Sopir, Landing Page (navbar + footer), Peta Real-Time.
 - Logo ditampilkan dalam *circle badge* putih elegan yang konsisten di semua layout.
 
 ### 4.2 Halaman Error Premium (401, 403, 404, 419, 500, 503)
 - Desain glassmorphism dengan latar cross-pattern SVG.
-- Logo Kampus Non-Merdeka melayang dengan animasi radar ping.
+- Logo Bus Kampus melayang dengan animasi radar ping.
 - Tombol "Kembali Coba" dan "Beranda Utama".
-- Skema warna gradien navy-merah Kampus Non-Merdeka.
+- Skema warna gradien navy-merah Universitas Hasanuddin.
 - **Route uji** `/test-error/{kode}` tersedia di environment lokal (Sprint 12).
 - **Dashboard pengujian** di `/test-error/` menampilkan 6 kartu error dan panduan cara menguji.
 
@@ -316,16 +316,16 @@ Sistem menyediakan UI Prototipe statis/demo (`inclusive-demo.html`) yang mendemo
 
 ## 5. KESIMPULAN
 
-Melalui **16 sprint pengembangan Agile**, Sistem Informasi Tiket Bus Kampus Non-Merdeka telah berkembang dari aplikasi booking statis menjadi ekosistem transportasi digital yang lengkap, inklusif, dan terstandarisasi. Dengan penerapan:
+Melalui **16 sprint pengembangan Agile**, Sistem Informasi Tiket Bus Kampus Inclusive telah berkembang dari aplikasi booking statis menjadi ekosistem transportasi digital yang lengkap, inklusif, dan terstandarisasi. Dengan penerapan:
 
 - **Role-Based Access Control + UserMiddleware Isolator** yang ketat (4 peran berbeda dengan proteksi multi-tab tanpa kompromi).
 - **Mekanisme Simulasi Geofencing Ekstrem (Auto-Cancel 15 Detik)** yang dikemas cerdas dengan celah manual untuk **Penyelamatan Sopir (Driver Revive)**.
 - **Manajemen Armada & Histori Pelaporan Fisik** terpusat (Catatan harian pramudi vs. teknisi Maintenance).
 - **Real-Time Simulation** 13 armada dengan dual-route queue otomatis & live table sync.
 - **Notifikasi Bell** berbasis *Smart Read Hybrid Polling* yang membersihkan rekam jejak notifikasi dan memperlicin visualisasi pengguna secara efisien.
-- **Branding Institusional** yang konsisten dengan identitas visual Kampus Non-Merdeka.
+- **Branding Institusional** yang konsisten dengan identitas visual Universitas Hasanuddin.
 - **Error Handling** premium yang tetap informatif dan beridentitas (6 kode error).
 - **Aksesibilitas WCAG 2.1 Level AA** — inklusif untuk pengguna difabel, low-vision, bersinergi dengan sistem prioritas Login berbasis identitas akun khusus.
 - **Testing Infrastructure** — route `/test-error/*` dan proteksi penghapusan armada aktif.
 
-Sistem ini siap dioperasikan sebagai platform demonstrasi resmi layanan transportasi kampus Kampus Non-Merdeka yang modern, aman, inklusif, dan terdokumentasi dengan apik.
+Sistem ini siap dioperasikan sebagai platform demonstrasi resmi layanan transportasi kampus Universitas Hasanuddin yang modern, aman, inklusif, dan terdokumentasi dengan apik.

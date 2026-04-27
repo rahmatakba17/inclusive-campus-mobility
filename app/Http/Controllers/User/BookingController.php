@@ -128,12 +128,21 @@ class BookingController extends Controller
             );
         }
 
-        // [DEMO MODE] Pembatasan jam operasional (05:00–21:00 WITA) dinonaktifkan.
-        // Aktifkan kembali baris di bawah untuk production:
-        // $currentHour = (int) now()->setTimezone('Asia/Makassar')->format('H');
-        // if ($currentHour < 5 || $currentHour >= 21) {
-        //     return back()->with('error', 'Pemesanan hanya dapat dilakukan pada jam operasional bus (05:00 - 21:00 WITA).');
-        // }
+        // Validasi jadwal operasional spesifik tiap armada (Mendukung Shift Malam)
+        $currentTime = now()->format('H:i');
+        $validSchedule = false;
+        
+        if ($bus->departure_time < $bus->arrival_time) {
+            // Shift Normal (contoh: 05:00 - 21:00)
+            $validSchedule = ($currentTime >= $bus->departure_time && $currentTime <= $bus->arrival_time);
+        } else {
+            // Shift Malam lintas hari (contoh: 21:00 - 05:00)
+            $validSchedule = ($currentTime >= $bus->departure_time || $currentTime <= $bus->arrival_time);
+        }
+
+        if (!$validSchedule) {
+            return back()->with('error', "Pemesanan ditolak karena di luar jam operasional. Jadwal armada ini: {$bus->departure_time} – {$bus->arrival_time} WITA.");
+        }
 
         $bus = Bus::findOrFail($validated['bus_id']);
 

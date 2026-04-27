@@ -71,8 +71,8 @@ class SimulationController extends Controller
                     'user_booking_notes'   => isset($userActiveBookings[$bus->id]) ? $userActiveBookings[$bus->id]->first()->notes : null,
                     'driver_name'         => $bus->driver?->name ?? 'Tidak Ditugaskan',
                     'driver_id'           => $bus->driver_id,
-                    // Sopir yang login sedang mengemudi bus ini
-                    'current_user_is_driver' => $currentUserRole === 'sopir' && $currentUserId === $bus->driver_id,
+                    // Sopir yang login sedang mengemudi bus ini (Fix Strict Type Comparison)
+                    'current_user_is_driver' => $currentUserRole === 'sopir' && (int)$currentUserId === (int)$bus->driver_id,
                     // Apakah sopir assigned aktif (selalu true jika driver_id ada)
                     'driver_on_board'     => $bus->driver_id !== null,
                 ];

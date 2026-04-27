@@ -41,6 +41,11 @@ class BusController extends Controller
             $validated['image'] = $request->file('image')->store('buses', 'public');
         }
 
+        // Jika tidak ada sopir yang ditugaskan, paksa status menjadi inactive
+        if (empty($validated['driver_id'])) {
+            $validated['status'] = 'inactive';
+        }
+
         $bus = Bus::create($validated);
 
         if ($bus->status === 'maintenance' && $request->filled('maintenance_notes')) {
@@ -97,6 +102,11 @@ class BusController extends Controller
                 Storage::disk('public')->delete($bus->image);
             }
             $validated['image'] = $request->file('image')->store('buses', 'public');
+        }
+
+        // Jika tidak ada sopir yang ditugaskan, paksa status menjadi inactive
+        if (empty($validated['driver_id'])) {
+            $validated['status'] = 'inactive';
         }
 
         $bus->update($validated);

@@ -21,6 +21,20 @@
         </div>
         @endif
 
+        @if($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-2xl text-sm mb-8 flex flex-col gap-2 shadow-sm">
+            <div class="flex items-center gap-3 font-bold">
+                <i class="fas fa-exclamation-circle text-lg"></i>
+                Mohon periksa kembali isian Anda:
+            </div>
+            <ul class="list-disc list-inside ml-7">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="grid lg:grid-cols-3 gap-10">
 
             {{-- Kiri: Form & Info --}}
@@ -94,6 +108,19 @@
                     busId: {{ $bus->id }},
                     busStatus: 'standby',
                     busStatusLabel: 'Standby - Siap',
+                    nextStandbyBusId: null,
+                    nextStandbyBusName: '',
+                    
+                    priorityLockSeconds: 10,
+                    isPriorityLocked: true,
+                    justUnlocked: false,
+                    priorityLockTimer: null,
+                    get formatLockTime() {
+                        if (!this.isPriorityLocked) return '00:00';
+                        const m = Math.floor(this.priorityLockSeconds / 60);
+                        const s = this.priorityLockSeconds % 60;
+                        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                    },
                     get isBookingLocked() { return this.busStatus !== 'standby'; },
 
                     bukaQris() { 
@@ -107,6 +134,14 @@
                     toggleSeat(seat) {
                         if (this.isBookingLocked) return;
                         if (this.bookedSeats.includes(seat)) return;
+                        
+                        const prioritySeats = [1, 2, 3, 4];
+                        const isPrioritySeat = prioritySeats.includes(seat);
+                        if (isPrioritySeat && this.isPriorityLocked) {
+                            alert(`Kursi 1-4 dialokasikan khusus untuk penumpang berkebutuhan prioritas (lansia, ibu hamil, penyandang disabilitas). Kursi akan terbuka untuk umum dalam waktu ${this.formatLockTime} mendatang jika masih kosong.`);
+                            return;
+                        }
+
                         if (this.selectedSeats.includes(seat)) {
                             this.selectedSeats = [];
                         } else {
@@ -123,7 +158,16 @@
                                 var dbBus = (data.buses || []).find(function(b){ return b.id === self.busId; });
                                 if (!dbBus) return;
 
-                                // SATU-SATUNYA sumber kebenaran: DB trip_status
+                                // Sinkronkan dengan mesin simulasi peta agar otomatis terblokir saat bus melaju di peta
+                                if (typeof BusSimulation !== 'undefined') {
+                                    BusSimulation.init(data.buses);
+                                    var positions = BusSimulation.getAllPositions();
+                                    var simPos = positions.find(function(p) { return p.id === self.busId; });
+                                    if (simPos && dbBus.trip_status !== 'istirahat') {
+                                        dbBus.trip_status = simPos.trip_status; // override DB status dengan status simulasi
+                                    }
+                                }
+
                                 var finalStatus = dbBus.trip_status || 'standby';
                                 self.busStatus = finalStatus;
                                 var labels = {
@@ -137,11 +181,65 @@
                                 if (self.isBookingLocked && self.showQris) {
                                     self.showQris = false;
                                 }
-                            })
-                            .catch(function(){});
-                    }
-                 }"
-                 x-init="pollBusStatus(); setInterval(() => pollBusStatus(), 2000);">
+
+                                // Update rekomendasi bus standby terdekat (Cari bus berurutan selanjutnya)
+                                if (self.isBookingLocked) {
+                                    var buses = data.buses || [];
+                                    var currentIndex = buses.findIndex(function(b) { return b.id === self.busId; });
+                                    var nextBus = null;
+                                    
+                                    // Cari bus standby di urutan setelah bus ini
+                                    for (var i = currentIndex + 1; i < buses.length; i++) {
+                                        if (buses[i].trip_status === 'standby') {
+                                            nextBus = buses[i];
+                                            break;
+                                        }
+                                    }
+                                    
+                                    // Jika tidak ada bus standby setelahnya, cari dari awal daftar (loop back)
+                                    if (!nextBus) {
+                                        for (var i = 0; i < currentIndex; i++) {
+                                            if (buses[i].trip_status === 'standby') {
+                                                nextBus = buses[i];
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (nextBus) {
+                                        self.nextStandbyBusId = nextBus.id;
+                                        self.nextStandbyBusName = nextBus.name;
+                                    } else {
+                                        self.nextStandbyBusId = null;
+                                    }
+                                }
+                             })
+                             .catch(function(){});
+                     },
+                     
+                     init() {
+                         this.pollBusStatus();
+                         
+                         // Start countdown untuk kursi prioritas
+                         if (this.priorityLockSeconds > 0) {
+                             this.priorityLockTimer = setInterval(() => {
+                                 this.priorityLockSeconds--;
+                                 if (this.priorityLockSeconds <= 0) {
+                                     this.isPriorityLocked = false;
+                                     this.justUnlocked = true;
+                                     // Munculkan animasi transisi menjadi kursi UMUM selama 15 detik
+                                     setTimeout(() => { this.justUnlocked = false; }, 15000);
+                                     clearInterval(this.priorityLockTimer);
+                                 }
+                             }, 1000);
+                         } else {
+                             this.isPriorityLocked = false;
+                         }
+
+                         setInterval(() => { this.pollBusStatus(); }, 2000);
+                     }
+                  }"
+                  x-init="init();">
                  
                 {{-- OVERLAY REALTIME --}}
                 <div x-show="isBookingLocked" x-transition.duration.300ms x-cloak
@@ -153,12 +251,21 @@
                     <h2 class="text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-3 leading-none text-red-400">Bus Telah <br>Berangkat!</h2>
                     <p class="text-slate-300 text-sm mb-4 font-bold tracking-widest uppercase" x-text="'STATUS TERKINI: ' + busStatusLabel"></p>
                     <p class="text-slate-500 font-medium leading-relaxed max-w-sm mt-2 text-sm">
-                        Transaksi dihentikan otomatis karena armada terpilih sudah melaju dari terminal. Sistem menyarankan Anda untuk mengalihkan reservasi ke bus lain yang berstatus <strong class="text-emerald-400">Standby</strong>.
+                        Transaksi dihentikan sementara. Anda dapat menunggu di halaman ini hingga armada kembali mengantri di terminal, atau mengalihkan pesanan ke bus lain.
                     </p>
-                    <a href="{{ route('guest.buses') }}"
-                       class="mt-10 inline-flex items-center gap-3 bg-white text-slate-900 font-black text-xs uppercase tracking-[0.2em] py-4 px-8 rounded-2xl hover:bg-slate-100 hover:scale-105 transition-all shadow-xl shadow-white/10">
-                        <i class="fas fa-arrow-right"></i> Alihkan ke Bus Lain
-                    </a>
+                    
+                    <div class="mt-8 flex flex-col gap-3 w-full max-w-xs">
+                        <template x-if="nextStandbyBusId">
+                            <a :href="'/guest/booking/' + nextStandbyBusId"
+                               class="w-full inline-flex items-center justify-center gap-3 bg-emerald-500 text-white font-black text-xs uppercase tracking-[0.2em] py-4 px-6 rounded-2xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
+                                <i class="fas fa-arrow-right"></i> Pindah ke <span x-text="nextStandbyBusName"></span>
+                            </a>
+                        </template>
+                        <a href="{{ route('guest.buses') }}"
+                           class="w-full inline-flex items-center justify-center gap-3 bg-white/10 text-white font-black text-xs uppercase tracking-[0.2em] py-4 px-6 rounded-2xl hover:bg-white/20 transition-all">
+                            <i class="fas fa-list"></i> Lihat Semua Armada
+                        </a>
+                    </div>
                 </div>
 
                 {{-- TAHAP 1: INFO HARGA & QRIS --}}
@@ -193,6 +300,12 @@
                         <p class="mt-6 text-xs text-gray-400 font-bold flex items-center justify-center gap-2">
                             <i class="fas fa-lock text-green-500"></i> Pembayaran Terproteksi & Instan
                         </p>
+
+                        <div class="mt-8 text-center border-t border-gray-100 pt-6">
+                            <a href="{{ route('guest.buses') }}" class="text-sm font-bold text-gray-400 hover:text-[#1e3a5f] transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Batal & Pilih Armada selanjutnya
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -234,7 +347,7 @@
                 {{-- TAHAP 2: DENAH KURSI --}}
                 <div x-show="tahap === 2" x-transition.duration.500ms x-cloak>
                     <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 mb-8">
-                        <div class="flex justify-between items-center mb-10 border-b border-gray-50 pb-6">
+                        <div class="flex justify-between items-center mb-6 border-b border-gray-50 pb-6">
                             <div>
                                 <h2 class="text-xl font-black text-gray-900">Denah Kursi Digital</h2>
                                 <p class="text-sm text-gray-500 font-medium">Silakan tentukan 1 tempat duduk pilihan Anda.</p>
@@ -242,6 +355,20 @@
                             <div class="bg-orange-50 text-orange-500 px-5 py-2.5 rounded-2xl text-xs font-black border border-orange-100 flex items-center gap-2">
                                 <i class="fas fa-ticket-alt"></i>
                                 Pilihan: <span x-text="selectedSeats.length ? '#' + selectedSeats[0] : '-'"></span>
+                            </div>
+                        </div>
+
+                        {{-- Priority Lock Timer Badge --}}
+                        <div x-show="isPriorityLocked" x-cloak x-transition class="mb-5 bg-orange-50 border border-orange-200 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between shadow-sm gap-3">
+                            <div class="flex items-start sm:items-center gap-3">
+                                <i class="fas fa-lock text-orange-500 mt-0.5 sm:mt-0 text-lg"></i>
+                                <div>
+                                    <span class="text-xs font-black text-orange-800 uppercase tracking-wide block">Kursi 1-4 Terkunci untuk Prioritas</span>
+                                    <span class="text-[10px] text-orange-600/80 font-medium leading-tight">Terbuka untuk umum dalam waktu yang tertera.</span>
+                                </div>
+                            </div>
+                            <div class="bg-orange-100 text-orange-800 font-mono font-black text-sm px-3 py-1.5 rounded-lg flex items-center justify-center gap-2 border border-orange-200 shadow-inner">
+                                <i class="fas fa-clock text-[11px]"></i> <span x-text="formatLockTime"></span>
                             </div>
                         </div>
 
@@ -267,19 +394,48 @@
 
                                 <div class="grid grid-cols-4 gap-3 sm:gap-4 gap-y-6 sm:gap-y-8 relative">
                                     @for($i = 1; $i <= 16; $i++)
+                                        @php $isPriority = $i <= 4; @endphp
                                         <div class="{{ $i % 4 == 2 ? 'mr-6 sm:mr-8' : '' }} flex justify-center">
                                             <button type="button"
                                                     @click="toggleSeat({{ $i }})"
                                                     :disabled="bookedSeats.includes({{ $i }})"
                                                     :class="{
                                                         'bg-slate-100 text-slate-300 cursor-not-allowed border-transparent opacity-60': bookedSeats.includes({{ $i }}),
-                                                        'bg-white text-slate-500 hover:border-[#c41e3a] hover:text-[#c41e3a] border-2 border-slate-200 shadow-sm group': !bookedSeats.includes({{ $i }}) && !selectedSeats.includes({{ $i }}),
+                                                        'bg-white text-slate-500 hover:border-[#c41e3a] hover:text-[#c41e3a] border-2 border-slate-200 shadow-sm group': !bookedSeats.includes({{ $i }}) && !selectedSeats.includes({{ $i }}) && (!{{ $isPriority ? 'true' : 'false' }} || !isPriorityLocked),
+                                                        'bg-[#1e3a5f]/5 text-[#1e3a5f] hover:border-[#1e3a5f] hover:bg-[#1e3a5f]/10 border-2 border-[#1e3a5f]/30 shadow-sm group': !bookedSeats.includes({{ $i }}) && {{ $isPriority ? 'true' : 'false' }} && isPriorityLocked && !selectedSeats.includes({{ $i }}),
                                                         'bg-[#c41e3a] text-white border-4 border-white shadow-xl scale-110 z-10 ring-4 ring-[#c41e3a]/20': selectedSeats.includes({{ $i }})
                                                     }"
                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden group">
                                                 <i class="fas fa-couch text-xs sm:text-sm mb-1 group-hover:scale-110 transition-transform"></i>
                                                 <span class="font-black text-[9px] sm:text-[10px] tracking-tighter">{{ $i }}</span>
                                                 
+                                                @if($isPriority)
+                                                    {{-- Ikon Kursi Roda Reguler (Muncul selama masih terkunci) --}}
+                                                    <i x-show="isPriorityLocked && !justUnlocked" class="fas fa-wheelchair text-[6px] absolute top-1.5 right-1.5 opacity-60 transition-opacity" aria-hidden="true"></i>
+
+                                                    {{-- Ikon Umum (Muncul 15 detik setelah unlock) --}}
+                                                    <i x-show="!isPriorityLocked && justUnlocked && !bookedSeats.includes({{ $i }})" x-transition.opacity.duration.500ms class="fas fa-users text-[8px] absolute top-1.5 right-1.5 text-emerald-600 animate-bounce" aria-hidden="true"></i>
+
+                                                    {{-- Overlay Kunci Animatif yang berisi Timer Detik --}}
+                                                    <div x-show="!bookedSeats.includes({{ $i }}) && isPriorityLocked" x-transition.opacity.duration.300ms 
+                                                         class="absolute inset-0 bg-slate-900/90 backdrop-blur-[2px] flex flex-col items-center justify-center rounded-2xl z-20 cursor-not-allowed border border-slate-700">
+                                                        <i class="fas fa-wheelchair text-[#ffd700] text-[10px] sm:text-xs mb-1 animate-pulse" aria-hidden="true"></i>
+                                                        <div class="flex items-center gap-1 font-mono text-[8px] sm:text-[9px] font-black text-rose-200 bg-rose-500/20 px-1 py-0.5 rounded border border-rose-500/30">
+                                                            <i class="fas fa-lock text-[7px] text-rose-400"></i>
+                                                            <span x-text="priorityLockSeconds + 's'"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- Overlay Status Berubah Untuk Umum (Animasi 15 detik) --}}
+                                                    <div x-show="!bookedSeats.includes({{ $i }}) && justUnlocked" x-transition.opacity.duration.500ms
+                                                         class="absolute inset-0 flex flex-col items-center justify-center rounded-2xl z-20 bg-emerald-500/10 border-2 border-emerald-400 animate-pulse pointer-events-none">
+                                                         <div class="bg-emerald-50/90 backdrop-blur-sm rounded-full p-1 shadow-sm mb-0.5">
+                                                            <i class="fas fa-users text-emerald-600 text-[10px]"></i>
+                                                         </div>
+                                                         <span class="text-[5px] font-black uppercase tracking-widest text-emerald-700 bg-emerald-100/80 px-1 rounded-sm">Umum</span>
+                                                    </div>
+                                                @endif
+
                                                 {{-- Indicator for selected --}}
                                                 <div x-show="selectedSeats.includes({{ $i }})"
                                                      class="absolute top-0 right-0 w-4 h-4 bg-[#ffd700] rounded-bl-xl shadow-sm"></div>
@@ -348,7 +504,7 @@
                                       placeholder="Contoh: Titik jemput Halte Teknik Gowa..."></textarea>
                         </div>
 
-                        <button @click="document.getElementById('guestForm').submit()"
+                        <button form="guestForm" type="submit"
                                 class="w-full bg-[#1e3a5f] hover:bg-slate-900 text-white font-black py-5 px-8 rounded-2xl shadow-2xl transition-all flex items-center justify-center gap-3 transform hover:-translate-y-1">
                             <i class="fas fa-check-circle text-xl"></i>
                             Konfirmasi & Selesaikan Pesanan
@@ -357,7 +513,7 @@
 
                     <div class="mt-12 text-center">
                         <a href="{{ route('guest.buses') }}" class="text-sm font-bold text-gray-400 hover:text-[#1e3a5f] transition-colors">
-                            <i class="fas fa-arrow-left mr-2"></i>Batal & Pilih Armada Lain
+                            <i class="fas fa-arrow-left mr-2"></i>Batal & Pilih Armada selanjutnya
                         </a>
                     </div>
                 </div>

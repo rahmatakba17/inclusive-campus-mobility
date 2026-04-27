@@ -189,13 +189,20 @@
                         const isGoingToGowa = ['go', 'queue', 'rest_tamal'].includes(pos.direction);
                         newGroups[pos.id] = isGoingToGowa ? 'perintis_to_gowa' : 'gowa_to_perintis';
 
-                        // Urutkan murni berdasarkan ETA (waktu tunggu paling sedikit di awal)
-                        // Kalikan 100 untuk memberikan ruang bagi index sebagai tie-breaker
-                        newOrders[pos.id]      = (pos.eta_minutes * 100) + idx;
-                        newETAs[pos.id]        = pos.eta_minutes;
                         const dbStat           = dbStatusMap[pos.id];
                         // [SIMULATION FIX] Hanya hormati status 'istirahat' dari DB, selebihnya percaya pada mesin simulasi map
-                        newStatus[pos.id]      = (dbStat === 'istirahat') ? 'istirahat' : pos.trip_status;
+                        const finalStatus      = (dbStat === 'istirahat') ? 'istirahat' : pos.trip_status;
+                        
+                        // Prioritaskan bus yang TERSEDIA (standby) di sebelah kiri
+                        let baseScore = 0;
+                        if (finalStatus === 'standby') baseScore = 0;
+                        else if (finalStatus === 'jalan') baseScore = 10000;
+                        else baseScore = 20000; // istirahat
+
+                        // Urutkan berdasarkan ketersediaan, lalu ETA terdekat
+                        newOrders[pos.id]      = baseScore + (pos.eta_minutes * 100) + idx;
+                        newETAs[pos.id]        = pos.eta_minutes;
+                        newStatus[pos.id]      = finalStatus;
                         newDirections[pos.id]  = pos.direction;
                     });
                     

@@ -3,19 +3,19 @@ describe('Pencarian Rute (Sesuai Rencana Pengujian Bus Kampus)', () => {
     // 1. Buka halaman utama
     cy.visit('/');
 
-    // 2. Sistem menampilkan antarmuka pencarian rute
-    // Memastikan elemen form pencarian ada di halaman
-    cy.get('form').should('be.visible');
+    // 2. Sistem menampilkan antarmuka pencarian rute (via tombol CTA ke halaman Guest Booking)
+    cy.contains('Pesanan Akses Tamu', { matchCase: false }).should('be.visible').click();
+
+    // 3. Pastikan dialihkan ke halaman guest buses
+    cy.url().should('include', '/guest/buses');
+
+    // 4. Pastikan elemen slider armada muncul di halaman guest buses
+    cy.get('h1').contains('Pilih Armada Perjalanan', { matchCase: false }).should('be.visible');
     
-    // Asumsi: form memiliki input asal atau tujuan dan tombol submit
-    cy.get('button[type="submit"]').should('exist');
-    
-    // (Opsional) Mengisi form pencarian jika ID input diketahui
-    // cy.get('select[name="origin"]').select('Makassar');
-    // cy.get('select[name="destination"]').select('Gowa');
-    // cy.get('input[type="date"]').type('2026-05-01');
-    // cy.get('button[type="submit"]').click();
-    
+    // 5. Pastikan komponen rute (slider) sudah dimuat
+    cy.contains('Rute Perintis → Gowa', { matchCase: false }).should('be.visible');
+    cy.contains('Rute Gowa → Perintis', { matchCase: false }).should('be.visible');
+
     // Memastikan UI halaman dirender dengan sukses
     cy.title().should('not.be.empty');
   });

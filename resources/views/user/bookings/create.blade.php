@@ -52,6 +52,8 @@
             busId: {{ $bus->id }},
             busStatus: '{{ $bus->trip_status ?? "standby" }}',
             busStatusLabel: '{{ $bus->trip_status === "jalan" ? "Sedang Berjalan - Pemesanan Ditutup" : ($bus->trip_status === "istirahat" ? "Istirahat - Pemesanan Ditutup" : "Standby - Siap Menerima Penumpang") }}',
+            nextStandbyBusId: null,
+            nextStandbyBusName: '',
 
             priorityLockSeconds: {{ $lockRemaining }},
             isPriorityLocked: {{ $lockRemaining > 0 ? 'true' : 'false' }},
@@ -179,7 +181,16 @@
                         var thisBus = (data.buses || []).find(function(b){ return b.id === self.busId; });
                         if (!thisBus) return;
 
-                        // SATU-SATUNYA sumber kebenaran: DB trip_status
+                        // Sinkronkan dengan mesin simulasi peta agar otomatis terblokir saat bus melaju di peta
+                        if (typeof BusSimulation !== 'undefined') {
+                            BusSimulation.init(data.buses);
+                            var positions = BusSimulation.getAllPositions();
+                            var simPos = positions.find(function(p) { return p.id === self.busId; });
+                            if (simPos && thisBus.trip_status !== 'istirahat') {
+                                thisBus.trip_status = simPos.trip_status; // override DB status dengan status simulasi
+                            }
+                        }
+
                         var dbStatus = thisBus.trip_status || 'standby';
                         self.busStatus = dbStatus;
 
@@ -193,6 +204,38 @@
                         // Reset step jika bus locked dan belum masuk flow pembayaran aktif
                         if (self.isBookingLocked && self.tahap === 1 && !self.paymentMethod) {
                             self.etollScanned = false;
+                        }
+
+                        // Update rekomendasi bus standby terdekat (Cari bus berurutan selanjutnya)
+                        if (self.isBookingLocked) {
+                            var buses = data.buses || [];
+                            var currentIndex = buses.findIndex(function(b) { return b.id === self.busId; });
+                            var nextBus = null;
+                            
+                            // Cari bus standby di urutan setelah bus ini
+                            for (var i = currentIndex + 1; i < buses.length; i++) {
+                                if (buses[i].trip_status === 'standby') {
+                                    nextBus = buses[i];
+                                    break;
+                                }
+                            }
+                            
+                            // Jika tidak ada bus standby setelahnya, cari dari awal daftar (loop back)
+                            if (!nextBus) {
+                                for (var i = 0; i < currentIndex; i++) {
+                                    if (buses[i].trip_status === 'standby') {
+                                        nextBus = buses[i];
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (nextBus) {
+                                self.nextStandbyBusId = nextBus.id;
+                                self.nextStandbyBusName = nextBus.name;
+                            } else {
+                                self.nextStandbyBusId = null;
+                            }
                         }
                     })
                     .catch(function(){});
@@ -332,13 +375,22 @@
                 </div>
                 <h2 class="text-xl font-black uppercase tracking-tighter mb-2">Pemesanan Ditutup</h2>
                 <p class="text-slate-300 text-sm mb-1 font-medium" x-text="'Status Bus: ' + busStatusLabel"></p>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-xs">
-                    Bus ini tidak lagi menerima pemesanan karena sudah meninggalkan terminal. Pantau peta realtime dan pesan saat bus kembali ke status <strong class="text-yellow-300">Standby</strong>.
+                <p class="text-slate-500 text-xs leading-relaxed max-w-xs mt-2">
+                    Transaksi dihentikan sementara. Anda dapat menunggu di halaman ini hingga armada kembali mengantri di terminal, atau mengalihkan pesanan ke bus lain.
                 </p>
-                <a href="{{ route('user.buses') }}"
-                   class="mt-6 inline-flex items-center gap-2 bg-white text-slate-900 font-black text-xs uppercase tracking-widest py-3 px-6 rounded-xl hover:bg-slate-100 transition-all">
-                    <i class="fas fa-arrow-left"></i> Pilih Bus Lain
-                </a>
+
+                <div class="mt-6 flex flex-col gap-3 w-full max-w-xs">
+                    <template x-if="nextStandbyBusId">
+                        <a :href="'/user/booking/' + nextStandbyBusId"
+                           class="w-full inline-flex items-center justify-center gap-2 bg-emerald-500 text-white font-black text-xs uppercase tracking-widest py-3 px-6 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20">
+                            <i class="fas fa-arrow-right"></i> Pindah ke <span x-text="nextStandbyBusName"></span>
+                        </a>
+                    </template>
+                    <a href="{{ route('user.buses') }}"
+                       class="w-full inline-flex items-center justify-center gap-2 bg-white/10 text-white font-black text-xs uppercase tracking-widest py-3 px-6 rounded-xl hover:bg-white/20 transition-all">
+                        <i class="fas fa-list"></i> Lihat Semua Armada
+                    </a>
+                </div>
             </div>
 
             {{-- ===== TAHAP 1: PILIH METODE PEMBAYARAN ===== --}}

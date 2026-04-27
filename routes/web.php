@@ -50,10 +50,10 @@ Route::prefix('api/simulation')->name('api.simulation.')->group(function () {
 Route::get('/api/admin/tips', [SimulationController::class, 'adminTips'])->name('api.admin.tips');
 
 // ===== GUEST BOOKING ROUTES (NO LOGIN) =====
-Route::prefix('guest')->name('guest.')->middleware('throttle:1000,1')->group(function () {
+Route::prefix('guest')->name('guest.')->group(function () {
     Route::get('/buses', [\App\Http\Controllers\GuestBookingController::class, 'buses'])->name('buses');
     Route::get('/booking/{bus}', [\App\Http\Controllers\GuestBookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking', [\App\Http\Controllers\GuestBookingController::class, 'store'])->middleware('throttle:1000,1')->name('booking.store');
+    Route::post('/booking', [\App\Http\Controllers\GuestBookingController::class, 'store'])->name('booking.store');
     Route::get('/booking/success/{code}', [\App\Http\Controllers\GuestBookingController::class, 'success'])->name('booking.success');
 });
 

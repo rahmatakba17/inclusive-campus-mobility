@@ -179,7 +179,7 @@ class DashboardController extends Controller
     public function boardPassenger(\App\Models\Booking $booking)
     {
         $driver = auth()->user();
-        if (!$driver->bus || $booking->bus_id !== $driver->bus->id) {
+        if (!$driver->bus || (int)$booking->bus_id !== (int)$driver->bus->id) {
             return response()->json(['success' => false, 'message' => 'Akses ditolak.'], 403);
         }
 

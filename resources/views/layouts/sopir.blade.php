@@ -89,7 +89,7 @@
                     </div>
                     <div>
                         <p class="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em] leading-none">Panel Armada</p>
-                        <p class="text-sm font-black text-white leading-tight tracking-tight">Bus Kampus Non-Merdeka</p>
+                        <p class="text-sm font-black text-white leading-tight tracking-tight">{{ isset($bus) ? $bus->name : 'Bus Kampus Non-Merdeka' }}</p>
                     </div>
                 </div>
 
@@ -98,7 +98,7 @@
                     {{-- Driver name --}}
                     <div class="hidden sm:flex items-center gap-2 glass px-3 py-1.5 rounded-xl">
                         <div class="w-6 h-6 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                            <i class="fas fa-steering-wheel text-amber-400 text-[10px]"></i>
+                            <span class="text-amber-400 font-black text-[12px] uppercase">{{ substr(auth()->user()->name, 0, 1) }}</span>
                         </div>
                         <span class="text-xs font-bold text-slate-300">{{ auth()->user()->name }}</span>
                     </div>

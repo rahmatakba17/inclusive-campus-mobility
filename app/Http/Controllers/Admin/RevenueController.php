@@ -14,7 +14,7 @@ class RevenueController extends Controller
     {
         $period = $request->get('period', 'yearly');
 
-        $query = Booking::whereIn('status', ['confirmed']);
+        $query = Booking::whereIn('status', ['confirmed', 'cancelled']);
         $chartTitle = "Grafik Pemasukan";
 
         if ($period === 'yearly') {
@@ -136,7 +136,7 @@ class RevenueController extends Controller
     public function print(Request $request)
     {
         $period = $request->get('period', 'yearly');
-        $query = Booking::whereIn('status', ['confirmed']);
+        $query = Booking::whereIn('status', ['confirmed', 'cancelled']);
         $periodeLabel = "Semua Waktu";
 
         if ($period === 'yearly') {

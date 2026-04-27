@@ -1,4 +1,4 @@
-# 🔑 Daftar Akun Simulasi — Bus Kampus Non-Merdeka
+# 🔑 Daftar Akun Simulasi — Bus Kampus Inclusive
 
 > **Semua akun menggunakan sandi yang sama:** `password`  
 > **Versi Sistem:** 3.2 — April 2026
@@ -17,19 +17,19 @@
 
 | No | Nama | Email | Sandi | Role | Bus |
 |----|------|-------|-------|------|-----|
-| 01 | Hasan Basri | `sopir01@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 01, Laporan Harian |
-| 02 | Mukhtar Lede | `sopir02@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 02, Laporan Harian |
-| 03 | Syamsul Hadi | `sopir03@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 03 |
-| 04 | Ridwan Karim | `sopir04@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 04 |
-| 05 | Ambo Dalle | `sopir05@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 05 |
-| 06 | Nurdin Sialana | `sopir06@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 06 |
-| 07 | Saharuddin | `sopir07@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 07 |
-| 08 | Andi Mappa | `sopir08@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 08 |
-| 09 | Baharuddin | `sopir09@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 09 |
-| 10 | Suardi Usman | `sopir10@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 10 |
-| 11 | Junaidi Rahman | `sopir11@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 11 |
-| 12 | Kamaruddin | `sopir12@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 12 |
-| 13 | Arifin Dg. Nai | `sopir13@unhas.ac.id` | `password` | Sopir | Bus Kampus Non-Merdeka 13 |
+| 01 | Hasan Basri | `sopir01@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 01, Laporan Harian |
+| 02 | Mukhtar Lede | `sopir02@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 02, Laporan Harian |
+| 03 | Syamsul Hadi | `sopir03@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 03 |
+| 04 | Ridwan Karim | `sopir04@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 04 |
+| 05 | Ambo Dalle | `sopir05@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 05 |
+| 06 | Nurdin Sialana | `sopir06@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 06 |
+| 07 | Saharuddin | `sopir07@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 07 |
+| 08 | Andi Mappa | `sopir08@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 08 |
+| 09 | Baharuddin | `sopir09@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 09 |
+| 10 | Suardi Usman | `sopir10@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 10 |
+| 11 | Junaidi Rahman | `sopir11@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 11 |
+| 12 | Kamaruddin | `sopir12@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 12 |
+| 13 | Arifin Dg. Nai | `sopir13@unhas.ac.id` | `password` | Sopir | Bus Kampus Inclusive 13 |
 
 ---
 
@@ -64,7 +64,7 @@
 
 | Halaman | URL | Catatan |
 |---------|-----|---------|
-| Beranda (Landing Page) | `https://bus-inclusive.my.id/` | Publik, Logo Kampus Non-Merdeka |
+| Beranda (Landing Page) | `https://bus-inclusive.my.id/` | Publik, Logo Bus Kampus |
 | Peta Real-Time | `https://bus-inclusive.my.id/map` | Publik, 13 armada live |
 | Login | `https://bus-inclusive.my.id/login` | Semua peran |
 | Pesan sebagai Tamu | `https://bus-inclusive.my.id/guest/buses` | Tanpa login |
@@ -116,12 +116,12 @@
 - Klik 🔔 notifikasi → tampil booking pending terbaru secara real-time.
 
 ### 5. Test **Branding & Error Pages**
-- Buka URL acak, misal `https://bus-inclusive.my.id/test404` → Error page tampil dengan **Logo Kampus Non-Merdeka** dan desain premium.
-- Cek semua sidebar Admin, User, dan Sopir → Logo Kampus Non-Merdeka dalam lingkaran putih elegan.
-- Cek halaman **Peta** (`/map`) → Logo Kampus Non-Merdeka di topbar kiri.
+- Buka URL acak, misal `https://bus-inclusive.my.id/test404` → Error page tampil dengan **Logo Bus Kampus** dan desain premium.
+- Cek semua sidebar Admin, User, dan Sopir → Logo Bus Kampus dalam lingkaran putih elegan.
+- Cek halaman **Peta** (`/map`) → Logo Bus Kampus di topbar kiri.
 
 ### 6. Test **Peta Real-Time & Auto-Finish** (Sopir)
-- Login sopir08 (`sopir08@unhas.ac.id`) → Dashboard sopir tampil dengan Logo Kampus Non-Merdeka di navbar.
+- Login sopir08 (`sopir08@unhas.ac.id`) → Dashboard sopir tampil dengan Logo Bus Kampus di navbar.
 - Klik **Mulai Perjalanan** → status bus berubah ke "Jalan".
 - Buka peta `/map` di tab lain → pantau pergerakan bus secara live.
 - Saat bus tiba di terminal → muncul alert **"Tiba di Tujuan"** HANYA 1 KALI (tidak berulang).

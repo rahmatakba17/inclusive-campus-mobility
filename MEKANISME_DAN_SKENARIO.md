@@ -1,6 +1,6 @@
-# Mekanisme dan Skenario Sistem Bus Kampus Non-Merdeka (Versi 3.2)
+# Mekanisme dan Skenario Sistem Bus Kampus Inclusive (Versi 3.2)
 
-Dokumen ini merangkum seluruh kerangka logika, mekanisme kerja arsitektur, dan skenario penggunaan yang ada di dalam aplikasi **Bus Kampus Terintegrasi Kampus Non-Merdeka**. Aplikasi ini telah bertransformasi sepenuhnya memfasilitasi kebutuhan transportasi harian menggunakan telemetri *real-time* dan pelacakan asinkron multi-kategori serta sistem pelaporan inspeksi fisik yang mumpuni.
+Dokumen ini merangkum seluruh kerangka logika, mekanisme kerja arsitektur, dan skenario penggunaan yang ada di dalam aplikasi **Bus Kampus Terintegrasi Universitas Hasanuddin**. Aplikasi ini telah bertransformasi sepenuhnya memfasilitasi kebutuhan transportasi harian menggunakan telemetri *real-time* dan pelacakan asinkron multi-kategori serta sistem pelaporan inspeksi fisik yang mumpuni.
 
 ---
 
@@ -36,7 +36,7 @@ Sistem ini ditopang oleh beberapa mekanisme "di balik layar" untuk menjamin oper
 ### Skenario 1. Reservasi Reguler Sivitas Akademika (Protokol Baku)
 **Konteks:** Seorang mahasiswa jurusan Teknik berada di Tamalanrea dan ingin menuju kampus Teknik di Gowa, tetapi halte terlalu jauh dari posisinya saat ini dan ia belum siap naik bus sekarang, ia butuh kursi kosong terjadwal.
 **Alur Kerja:**
-1. Mahasiswa mengautentikasi (Log-in) menggunakan `email@kampus-non-merdeka.ac.id` ke dalam sistem.
+1. Mahasiswa mengautentikasi (Log-in) menggunakan `email@unhas.ac.id` ke dalam sistem.
 2. Lewat menu **Daftar Bus**, ia melihat telemetri ketersediaan bus beserta parameter kapasitas (misal: Sisa Kursi 15/20).
 3. Ia memilih bus terdekat yang berstatus `Standby`.
 4. Sistem memverifikasi limitasi dan menukarkan kupon kursi untuk dikonversi menjadi sebuah tiket barcode **(E-Ticket)** seketika ke dalam profil pengguna.
@@ -45,7 +45,7 @@ Sistem ini ditopang oleh beberapa mekanisme "di balik layar" untuk menjamin oper
 7. **Penyelamatan Sopir (Driver Override):** Jika penumpang tiba secara fisik pada detik-detik saat sudah di-*cancel*, Sopir dapat menekan tombol hijau bertuliskan **"Hadir (<i class=\"fas fa-check\"></i>)"** pada daftar Manifest Dashboard Sopir untuk mengesampingkan sistem, memulihkan (*revive*) tiket kembali menjadi aktif dan permanen.
 
 ### Skenario 2. Akses Insidental Masyarakat Eksternal (Guest Booking)
-**Konteks:** Suatu orang tua wali mahasiswa sedang berada di Kampus Non-Merdeka tanpa menginstall aplikasi penuh maupun login sistem (Non-Sivitas), lalu ada bus singgah dan ingin segera naik agar tidak diusir sekuriti tanpa kebingungan membuat akun panjang lebar.
+**Konteks:** Suatu orang tua wali mahasiswa sedang berada di Universitas Hasanuddin tanpa menginstall aplikasi penuh maupun login sistem (Non-Sivitas), lalu ada bus singgah dan ingin segera naik agar tidak diusir sekuriti tanpa kebingungan membuat akun panjang lebar.
 **Alur Kerja:**
 1. Wali/Tamu menelusuri pranala singkat `guest/buses` atau menggunakan Menu Cepat pada beranda.
 2. Memasukkan Nama Perwakilan saja sebagai pendaftar instan (*walk-in user*).

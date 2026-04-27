@@ -73,7 +73,7 @@ class BusPollingController extends Controller
                 ) AS booked_seats
             FROM buses b
             LEFT JOIN users u ON u.id = b.driver_id
-            WHERE b.status = 'active'
+            WHERE b.status = 'active' AND b.driver_id IS NOT NULL
             ORDER BY b.bus_number ASC
         ");
 

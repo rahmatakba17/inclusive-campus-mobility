@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Modul Skenario Simulasi - Bus Kampus Non-Merdeka</title>
+  <title>Modul Skenario Simulasi - Bus Kampus Inclusive</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -212,11 +212,11 @@
   <div class="container">
     <div class="header">
       <div class="header-logo-wrap">
-        <img src="http://localhost:8181/images/logo_kampus_non_merdeka.png" alt="Logo Kampus Non-Merdeka"
+        <img src="https://bus-inclusive.my.id/images/logo_kampus_non_merdeka.png" alt="Logo Bus Kampus"
              onerror="this.style.display='none'; this.parentElement.innerHTML='🏛️'">
       </div>
       <h1>Modul Skenario Simulasi</h1>
-      <p>Dokumentasi Lengkap Alur Sistem Tiket &amp; Pelacakan Real-Time Bus Kampus Non-Merdeka</p>
+      <p>Dokumentasi Lengkap Alur Sistem Tiket &amp; Pelacakan Real-Time Bus Kampus Inclusive</p>
       <div class="version">Versi 3.2 — April 2026 &nbsp;|&nbsp; 11 Skenario Lengkap</div>
     </div>
 
@@ -249,7 +249,7 @@
         <ol class="step-list">
           <li class="step-item">
             <div class="step-content">
-              <strong>Login Akun:</strong> Akses <code>/login</code> dan masuk menggunakan kredensial Civitas (contoh: <code>riska@kampus-non-merdeka.ac.id</code> / <code>password</code>). Sidebar menampilkan Logo Kampus Non-Merdeka dalam lingkaran putih.
+              <strong>Login Akun:</strong> Akses <code>/login</code> dan masuk menggunakan kredensial Civitas (contoh: <code>riska@unhas.ac.id</code> / <code>password</code>). Sidebar menampilkan Logo Bus Kampus dalam lingkaran putih.
             </div>
           </li>
           <li class="step-item">
@@ -385,7 +385,7 @@
         <ol class="step-list">
           <li class="step-item">
             <div class="step-content">
-              <strong>Login Sopir:</strong> Masuk sebagai <code>sopir08@kampus-non-merdeka.ac.id</code> / <code>password</code>. Navbar menampilkan Logo Kampus Non-Merdeka. Panel menampilkan ID bus dan rute hari ini.
+              <strong>Login Sopir:</strong> Masuk sebagai <code>sopir08@unhas.ac.id</code> / <code>password</code>. Navbar menampilkan Logo Bus Kampus. Panel menampilkan ID bus dan rute hari ini.
             </div>
           </li>
           <li class="step-item">
@@ -423,7 +423,7 @@
         <ol class="step-list">
           <li class="step-item">
             <div class="step-content">
-              <strong>Akses Peta Publik:</strong> Buka <code>http://localhost:8181/map</code> (tanpa login). Logo Kampus Non-Merdeka tampil di topbar kiri.
+              <strong>Akses Peta Publik:</strong> Buka <code>https://bus-inclusive.my.id/map</code> (tanpa login). Logo Bus Kampus tampil di topbar kiri.
             </div>
           </li>
           <li class="step-item">
@@ -456,7 +456,7 @@
         <ol class="step-list">
           <li class="step-item">
             <div class="step-content">
-              <strong>Akses Menu Pelaporan:</strong> Login sebagai <code>admin@kampus-non-merdeka.ac.id</code> → menu <strong>Laporan Pemasukan</strong> di sidebar kiri.
+              <strong>Akses Menu Pelaporan:</strong> Login sebagai <code>admin@unhas.ac.id</code> → menu <strong>Laporan Pemasukan</strong> di sidebar kiri.
             </div>
           </li>
           <li class="step-item">
@@ -581,7 +581,7 @@
         <ol class="step-list">
           <li class="step-item">
             <div class="step-content">
-              <strong>Buka Dashboard Uji:</strong> Akses <code>http://localhost:8181/test-error/</code>. Dashboard menampilkan 6 kartu error berwarna berbeda (tersedia hanya di <code>APP_ENV=local</code>).
+              <strong>Buka Dashboard Uji:</strong> Akses <code>https://bus-inclusive.my.id/test-error/</code>. Dashboard menampilkan 6 kartu error berwarna berbeda (tersedia hanya di <code>APP_ENV=local</code>).
             </div>
           </li>
           <li class="step-item">
@@ -599,7 +599,7 @@
           </li>
           <li class="step-item">
             <div class="step-content">
-              <strong>Verifikasi Tampilan:</strong> Setiap halaman error harus menampilkan: Logo Kampus Non-Merdeka melayang dengan animasi ping, kode error besar (H1), pesan deskriptif, tombol <strong>Kembali Coba</strong> dan <strong>Beranda Utama</strong>.
+              <strong>Verifikasi Tampilan:</strong> Setiap halaman error harus menampilkan: Logo Bus Kampus melayang dengan animasi ping, kode error besar (H1), pesan deskriptif, tombol <strong>Kembali Coba</strong> dan <strong>Beranda Utama</strong>.
             </div>
           </li>
           <li class="step-item">
@@ -614,7 +614,7 @@
           </li>
           <li class="step-item">
             <div class="step-content">
-              <strong>Error 500 (Butuh APP_DEBUG=false):</strong> Edit <code>.env</code>: set <code>APP_DEBUG=false</code> → jalankan <code>php artisan config:clear</code> → buka <code>/test-error/500</code>. Halaman 500 kustom Kampus Non-Merdeka muncul (bukan stack trace Laravel).
+              <strong>Error 500 (Butuh APP_DEBUG=false):</strong> Edit <code>.env</code>: set <code>APP_DEBUG=false</code> → jalankan <code>php artisan config:clear</code> → buka <code>/test-error/500</code>. Halaman 500 kustom Universitas Hasanuddin muncul (bukan stack trace Laravel).
             </div>
           </li>
         </ol>

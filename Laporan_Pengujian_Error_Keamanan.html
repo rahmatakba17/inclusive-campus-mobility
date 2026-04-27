@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laporan Pengujian Error & Keamanan — Bus Kampus Non-Merdeka</title>
+<title>Laporan Pengujian Error & Keamanan — Bus Kampus Inclusive</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
   @page { size: A4; margin: 20mm 18mm 22mm 18mm; }
@@ -93,7 +93,7 @@
 <div class="cover">
   <div class="cover-badge">Dokumen Teknis — Pengujian Sistem</div>
   <h1>Laporan Pengujian<br><span>Error Pages & Keamanan</span></h1>
-  <p>Bus Kampus Kampus Non-Merdeka — Sistem Tiket Terintegrasi</p>
+  <p>Bus Kampus Universitas Hasanuddin — Sistem Tiket Terintegrasi</p>
   <div class="cover-meta">
     <div>Tanggal<strong>April 2026</strong></div>
     <div>Versi<strong>v3.2 — Keamanan Multi-Peran</strong></div>
@@ -121,7 +121,7 @@
 
 <!-- ==================== BAB 1 ==================== -->
 <h2 class="section-title"><span class="num">1</span> Pendahuluan & Lingkup Pengujian</h2>
-<p>Dokumen ini merupakan panduan teknis pengujian sistem <strong>Bus Kampus Non-Merdeka</strong> yang mencakup dua area utama: <strong>(1) Pengujian tampilan halaman error HTTP</strong> dan <strong>(2) Pengujian keamanan aplikasi web</strong>. Pengujian dilakukan pada lingkungan development lokal sebelum deployment ke production.</p>
+<p>Dokumen ini merupakan panduan teknis pengujian sistem <strong>Bus Kampus Inclusive</strong> yang mencakup dua area utama: <strong>(1) Pengujian tampilan halaman error HTTP</strong> dan <strong>(2) Pengujian keamanan aplikasi web</strong>. Pengujian dilakukan pada lingkungan development lokal sebelum deployment ke production.</p>
 
 <div class="grid-2" style="margin-top:14px;">
   <div class="card">
@@ -130,7 +130,7 @@
       <tr><td style="font-weight:700;width:90px;">Framework</td><td>Laravel 10.x</td></tr>
       <tr><td style="font-weight:700;">Database</td><td>MySQL 8.0</td></tr>
       <tr><td style="font-weight:700;">Auth</td><td>Session-based + CSRF</td></tr>
-      <tr><td style="font-weight:700;">Base URL</td><td><code>http://localhost:8181</code></td></tr>
+      <tr><td style="font-weight:700;">Base URL</td><td><code>https://bus-inclusive.my.id</code></td></tr>
     </table>
   </div>
   <div class="card">
@@ -151,7 +151,7 @@
 <!-- ==================== BAB 2 ==================== -->
 <div class="page-break"></div>
 <h2 class="section-title"><span class="num">2</span> Pengujian Halaman Error HTTP</h2>
-<p>Semua halaman error menggunakan template <code>resources/views/errors/minimal.blade.php</code> dengan desain konsisten berlogo Kampus Non-Merdeka. Gunakan route debug berikut atau cara natural untuk memicu setiap kode error.</p>
+<p>Semua halaman error menggunakan template <code>resources/views/errors/minimal.blade.php</code> dengan desain konsisten berlogo Universitas Hasanuddin. Gunakan route debug berikut atau cara natural untuk memicu setiap kode error.</p>
 
 <h3 class="sub">2.1 URL Pengujian Cepat (Development)</h3>
 <table>
@@ -201,8 +201,8 @@
   <thead><tr><th>Langkah</th><th>Aksi</th><th>Hasil yang Diharapkan</th><th>Status</th></tr></thead>
   <tbody>
     <tr><td>1</td><td>Buka <code>/test-error/</code></td><td>Dashboard 6 kartu error muncul</td><td>☐</td></tr>
-    <tr><td>2</td><td>Klik kartu 404</td><td>Halaman 404 muncul dengan logo Kampus Non-Merdeka, tombol Beranda &amp; Kembali</td><td>☐</td></tr>
-    <tr><td>3</td><td>Klik kartu 403</td><td>Pesan "Forbidden" dengan desain Kampus Non-Merdeka</td><td>☐</td></tr>
+    <tr><td>2</td><td>Klik kartu 404</td><td>Halaman 404 muncul dengan logo Universitas Hasanuddin, tombol Beranda &amp; Kembali</td><td>☐</td></tr>
+    <tr><td>3</td><td>Klik kartu 403</td><td>Pesan "Forbidden" dengan desain Universitas Hasanuddin</td><td>☐</td></tr>
     <tr><td>4</td><td>Klik kartu 401</td><td>Pesan "Unauthorized"</td><td>☐</td></tr>
     <tr><td>5</td><td>Klik kartu 419</td><td>Pesan "Page Expired"</td><td>☐</td></tr>
     <tr><td>6</td><td>Set APP_DEBUG=false → klik kartu 500</td><td>Halaman 500 custom (bukan stack trace)</td><td>☐</td></tr>
@@ -218,7 +218,7 @@
 </div>
 
 <h3 class="sub">2.3 Pengujian via Dashboard</h3>
-<p>Buka URL <code>http://localhost:8181/test-error/</code> di browser. Halaman dashboard akan menampilkan 6 kartu error. Klik setiap kartu untuk melihat tampilan masing-masing halaman error kustom Bus Kampus Non-Merdeka.</p>
+<p>Buka URL <code>https://bus-inclusive.my.id/test-error/</code> di browser. Halaman dashboard akan menampilkan 6 kartu error. Klik setiap kartu untuk melihat tampilan masing-masing halaman error kustom Bus Kampus Inclusive.</p>
 
 <!-- ==================== BAB 3 ==================== -->
 <div class="page-break"></div>
@@ -375,8 +375,8 @@
 
 <h3 class="sub">4.2 Cara Menguji CSRF dengan cURL</h3>
 <pre># Uji POST tanpa CSRF token — harus ditolak dengan 419
-curl -X POST http://localhost:8181/login \
-  -d "email=admin@kampus-non-merdeka.ac.id&password=password" \
+curl -X POST https://bus-inclusive.my.id/login \
+  -d "email=admin@unhas.ac.id&password=password" \
   -c /tmp/cookies.txt -b /tmp/cookies.txt \
   -v 2>&1 | grep "HTTP/"
 
@@ -518,7 +518,7 @@ curl -X POST http://localhost:8181/login \
 <pre># Simulasi login gagal berulang — pantau apakah 429 muncul setelah percobaan ke-5
 for i in {1..6}; do
   curl -s -o /dev/null -w "Request $i: HTTP %{http_code}\n" \
-    -X POST http://localhost:8181/login \
+    -X POST https://bus-inclusive.my.id/login \
     -H "Content-Type: application/x-www-form-urlencoded" \
     -d "_token=INVALID&email=test@test.com&password=wrongpass"
 done
@@ -528,7 +528,7 @@ done
 <!-- ==================== BAB 8 ==================== -->
 <div class="page-break"></div>
 <h2 class="section-title"><span class="num">8</span> Checklist Aksesibilitas WCAG 2.1</h2>
-<p>Bus Kampus Non-Merdeka telah mengimplementasikan standar <strong>WCAG 2.1 Level AA</strong>. Gunakan checklist ini untuk memverifikasi:</p>
+<p>Bus Kampus Inclusive telah mengimplementasikan standar <strong>WCAG 2.1 Level AA</strong>. Gunakan checklist ini untuk memverifikasi:</p>
 
 <div class="grid-2">
   <div class="card">
@@ -701,8 +701,8 @@ done
 
 <!-- FOOTER -->
 <div class="doc-footer">
-  <span>Bus Kampus Non-Merdeka — Laporan Pengujian Error & Keamanan</span>
-  <span>© 2026 Kampus Non-Merdeka Transport System</span>
+  <span>Bus Kampus Inclusive — Laporan Pengujian Error & Keamanan</span>
+  <span>© 2026 Bus Kampus Inclusive Transport System</span>
   <span>Versi 3.2 — April 2026</span>
 </div>
 
