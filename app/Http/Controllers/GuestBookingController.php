@@ -114,8 +114,8 @@ class GuestBookingController extends Controller
                 'notes' => $finalNotes,
                 'guest_name' => $validated['guest_name'],
                 'guest_phone' => $validated['guest_phone'],
-                'price' => 5000,
-                'is_boarded' => true,
+                'price' => 6000,
+                'is_boarded' => false,
             ]);
 
             DB::commit();

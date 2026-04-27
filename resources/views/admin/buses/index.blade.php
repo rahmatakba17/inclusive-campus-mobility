@@ -156,13 +156,14 @@
 
     @forelse($buses as $bus)
     @php
+        $isDriverMissing = is_null($bus->driver_id);
         $statusClass = match($bus->status) {
-            'active'      => 'pill-active',
+            'active'      => $isDriverMissing ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'pill-active',
             'maintenance' => 'pill-maintain',
             default       => 'pill-inactive',
         };
         $statusLabel = match($bus->status) {
-            'active'      => 'Aktif',
+            'active'      => $isDriverMissing ? 'Tanpa Sopir' : 'Aktif',
             'maintenance' => 'Perawatan',
             default       => 'Nonaktif',
         };
@@ -218,6 +219,11 @@
                     <span class="text-[10px] text-slate-500 font-medium">
                         <i class="far fa-clock mr-0.5 text-slate-300"></i>
                         {{ substr($bus->departure_time,0,5) }} – {{ substr($bus->arrival_time,0,5) }}
+                    </span>
+                    <span class="w-1 h-1 rounded-full bg-slate-200"></span>
+                    <span class="text-[10px] {{ $isDriverMissing ? 'text-rose-500 font-bold' : 'text-slate-500 font-medium' }}">
+                        <i class="far fa-user mr-0.5 {{ $isDriverMissing ? 'text-rose-400' : 'text-slate-300' }}"></i>
+                        {{ $bus->driver->name ?? 'Belum Ditugaskan' }}
                     </span>
                 </div>
             </div>

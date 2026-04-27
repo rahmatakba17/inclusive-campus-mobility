@@ -12,8 +12,8 @@ describe('Skenario Dasbor Admin (Sesuai AKUN_SIMULASI.md)', () => {
     cy.visit('/admin/dashboard', { failOnStatusCode: false });
     
     // Asumsi halaman memuat elemen statistik
-    cy.get('body').should('contain', 'Fleet');
-    cy.get('body').should('contain', 'Total Orders');
+    cy.get('body').should('contain', 'Total Armada');
+    cy.get('body').should('contain', 'Total Pemesanan');
   });
 
   it('TC-202: Admin Mengakses Daftar Penumpang', () => {

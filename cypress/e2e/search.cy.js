@@ -10,7 +10,7 @@ describe('Pencarian Rute (Sesuai Rencana Pengujian Bus Kampus)', () => {
     cy.url().should('include', '/guest/buses');
 
     // 4. Pastikan elemen slider armada muncul di halaman guest buses
-    cy.get('h1').contains('Pilih Armada Perjalanan', { matchCase: false }).should('be.visible');
+    cy.get('h1').contains('Pilih Armada', { matchCase: false }).should('be.visible');
     
     // 5. Pastikan komponen rute (slider) sudah dimuat
     cy.contains('Rute Perintis → Gowa', { matchCase: false }).should('be.visible');

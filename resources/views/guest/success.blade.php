@@ -19,6 +19,7 @@
         <p class="text-gray-500 font-medium mb-10 leading-relaxed">
             Terima kasih <b>{{ $booking->guest_name }}</b>! Kursi Anda telah dipesan.
             Silakan simpan detail di bawah untuk ditunjukkan kepada kondektur.
+            <br><span class="text-rose-500 font-bold bg-rose-50 px-2 py-1 rounded inline-block mt-2">Penting: Tiket akan otomatis hangus dalam 15 detik setelah armada berangkat jika Anda belum melakukan konfirmasi kehadiran di dalam bus.</span>
         </p>
 
         <div class="bg-white rounded-[2rem] border-4 border-white shadow-2xl p-8 mb-10 text-left relative overflow-hidden">
